@@ -15,5 +15,19 @@
     "  smokeSpec   - Playwright test filter run by `npm run verify`, default \"e2e\"",
     "APP_PYTHON (environment or root .env) picks the Python used to create the backend .venv. Never put secrets in this file."
   ],
-  "app": null
+  "app": {
+    "name": "Friedland Buyer Screening",
+    "frontendDir": "app/frontend",
+    "backendDir": "app/backend",
+    "docsDir": "app/docs",
+    "backendApp": "app.main:app",
+    "healthPath": "/api/health",
+    "ports": {
+      "backend": 8000,
+      "frontend": 3000
+    },
+    "devEnv": {},
+    "demoEnv": {},
+    "smokeSpec": "e2e"
+  }
 }

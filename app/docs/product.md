@@ -54,7 +54,7 @@ Agreed visuals: table only, plus the two count cards (by the owner's choice: opt
 | F3 | See the source and collection date of every figure | figures must be quotable and checkable; nothing invented | AC6 |
 | F4 | The data is checked automatically (required fields, ranges, allowed values) every time `npm run verify` runs | a wrong figure in front of a client or jury is costly | AC7, AC8 |
 | F5 | Export the filtered list to a CSV file that opens in Excel | the banker works on the longlist in Excel | AC9 |
-| F6 | Describe the company for sale and get a ranked list of strategies with the explanation of each score (phase 2; method to design after the database) | this is the problem the product solves: who is likely to bid | to write when designed |
+| F6 | Describe the company for sale and get a ranked list of strategies with the explanation of each score (phase 2; method to design after the database) | this is the problem the product solves: who is likely to bid | score rules: `app/docs/scoring.md` (proposed 2026-11-20, group agreement pending); SC1, SC2 |
 
 ## Explicitly not in the MVP
 

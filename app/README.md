@@ -25,6 +25,15 @@ light theme follows the system setting.
 | `npm run dev` | starts the backend on http://127.0.0.1:8000 and the site on http://127.0.0.1:3000 (Ctrl+C stops both) |
 | `npm run verify` | backend lint (ruff) and tests (pytest); frontend lint, typecheck, unit tests (Vitest), production build; then a Playwright browser test with screenshots in `frontend/test-results/` |
 
+## Score engine (phase 2)
+
+`backend/app/logic/scoring/` computes a 0–100 compatibility score and a ranking between an operation
+and each fund (entry point `score_operation(operation, funds)`; criteria, weights and thresholds in
+`config.py`). Rules, assumptions and how to change the configuration: [docs/scoring.md](docs/scoring.md).
+Two assumptions to know: the company's **stage is measured by its enterprise value** (fund's
+`ev_min_eur_m`–`ev_max_eur_m` range), and the **investment period is approximated by the year of the
+last fund raised** (`last_fund_year`).
+
 ## Tests
 
 - `backend/tests/test_health.py`: the health endpoint (pytest, FastAPI `TestClient`).

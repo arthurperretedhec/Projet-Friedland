@@ -1,0 +1,11 @@
+﻿sector_code,label,description,nonexclusive
+TECH_SOFTWARE,Technology / Software,"Software, IT, digital, cybersecurity, deep tech",YES
+HEALTHCARE,Healthcare / Life Sciences,"Healthcare, biotech, pharma, MedTech, diagnostics",YES
+BUSINESS_SERVICES,Business Services,B2B and professional services,YES
+INDUSTRIALS,Industrials / Manufacturing,"Manufacturing, engineering, defence, industrial services",YES
+CONSUMER,Consumer / Leisure,"Retail, brands, lifestyle, consumer services",YES
+FOOD_AGRI,Food / Agribusiness,"Food production, agriculture and related value chains",YES
+FINANCIAL_SERVICES,Financial Services,"Fintech, insurance and financial activities",YES
+ENERGY_ENV,Energy / Environment,"Energy transition, circular economy, environment",YES
+INFRA_TRANSPORT,Infrastructure / Transport,"Infrastructure, connectivity, logistics, mobility",YES
+REAL_ESTATE_HOSPITALITY,Real Estate / Hospitality,"Property assets, tourism and hotels",YES

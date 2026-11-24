@@ -1,0 +1,326 @@
+﻿strategy_id,fund_id,strategy_name,raw_tag,sector_code,subsector,polarity,mapping_confidence,original_source_url
+str-abenex-industries-90,fund-001,Abenex Industries 9.0,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.abenex.com/en/publications/abenex-industries-9-fund-first-closing
+str-abenex-smallcap-ii,fund-001,Abenex Small Cap II,health_wellness,HEALTHCARE,Health Wellness,INCLUDED,DIRECT_TAG,https://www.abenex.com/en/publications/abenex-small-cap-ii-final-closing-180m
+str-abenex-smallcap-ii,fund-001,Abenex Small Cap II,value_added_services,BUSINESS_SERVICES,Value Added Services,INCLUDED,DIRECT_TAG,https://www.abenex.com/en/publications/abenex-small-cap-ii-final-closing-180m
+str-access-smallcap-coinvest,fund-002,Small-cap Buy-out Co-investments,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://www.access-capital-partners.com/en/expertise/small-cap
+str-access-smallcap-coinvest,fund-002,Small-cap Buy-out Co-investments,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.access-capital-partners.com/en/expertise/small-cap
+str-access-smallcap-coinvest,fund-002,Small-cap Buy-out Co-investments,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.access-capital-partners.com/en/expertise/small-cap
+str-activa-core,fund-003,Activa - Innovative Services,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://activa.fr/vision
+str-activa-core,fund-003,Activa - Innovative Services,technology_services,TECH_SOFTWARE,IT / Tech-enabled Services,INCLUDED,DIRECT_TAG,https://activa.fr/vision
+str-activa-core,fund-003,Activa - Innovative Services,technology_services,BUSINESS_SERVICES,IT / Tech-enabled Services,INCLUDED,DIRECT_TAG,https://activa.fr/vision
+str-archimed-medrise,fund-014,MED Rise - Small Cap Healthcare,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.archimed.group/news/archimed-acquires-seqcenter-a-fast-growing-player-in-cutting-edge-dna-and-rna-gene-sequencing/
+str-archimed-medrise,fund-014,MED Rise - Small Cap Healthcare,medtech,HEALTHCARE,Medtech,INCLUDED,DIRECT_TAG,https://www.archimed.group/news/archimed-acquires-seqcenter-a-fast-growing-player-in-cutting-edge-dna-and-rna-gene-sequencing/
+str-archimed-medrise,fund-014,MED Rise - Small Cap Healthcare,diagnostics,HEALTHCARE,Diagnostics,INCLUDED,DIRECT_TAG,https://www.archimed.group/news/archimed-acquires-seqcenter-a-fast-growing-player-in-cutting-edge-dna-and-rna-gene-sequencing/
+str-archimed-medrise,fund-014,MED Rise - Small Cap Healthcare,life_science_tools,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://www.archimed.group/news/archimed-acquires-seqcenter-a-fast-growing-player-in-cutting-edge-dna-and-rna-gene-sequencing/
+str-archimed-medrise,fund-014,MED Rise - Small Cap Healthcare,healthcare_it,HEALTHCARE,Digital Health / Healthcare IT,INCLUDED,DIRECT_TAG,https://www.archimed.group/news/archimed-acquires-seqcenter-a-fast-growing-player-in-cutting-edge-dna-and-rna-gene-sequencing/
+str-archimed-medrise,fund-014,MED Rise - Small Cap Healthcare,healthcare_it,TECH_SOFTWARE,Digital Health / Healthcare IT,INCLUDED,DIRECT_TAG,https://www.archimed.group/news/archimed-acquires-seqcenter-a-fast-growing-player-in-cutting-edge-dna-and-rna-gene-sequencing/
+str-capza-flex,fund-031,CAPZA Flex Equity,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-fr
+str-capza-flex,fund-031,CAPZA Flex Equity,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-fr
+str-capza-flex,fund-031,CAPZA Flex Equity,financial_services,FINANCIAL_SERVICES,Financial Services,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-fr
+str-capza-flex,fund-031,CAPZA Flex Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-fr
+str-capza-flex-mid,fund-031,CAPZA Flex Equity Mid-Market,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-mid-market-fr/
+str-capza-flex-mid,fund-031,CAPZA Flex Equity Mid-Market,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-mid-market-fr/
+str-capza-flex-mid,fund-031,CAPZA Flex Equity Mid-Market,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://capza.co/fr/expertise/flex-equity-mid-market-fr/
+str-keensight-growth,fund-065,Keensight Growth Buyout,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://keensight.com/about-us/
+str-keensight-growth,fund-065,Keensight Growth Buyout,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://keensight.com/about-us/
+str-adagia-buyout,fund-004,Adagia European Mid-Market Buyout,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.adagiapartners.com/about/
+str-adagia-buyout,fund-004,Adagia European Mid-Market Buyout,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.adagiapartners.com/about/
+str-adagia-buyout,fund-004,Adagia European Mid-Market Buyout,technology_industrials,INDUSTRIALS,Technology Industrials,INCLUDED,DIRECT_TAG,https://www.adagiapartners.com/about/
+str-aldebaran-transform,fund-008,Aldebaran Transformation,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.aldebaran.fr/en/manifest
+str-amethis-europe,fund-010,Amethis Small Caps Europe,food,FOOD_AGRI,Food,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-europe,fund-010,Amethis Small Caps Europe,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-europe,fund-010,Amethis Small Caps Europe,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-europe,fund-010,Amethis Small Caps Europe,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-europe,fund-010,Amethis Small Caps Europe,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,financial_services,FINANCIAL_SERVICES,Financial Services,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,energy_infrastructure,INFRA_TRANSPORT,Energy Infrastructure,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-amethis-africa,fund-010,Amethis Small & Mid Caps Africa,energy_infrastructure,ENERGY_ENV,Energy Infrastructure,INCLUDED,DIRECT_TAG,https://amethis.com/en/investment-strategies/
+str-andera-lifesciences,fund-011,andera Life Sciences,life_sciences,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-lifesciences,fund-011,andera Life Sciences,medtech,HEALTHCARE,Medtech,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-lifesciences,fund-011,andera Life Sciences,biotech,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-infra,fund-011,andera Infra,green_infrastructure,INFRA_TRANSPORT,Green Infrastructure,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-infra,fund-011,andera Infra,green_infrastructure,ENERGY_ENV,Green Infrastructure,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-infra,fund-011,andera Infra,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-expansion,fund-011,andera Expansion,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-expansion,fund-011,andera Expansion,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-midcap,fund-011,andera MidCap,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-andera-midcap,fund-011,andera MidCap,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.anderapartners.com/en/expertise/
+str-antin-flagship,fund-012,Antin Flagship,energy,ENERGY_ENV,Energy,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/flagship
+str-antin-flagship,fund-012,Antin Flagship,environment,ENERGY_ENV,Environment,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/flagship
+str-antin-flagship,fund-012,Antin Flagship,digital_infrastructure,INFRA_TRANSPORT,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/flagship
+str-antin-flagship,fund-012,Antin Flagship,digital_infrastructure,TECH_SOFTWARE,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/flagship
+str-antin-flagship,fund-012,Antin Flagship,transport_infrastructure,INFRA_TRANSPORT,Transport Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/flagship
+str-antin-flagship,fund-012,Antin Flagship,social_infrastructure,INFRA_TRANSPORT,Social Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/flagship
+str-antin-midcap,fund-012,Antin Mid Cap,energy,ENERGY_ENV,Energy,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/mid-cap
+str-antin-midcap,fund-012,Antin Mid Cap,environment,ENERGY_ENV,Environment,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/mid-cap
+str-antin-midcap,fund-012,Antin Mid Cap,digital_infrastructure,INFRA_TRANSPORT,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/mid-cap
+str-antin-midcap,fund-012,Antin Mid Cap,digital_infrastructure,TECH_SOFTWARE,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/mid-cap
+str-antin-midcap,fund-012,Antin Mid Cap,transport_infrastructure,INFRA_TRANSPORT,Transport Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/mid-cap
+str-antin-midcap,fund-012,Antin Mid Cap,social_infrastructure,INFRA_TRANSPORT,Social Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/mid-cap
+str-antin-nextgen,fund-012,Antin NextGen,energy,ENERGY_ENV,Energy,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/nextgen
+str-antin-nextgen,fund-012,Antin NextGen,environment,ENERGY_ENV,Environment,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/nextgen
+str-antin-nextgen,fund-012,Antin NextGen,digital_infrastructure,INFRA_TRANSPORT,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/nextgen
+str-antin-nextgen,fund-012,Antin NextGen,digital_infrastructure,TECH_SOFTWARE,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/nextgen
+str-antin-nextgen,fund-012,Antin NextGen,transport_infrastructure,INFRA_TRANSPORT,Transport Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/nextgen
+str-antin-nextgen,fund-012,Antin NextGen,social_infrastructure,INFRA_TRANSPORT,Social Infrastructure,INCLUDED,DIRECT_TAG,https://www.antin-ip.com/who-we-are/strategies/nextgen
+str-astorg-flagship,fund-020,Astorg Flagship,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-flagship,fund-020,Astorg Flagship,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-flagship,fund-020,Astorg Flagship,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-flagship,fund-020,Astorg Flagship,B2B,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-midcap,fund-020,Astorg Mid-Cap,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-midcap,fund-020,Astorg Mid-Cap,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-midcap,fund-020,Astorg Mid-Cap,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-astorg-midcap,fund-020,Astorg Mid-Cap,B2B,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://www.astorg.com/approach/how-we-invest
+str-chequers-buyout,fund-034,Chequers Pan-European Mid-Market Buyout,B2B,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://www.chequerscapital.com/presentation/
+str-chequers-buyout,fund-034,Chequers Pan-European Mid-Market Buyout,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.chequerscapital.com/presentation/
+str-chequers-buyout,fund-034,Chequers Pan-European Mid-Market Buyout,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.chequerscapital.com/presentation/
+str-seven2-midmarket,fund-097,Seven2 MidMarket,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.seven2.eu/en/firm/strategie-dinvestissement/
+str-seven2-midmarket,fund-097,Seven2 MidMarket,telecom,INFRA_TRANSPORT,Telecom,INCLUDED,DIRECT_TAG,https://www.seven2.eu/en/firm/strategie-dinvestissement/
+str-seven2-midmarket,fund-097,Seven2 MidMarket,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://www.seven2.eu/en/firm/strategie-dinvestissement/
+str-seven2-development,fund-097,Seven2 Development,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.seven2.eu/en/firm/strategie-dinvestissement/
+str-seven2-development,fund-097,Seven2 Development,telecom,INFRA_TRANSPORT,Telecom,INCLUDED,DIRECT_TAG,https://www.seven2.eu/en/firm/strategie-dinvestissement/
+str-seven2-development,fund-097,Seven2 Development,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://www.seven2.eu/en/firm/strategie-dinvestissement/
+str-ardian-buyout,fund-015,Ardian Buyout,food_value_chain,FOOD_AGRI,Food Value Chain,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/buyout
+str-ardian-buyout,fund-015,Ardian Buyout,health_wellness,HEALTHCARE,Health Wellness,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/buyout
+str-ardian-buyout,fund-015,Ardian Buyout,applied_technologies,TECH_SOFTWARE,Applied / Industrial Technology,INCLUDED,BROAD_TAG,https://www.ardian.com/fr/expertise/private-equity/buyout
+str-ardian-buyout,fund-015,Ardian Buyout,applied_technologies,INDUSTRIALS,Applied / Industrial Technology,INCLUDED,BROAD_TAG,https://www.ardian.com/fr/expertise/private-equity/buyout
+str-ardian-buyout,fund-015,Ardian Buyout,essential_B2B_services,BUSINESS_SERVICES,Essential B2B Services,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/buyout
+str-ardian-expansion,fund-015,Ardian Expansion,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/expansion
+str-ardian-expansion,fund-015,Ardian Expansion,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/expansion
+str-ardian-expansion,fund-015,Ardian Expansion,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/expansion
+str-ardian-expansion,fund-015,Ardian Expansion,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/expansion
+str-ardian-expansion,fund-015,Ardian Expansion,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.ardian.com/fr/expertise/private-equity/expansion
+str-bpifrance-direct-growth,fund-024,Bpifrance Direct Capital Development,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.bpifrance.fr/nous-decouvrir/notre-mission
+str-bpifrance-direct-growth,fund-024,Bpifrance Direct Capital Development,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.bpifrance.fr/nous-decouvrir/notre-mission
+str-blackfin-buyout,fund-023,BlackFin Financial Services Buyout,financial_services,FINANCIAL_SERVICES,Financial Services,INCLUDED,DIRECT_TAG,https://blackfin.com/buyout/
+str-blackfin-buyout,fund-023,BlackFin Financial Services Buyout,financial_technology,FINANCIAL_SERVICES,Financial Technology,INCLUDED,DIRECT_TAG,https://blackfin.com/buyout/
+str-blackfin-buyout,fund-023,BlackFin Financial Services Buyout,financial_technology,TECH_SOFTWARE,Financial Technology,INCLUDED,DIRECT_TAG,https://blackfin.com/buyout/
+str-blackfin-buyout,fund-023,BlackFin Financial Services Buyout,B2B_financial_services,FINANCIAL_SERVICES,B2B Financial Services,INCLUDED,DIRECT_TAG,https://blackfin.com/buyout/
+str-blackfin-venture,fund-023,BlackFin Tech Venture,fintech,FINANCIAL_SERVICES,Fintech,INCLUDED,DIRECT_TAG,https://blackfin.com/tech-venture/
+str-blackfin-venture,fund-023,BlackFin Tech Venture,fintech,TECH_SOFTWARE,Fintech,INCLUDED,DIRECT_TAG,https://blackfin.com/tech-venture/
+str-blackfin-venture,fund-023,BlackFin Tech Venture,insurtech,FINANCIAL_SERVICES,Insurtech,INCLUDED,DIRECT_TAG,https://blackfin.com/tech-venture/
+str-blackfin-venture,fund-023,BlackFin Tech Venture,insurtech,TECH_SOFTWARE,Insurtech,INCLUDED,DIRECT_TAG,https://blackfin.com/tech-venture/
+str-blackfin-venture,fund-023,BlackFin Tech Venture,financial_services_technology,FINANCIAL_SERVICES,Financial Services Technology,INCLUDED,DIRECT_TAG,https://blackfin.com/tech-venture/
+str-blackfin-venture,fund-023,BlackFin Tech Venture,financial_services_technology,TECH_SOFTWARE,Financial Services Technology,INCLUDED,DIRECT_TAG,https://blackfin.com/tech-venture/
+str-siparex-eti,fund-055,Siparex ETI,health_wellness,HEALTHCARE,Health Wellness,INCLUDED,DIRECT_TAG,https://www.siparex.com/plateforme/eti/
+str-siparex-eti,fund-055,Siparex ETI,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://www.siparex.com/plateforme/eti/
+str-siparex-eti,fund-055,Siparex ETI,specialty_industrials,INDUSTRIALS,Specialty Industrials,INCLUDED,DIRECT_TAG,https://www.siparex.com/plateforme/eti/
+str-siparex-eti,fund-055,Siparex ETI,technology_services,TECH_SOFTWARE,IT / Tech-enabled Services,INCLUDED,DIRECT_TAG,https://www.siparex.com/plateforme/eti/
+str-siparex-eti,fund-055,Siparex ETI,technology_services,BUSINESS_SERVICES,IT / Tech-enabled Services,INCLUDED,DIRECT_TAG,https://www.siparex.com/plateforme/eti/
+str-siparex-eti,fund-055,Siparex ETI,food,FOOD_AGRI,Food,INCLUDED,DIRECT_TAG,https://www.siparex.com/plateforme/eti/
+str-infravia-growth,fund-059,InfraVia Growth Equity,B2B_software,TECH_SOFTWARE,B2B Software,INCLUDED,DIRECT_TAG,https://infraviacapital.com/growth/
+str-infravia-growth,fund-059,InfraVia Growth Equity,digital_technology,TECH_SOFTWARE,Digital Technology,INCLUDED,DIRECT_TAG,https://infraviacapital.com/growth/
+str-infravia-infrastructure,fund-059,InfraVia Infrastructure,energy_infrastructure,INFRA_TRANSPORT,Energy Infrastructure,INCLUDED,DIRECT_TAG,https://infraviacapital.com/infrastructure/
+str-infravia-infrastructure,fund-059,InfraVia Infrastructure,energy_infrastructure,ENERGY_ENV,Energy Infrastructure,INCLUDED,DIRECT_TAG,https://infraviacapital.com/infrastructure/
+str-infravia-infrastructure,fund-059,InfraVia Infrastructure,digital_infrastructure,INFRA_TRANSPORT,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://infraviacapital.com/infrastructure/
+str-infravia-infrastructure,fund-059,InfraVia Infrastructure,digital_infrastructure,TECH_SOFTWARE,Digital Infrastructure,INCLUDED,DIRECT_TAG,https://infraviacapital.com/infrastructure/
+str-infravia-infrastructure,fund-059,InfraVia Infrastructure,transport_infrastructure,INFRA_TRANSPORT,Transport Infrastructure,INCLUDED,DIRECT_TAG,https://infraviacapital.com/infrastructure/
+str-infravia-infrastructure,fund-059,InfraVia Infrastructure,social_infrastructure,INFRA_TRANSPORT,Social Infrastructure,INCLUDED,DIRECT_TAG,https://infraviacapital.com/infrastructure/
+str-argos-midmarket,fund-017,Argos Mid-Market,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://argos.fund/fr/argos-mid-market/
+str-argos-midmarket,fund-017,Argos Mid-Market,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://argos.fund/fr/argos-mid-market/
+str-argos-climate,fund-017,Argos Climate Action,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://argos.fund/fr/entreprise/
+str-argos-climate,fund-017,Argos Climate Action,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://argos.fund/fr/entreprise/
+str-argos-climate,fund-017,Argos Climate Action,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://argos.fund/fr/entreprise/
+str-capital-export-b2b,fund-029,Capital Export - B2B International Growth,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.capital-export.fr/
+str-capital-export-b2b,fund-029,Capital Export - B2B International Growth,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.capital-export.fr/
+str-capital-export-b2b,fund-029,Capital Export - B2B International Growth,b2b,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://www.capital-export.fr/
+str-ciclad-defense,fund-036,Ciclad Si Vis Pacem,defense,INDUSTRIALS,Defense,INCLUDED,DIRECT_TAG,https://www.ciclad.com/a-propos/
+str-ciclad-defense,fund-036,Ciclad Si Vis Pacem,aerospace,INDUSTRIALS,Aerospace,INCLUDED,DIRECT_TAG,https://www.ciclad.com/a-propos/
+str-ciclad-defense,fund-036,Ciclad Si Vis Pacem,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.ciclad.com/a-propos/
+str-dentressangle-majority,fund-040,DENTRESSANGLE Capital - Majority Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.dentressangle.com/en/news/dentressangle-announces-olivier-verdet-as-partner-dentressangle-capital/
+str-dentressangle-majority,fund-040,DENTRESSANGLE Capital - Majority Equity,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.dentressangle.com/en/news/dentressangle-announces-olivier-verdet-as-partner-dentressangle-capital/
+str-dentressangle-majority,fund-040,DENTRESSANGLE Capital - Majority Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.dentressangle.com/en/news/dentressangle-announces-olivier-verdet-as-partner-dentressangle-capital/
+str-elaia-dv5,fund-042,Elaia Digital Venture 5 (DV5),software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://elaia.com/news/elaias-fifth-digital-venture-fund-dv5-announces-first-close-at-120m
+str-elaia-dv5,fund-042,Elaia Digital Venture 5 (DV5),ai,TECH_SOFTWARE,AI / Deep Tech,INCLUDED,DIRECT_TAG,https://elaia.com/news/elaias-fifth-digital-venture-fund-dv5-announces-first-close-at-120m
+str-elaia-dv5,fund-042,Elaia Digital Venture 5 (DV5),deeptech,TECH_SOFTWARE,AI / Deep Tech,INCLUDED,DIRECT_TAG,https://elaia.com/news/elaias-fifth-digital-venture-fund-dv5-announces-first-close-at-120m
+str-elaia-dv5,fund-042,Elaia Digital Venture 5 (DV5),b2b,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://elaia.com/news/elaias-fifth-digital-venture-fund-dv5-announces-first-close-at-120m
+str-elaia-dts3,fund-042,Elaia Deep Tech Seed 3,deeptech,TECH_SOFTWARE,AI / Deep Tech,INCLUDED,DIRECT_TAG,https://elaia.com/news/elaia-announces-final-close-of-dts3-at-134m
+str-elaia-dts3,fund-042,Elaia Deep Tech Seed 3,ai,TECH_SOFTWARE,AI / Deep Tech,INCLUDED,DIRECT_TAG,https://elaia.com/news/elaia-announces-final-close-of-dts3-at-134m
+str-demea-sage,fund-039,Sustainable Agriculture Growth Equity (SAGE),agriculture,FOOD_AGRI,Agriculture,INCLUDED,DIRECT_TAG,https://paris-fonds-vert.demeter-im.com/en/quipe/marie-cartet/
+str-demea-sage,fund-039,Sustainable Agriculture Growth Equity (SAGE),agri_food,FOOD_AGRI,Agri Food,INCLUDED,DIRECT_TAG,https://paris-fonds-vert.demeter-im.com/en/quipe/marie-cartet/
+str-eurazeo-smbo,fund-047,Eurazeo Small-Mid Buyout,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.eurazeo.com/en/businesses/private-equity/buyout
+str-eurazeo-smbo,fund-047,Eurazeo Small-Mid Buyout,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.eurazeo.com/en/businesses/private-equity/buyout
+str-eurazeo-planetary,fund-047,Eurazeo Planetary Boundaries Fund,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://www.eurazeo.com/en/businesses/private-equity/buyout
+str-eurazeo-planetary,fund-047,Eurazeo Planetary Boundaries Fund,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.eurazeo.com/en/businesses/private-equity/buyout
+str-hivest-sme,fund-056,Hivest - SME & Midcap Transformation,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://hivestcapital.com/
+str-hivest-sme,fund-056,Hivest - SME & Midcap Transformation,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://hivestcapital.com/
+str-isatis-expansion,fund-063,Isatis Expansion,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://isatis-capital.fr/actualites/isatis-capital-annonce-de-nouvelles-promotions-internes
+str-isatis-expansion,fund-063,Isatis Expansion,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://isatis-capital.fr/actualites/isatis-capital-annonce-de-nouvelles-promotions-internes
+str-isatis-expansion,fund-063,Isatis Expansion,engineering,INDUSTRIALS,Engineering,INCLUDED,DIRECT_TAG,https://isatis-capital.fr/actualites/isatis-capital-annonce-de-nouvelles-promotions-internes
+str-montefiore-vi,fund-077,Montefiore Investment VI / Services Buyout,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://montefiore.eu/en/strategy/
+str-montefiore-vi,fund-077,Montefiore Investment VI / Services Buyout,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://montefiore.eu/en/strategy/
+str-montefiore-vi,fund-077,Montefiore Investment VI / Services Buyout,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://montefiore.eu/en/strategy/
+str-montefiore-vi,fund-077,Montefiore Investment VI / Services Buyout,consumer_services,CONSUMER,Consumer Services,INCLUDED,DIRECT_TAG,https://montefiore.eu/en/strategy/
+str-merieux-buyout,fund-074,Mérieux Equity Partners - Buyout,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://merieux-partners.com/about-us/
+str-merieux-buyout,fund-074,Mérieux Equity Partners - Buyout,life_sciences,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://merieux-partners.com/about-us/
+str-merieux-buyout,fund-074,Mérieux Equity Partners - Buyout,medtech,HEALTHCARE,Medtech,INCLUDED,DIRECT_TAG,https://merieux-partners.com/about-us/
+str-merieux-buyout,fund-074,Mérieux Equity Partners - Buyout,pharma_services,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://merieux-partners.com/about-us/
+str-merieux-innovation,fund-074,Mérieux Equity Partners - Innovation,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://merieux-partners.com/
+str-merieux-innovation,fund-074,Mérieux Equity Partners - Innovation,medtech,HEALTHCARE,Medtech,INCLUDED,DIRECT_TAG,https://merieux-partners.com/
+str-merieux-innovation,fund-074,Mérieux Equity Partners - Innovation,biotech,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://merieux-partners.com/
+str-naxicap-buyout,fund-080,Naxicap - Majority LBO,b2b,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://naxicap.com/
+str-naxicap-buyout,fund-080,Naxicap - Majority LBO,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://naxicap.com/
+str-pai-mid-market,fund-086,PAI Mid-Market Fund,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.paipartners.com/mediaitem/pai-partners-raises-c-e920-million-for-inaugural-mid-market-fund-above-original-hard-cap/
+str-pai-mid-market,fund-086,PAI Mid-Market Fund,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.paipartners.com/mediaitem/pai-partners-raises-c-e920-million-for-inaugural-mid-market-fund-above-original-hard-cap/
+str-pai-mid-market,fund-086,PAI Mid-Market Fund,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://www.paipartners.com/mediaitem/pai-partners-raises-c-e920-million-for-inaugural-mid-market-fund-above-original-hard-cap/
+str-sparring-transmission,fund-101,Sparring - Transmission,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://sparringcapital.com/transmission/
+str-sparring-transmission,fund-101,Sparring - Transmission,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://sparringcapital.com/transmission/
+str-sparring-transmission,fund-101,Sparring - Transmission,b2b,BUSINESS_SERVICES,B2B,INCLUDED,DIRECT_TAG,https://sparringcapital.com/transmission/
+str-sparring-growth,fund-101,Sparring - Responsible Growth,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://sparringcapital.com/en/
+str-sparring-growth,fund-101,Sparring - Responsible Growth,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://sparringcapital.com/en/
+str-sparring-growth,fund-101,Sparring - Responsible Growth,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://sparringcapital.com/en/
+str-weinberg-defense,fund-110,WCP Eiréné Développement,defense,INDUSTRIALS,Defense,INCLUDED,DIRECT_TAG,https://www.weinbergcapital.com/actualites/dossier-defense-securite/
+str-weinberg-defense,fund-110,WCP Eiréné Développement,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.weinbergcapital.com/actualites/dossier-defense-securite/
+str-b-capital,fund-022,B & Capital - RB Capital France,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://b-and-capital.com/notre-approche/
+str-b-capital,fund-022,B & Capital - RB Capital France,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://b-and-capital.com/notre-approche/
+str-ekkio-direct,fund-041,Ekkio - European SME Growth,tourism_leisure,CONSUMER,Tourism / Leisure,INCLUDED,DIRECT_TAG,https://ekkio.com/investissements
+str-ekkio-direct,fund-041,Ekkio - European SME Growth,tourism_leisure,REAL_ESTATE_HOSPITALITY,Tourism / Leisure,INCLUDED,DIRECT_TAG,https://ekkio.com/investissements
+str-ekkio-direct,fund-041,Ekkio - European SME Growth,health_beauty,CONSUMER,Health Beauty,INCLUDED,DIRECT_TAG,https://ekkio.com/investissements
+str-ekkio-direct,fund-041,Ekkio - European SME Growth,environment,ENERGY_ENV,Environment,INCLUDED,DIRECT_TAG,https://ekkio.com/investissements
+str-frenchfood-agro,fund-051,FrenchFood Agro Invest,agri_food,FOOD_AGRI,Agri Food,INCLUDED,DIRECT_TAG,https://frenchfoodcapital.com/frenchfood-agroinvest/
+str-frenchfood-agro,fund-051,FrenchFood Agro Invest,food_services,FOOD_AGRI,Food Services,INCLUDED,DIRECT_TAG,https://frenchfoodcapital.com/frenchfood-agroinvest/
+str-frenchfood-agro,fund-051,FrenchFood Agro Invest,food_supply_chain,FOOD_AGRI,Food Supply Chain,INCLUDED,DIRECT_TAG,https://frenchfoodcapital.com/frenchfood-agroinvest/
+str-frenchfood-general,fund-051,FrenchFood Capital I / Positive Impact,agri_food,FOOD_AGRI,Agri Food,INCLUDED,DIRECT_TAG,https://frenchfoodcapital.com/strategies-dinvestissement/
+str-frenchfood-general,fund-051,FrenchFood Capital I / Positive Impact,food_services,FOOD_AGRI,Food Services,INCLUDED,DIRECT_TAG,https://frenchfoodcapital.com/strategies-dinvestissement/
+str-frenchfood-general,fund-051,FrenchFood Capital I / Positive Impact,food_supply_chain,FOOD_AGRI,Food Supply Chain,INCLUDED,DIRECT_TAG,https://frenchfoodcapital.com/strategies-dinvestissement/
+str-galiena-small,fund-053,Galiena Capital - Small Cap,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.galiena-capital.com/nos-metiers/
+str-galiena-small,fund-053,Galiena Capital - Small Cap,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.galiena-capital.com/nos-metiers/
+str-yotta-smart,fund-112,Yotta Smart Industry,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://climate-transparency-hub.ademe.fr/dossier/yotta-capital-partners/
+str-yotta-growth,fund-112,Yotta Growth Industry,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://climate-transparency-hub.ademe.fr/dossier/yotta-capital-partners/
+str-hld-longterm,fund-057,HLD - Entrepreneurial Long-Term Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://groupehld.com/fr
+str-hld-longterm,fund-057,HLD - Entrepreneurial Long-Term Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://groupehld.com/fr
+str-hld-longterm,fund-057,HLD - Entrepreneurial Long-Term Equity,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://groupehld.com/fr
+str-hld-longterm,fund-057,HLD - Entrepreneurial Long-Term Equity,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://groupehld.com/fr
+str-nextstage-growth,fund-082,NextStage AM - Capital Développement,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://nextstage-am.com/
+str-nextstage-growth,fund-082,NextStage AM - Capital Développement,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://nextstage-am.com/
+str-turenne-industrie,fund-106,Turenne - Industrie,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.turennecapital.com/expertises/industrie/presentation/
+str-turenne-industrie,fund-106,Turenne - Industrie,manufacturing,INDUSTRIALS,Manufacturing,INCLUDED,DIRECT_TAG,https://www.turennecapital.com/expertises/industrie/presentation/
+str-m-capital-tourism,fund-070,M Capital - Tourism & Hospitality Growth,tourism,CONSUMER,Tourism / Leisure,INCLUDED,DIRECT_TAG,https://www.mcapital.fr/capital-developpement/
+str-m-capital-tourism,fund-070,M Capital - Tourism & Hospitality Growth,tourism,REAL_ESTATE_HOSPITALITY,Tourism / Leisure,INCLUDED,DIRECT_TAG,https://www.mcapital.fr/capital-developpement/
+str-m-capital-tourism,fund-070,M Capital - Tourism & Hospitality Growth,hospitality,REAL_ESTATE_HOSPITALITY,Hospitality,INCLUDED,DIRECT_TAG,https://www.mcapital.fr/capital-developpement/
+str-m-capital-tourism,fund-070,M Capital - Tourism & Hospitality Growth,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://www.mcapital.fr/capital-developpement/
+str-azulis-direct,fund-021,Azulis - Lower Mid-Market Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.azuliscapital.fr/en/homepage/
+str-azulis-direct,fund-021,Azulis - Lower Mid-Market Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.azuliscapital.fr/en/homepage/
+str-extendam-hotels,fund-049,EXTENDAM - European Hospitality Real Estate,hotels,REAL_ESTATE_HOSPITALITY,Hotels,INCLUDED,DIRECT_TAG,https://extendam.com/fr/nos-expertises/investissements-hoteliers/
+str-extendam-hotels,fund-049,EXTENDAM - European Hospitality Real Estate,hospitality,REAL_ESTATE_HOSPITALITY,Hospitality,INCLUDED,DIRECT_TAG,https://extendam.com/fr/nos-expertises/investissements-hoteliers/
+str-extendam-hotels,fund-049,EXTENDAM - European Hospitality Real Estate,real_estate,REAL_ESTATE_HOSPITALITY,Real Estate,INCLUDED,DIRECT_TAG,https://extendam.com/fr/nos-expertises/investissements-hoteliers/
+str-cathay-crossborder,fund-033,Cathay Capital - Cross-Border Private Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.cathaycapital.com/fr/private-equity/
+str-cathay-crossborder,fund-033,Cathay Capital - Cross-Border Private Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.cathaycapital.com/fr/private-equity/
+str-cathay-crossborder,fund-033,Cathay Capital - Cross-Border Private Equity,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.cathaycapital.com/fr/private-equity/
+str-emz-management,fund-044,EMZ - Management-Centric Capital Solutions,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://emzpartners.com/approche/
+str-emz-management,fund-044,EMZ - Management-Centric Capital Solutions,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://emzpartners.com/approche/
+str-raise-invest,fund-094,RAISE Invest - Evergreen Growth Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.raise.co/activites/raise-invest
+str-raise-invest,fund-094,RAISE Invest - Evergreen Growth Equity,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.raise.co/activites/raise-invest
+str-raise-impact,fund-094,RAISE Impact - Sustainable Small / Midcap,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.raise.co/activites/raise-impact
+str-innova-equity,fund-061,InnovaFonds - Industrial Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.innovafonds.fr/equity/
+str-innova-equity,fund-061,InnovaFonds - Industrial Equity,industrial_services,INDUSTRIALS,Industrial Services,INCLUDED,DIRECT_TAG,https://www.innovafonds.fr/equity/
+str-innova-flex,fund-061,InnovaFonds - Flex Mezzanine + Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.innovafonds.fr/flex/
+str-innova-flex,fund-061,InnovaFonds - Flex Mezzanine + Equity,industrial_services,INDUSTRIALS,Industrial Services,INCLUDED,DIRECT_TAG,https://www.innovafonds.fr/flex/
+str-tikehau-decarbon,fund-103,Tikehau - Private Equity Decarbonisation,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://www.tikehaucapital.com/fr/expertise/private-equity
+str-tikehau-decarbon,fund-103,Tikehau - Private Equity Decarbonisation,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.tikehaucapital.com/fr/expertise/private-equity
+str-tikehau-cyber,fund-103,Tikehau - Cybersecurity Private Equity,cybersecurity,TECH_SOFTWARE,Cybersecurity,INCLUDED,DIRECT_TAG,https://www.tikehaucapital.com/en/expertise/private-equity
+str-tikehau-cyber,fund-103,Tikehau - Cybersecurity Private Equity,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://www.tikehaucapital.com/en/expertise/private-equity
+str-wendel-principal,fund-111,Wendel Principal Investments,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.wendelgroup.com/en/activities/wendel-principal-investments/
+str-wendel-principal,fund-111,Wendel Principal Investments,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.wendelgroup.com/en/activities/wendel-principal-investments/
+str-truffle-vc,fund-105,Truffle - Life Sciences / Fintech Venture,life_sciences,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://www.truffle.com/
+str-truffle-vc,fund-105,Truffle - Life Sciences / Fintech Venture,biotech,HEALTHCARE,Life Sciences / Pharma,INCLUDED,DIRECT_TAG,https://www.truffle.com/
+str-truffle-vc,fund-105,Truffle - Life Sciences / Fintech Venture,fintech,FINANCIAL_SERVICES,Fintech,INCLUDED,DIRECT_TAG,https://www.truffle.com/
+str-truffle-vc,fund-105,Truffle - Life Sciences / Fintech Venture,fintech,TECH_SOFTWARE,Fintech,INCLUDED,DIRECT_TAG,https://www.truffle.com/
+str-perceva-special,fund-089,Perceva - Special Situations / Turnaround,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.perceva.fr/fr/ressources/metier/assurer_la_perennite_de_votre_entreprise
+str-meridiam-infra,fund-073,Meridiam - Long-Term Sustainable Infrastructure,infrastructure,INFRA_TRANSPORT,Infrastructure,INCLUDED,DIRECT_TAG,https://www.meridiam.com/notre-impact/approche-dinvestissement/?lang=fr
+str-meridiam-infra,fund-073,Meridiam - Long-Term Sustainable Infrastructure,energy,ENERGY_ENV,Energy,INCLUDED,DIRECT_TAG,https://www.meridiam.com/notre-impact/approche-dinvestissement/?lang=fr
+str-meridiam-infra,fund-073,Meridiam - Long-Term Sustainable Infrastructure,transport,INFRA_TRANSPORT,Transport,INCLUDED,DIRECT_TAG,https://www.meridiam.com/notre-impact/approche-dinvestissement/?lang=fr
+str-meridiam-infra,fund-073,Meridiam - Long-Term Sustainable Infrastructure,social_infrastructure,INFRA_TRANSPORT,Social Infrastructure,INCLUDED,DIRECT_TAG,https://www.meridiam.com/notre-impact/approche-dinvestissement/?lang=fr
+str-ui-regional,fund-107,UI Investissement - Regional SME Growth,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.ui-investissement.com/nos-investissements/
+str-ui-regional,fund-107,UI Investissement - Regional SME Growth,agri_food,FOOD_AGRI,Agri Food,INCLUDED,DIRECT_TAG,https://www.ui-investissement.com/nos-investissements/
+str-ui-regional,fund-107,UI Investissement - Regional SME Growth,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.ui-investissement.com/nos-investissements/
+str-ui-regional,fund-107,UI Investissement - Regional SME Growth,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.ui-investissement.com/nos-investissements/
+str-meanings-midcap,fund-072,Meanings - Private Equity Midcap,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.meanings.com/
+str-meanings-infrastructure,fund-072,Meanings - Infrastructure,infrastructure,INFRA_TRANSPORT,Infrastructure,INCLUDED,DIRECT_TAG,https://www.meanings.com/
+str-meanings-infrastructure,fund-072,Meanings - Infrastructure,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://www.meanings.com/
+str-latour-operator,fund-066,Latour Capital - Operational Buyouts,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.latour-capital.fr/qui-sommes-nous
+str-latour-operator,fund-066,Latour Capital - Operational Buyouts,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.latour-capital.fr/qui-sommes-nous
+str-cathay-growth,fund-033,Cathay - Cross Border Growth Capital,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.cathaycapital.com/fr/private-equity/
+str-cathay-growth,fund-033,Cathay - Cross Border Growth Capital,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://www.cathaycapital.com/fr/private-equity/
+str-sagard-newgen,fund-095,Sagard NewGen - Technology & Healthcare,technology,TECH_SOFTWARE,Technology,INCLUDED,DIRECT_TAG,https://www.sagard.com/fr/newgen/
+str-sagard-newgen,fund-095,Sagard NewGen - Technology & Healthcare,software_it,TECH_SOFTWARE,Software It,INCLUDED,DIRECT_TAG,https://www.sagard.com/fr/newgen/
+str-sagard-newgen,fund-095,Sagard NewGen - Technology & Healthcare,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.sagard.com/fr/newgen/
+str-sagard-midcap,fund-095,Sagard MidCap,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.sagard.com/fr/
+str-lfpi-direct,fund-068,LFPI - Direct Private Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://private-equity.lfpi.fr/investissements-directs-co-investissement/
+str-lfpi-direct,fund-068,LFPI - Direct Private Equity,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://private-equity.lfpi.fr/investissements-directs-co-investissement/
+str-parquest-midcap,fund-088,Parquest - Mid-Market Private Equity,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://parquest.fr/fr/secteurs/
+str-parquest-midcap,fund-088,Parquest - Mid-Market Private Equity,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://parquest.fr/fr/secteurs/
+str-parquest-midcap,fund-088,Parquest - Mid-Market Private Equity,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://parquest.fr/fr/secteurs/
+str-sodero-development,fund-099,Sodero - Capital Développement,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.sodero.fr/capital-developpement/
+str-sodero-development,fund-099,Sodero - Capital Développement,business_services,BUSINESS_SERVICES,Business Services,INCLUDED,DIRECT_TAG,https://www.sodero.fr/capital-developpement/
+str-sodero-transition,fund-099,Sodero - Capital Transition,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://www.sodero.fr/capital-transition/
+str-sodero-transition,fund-099,Sodero - Capital Transition,circular_economy,ENERGY_ENV,Circular Economy,INCLUDED,DIRECT_TAG,https://www.sodero.fr/capital-transition/
+str-ext-alba-infrastructure,fund-006,Alba - Infrastructure Projects,renewable_energy,ENERGY_ENV,Renewable Energy,INCLUDED,DIRECT_TAG,https://alba-ip.com/en/launch-of-alba-infra-partners/
+str-ext-alba-infrastructure,fund-006,Alba - Infrastructure Projects,energy_transition,ENERGY_ENV,Energy Transition,INCLUDED,DIRECT_TAG,https://alba-ip.com/en/launch-of-alba-infra-partners/
+str-ext-alba-infrastructure,fund-006,Alba - Infrastructure Projects,green_mobility,INFRA_TRANSPORT,Green Mobility,INCLUDED,DIRECT_TAG,https://alba-ip.com/en/launch-of-alba-infra-partners/
+str-ext-alba-infrastructure,fund-006,Alba - Infrastructure Projects,green_mobility,ENERGY_ENV,Green Mobility,INCLUDED,DIRECT_TAG,https://alba-ip.com/en/launch-of-alba-infra-partners/
+str-ext-alba-infrastructure,fund-006,Alba - Infrastructure Projects,social_infrastructure,INFRA_TRANSPORT,Social Infrastructure,INCLUDED,DIRECT_TAG,https://alba-ip.com/en/launch-of-alba-infra-partners/
+str-ext-artemis-holding,fund-019,Artémis - Long-Term Direct Investments,luxury,CONSUMER,Luxury,INCLUDED,DIRECT_TAG,https://www.groupeartemis.com/fr/
+str-ext-artemis-holding,fund-019,Artémis - Long-Term Direct Investments,consumer,CONSUMER,Consumer,INCLUDED,DIRECT_TAG,https://www.groupeartemis.com/fr/
+str-ext-btpki-minority,fund-025,BTP Capital Investissement - Construction Growth,construction,INDUSTRIALS,Construction,INCLUDED,DIRECT_TAG,https://www.btpki.fr/
+str-ext-btpki-minority,fund-025,BTP Capital Investissement - Construction Growth,building_materials,INDUSTRIALS,Building Materials,INCLUDED,DIRECT_TAG,https://www.btpki.fr/
+str-ext-btpki-minority,fund-025,BTP Capital Investissement - Construction Growth,construction_services,INDUSTRIALS,Construction Services,INCLUDED,DIRECT_TAG,https://www.btpki.fr/
+str-ext-butler-industries,fund-026,Butler Industries - Transformation & Turnaround,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://butlerindustries.com/activites
+str-ext-butler-industries,fund-026,Butler Industries - Transformation & Turnaround,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://butlerindustries.com/activites
+str-ext-butler-industries,fund-026,Butler Industries - Transformation & Turnaround,lifestyle,CONSUMER,Lifestyle,INCLUDED,DIRECT_TAG,https://butlerindustries.com/activites
+str-ext-caravelle-holding,fund-032,Caravelle - Majority Long-Term Investments,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://caravelle.fr/
+str-ext-caravelle-holding,fund-032,Caravelle - Majority Long-Term Investments,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://caravelle.fr/
+str-ext-caravelle-holding,fund-032,Caravelle - Majority Long-Term Investments,hospitality,REAL_ESTATE_HOSPITALITY,Hospitality,INCLUDED,DIRECT_TAG,https://caravelle.fr/
+str-ext-chevrillon-invest,fund-035,Groupe Chevrillon - Growth Investments,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.groupechevrillon.com/la-societe/
+str-ext-chevrillon-invest,fund-035,Groupe Chevrillon - Growth Investments,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://www.groupechevrillon.com/la-societe/
+str-ext-chevrillon-invest,fund-035,Groupe Chevrillon - Growth Investments,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.groupechevrillon.com/la-societe/
+str-ext-demea-agro-buyout,fund-038,Demea Agro - Food Buyout,food,FOOD_AGRI,Food,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-demea-agro-buyout,fund-038,Demea Agro - Food Buyout,agribusiness,FOOD_AGRI,Agribusiness,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-demea-agro-buyout,fund-038,Demea Agro - Food Buyout,food_supply_chain,FOOD_AGRI,Food Supply Chain,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-demea-agro-mezz,fund-038,Demea Agro - Mezzanine & Sponsorless,food,FOOD_AGRI,Food,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-demea-agro-mezz,fund-038,Demea Agro - Mezzanine & Sponsorless,agribusiness,FOOD_AGRI,Agribusiness,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-demea-agro-senior,fund-038,Demea Agro - Senior Debt,food,FOOD_AGRI,Food,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-demea-agro-senior,fund-038,Demea Agro - Senior Debt,agribusiness,FOOD_AGRI,Agribusiness,INCLUDED,DIRECT_TAG,https://www.demea-agro.com/fr/investissements/funds
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,it_services,TECH_SOFTWARE,It Services,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,b2b_services,BUSINESS_SERVICES,B2B Services,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,tourism,CONSUMER,Tourism / Leisure,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,tourism,REAL_ESTATE_HOSPITALITY,Tourism / Leisure,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-smallmid,fund-058,IDIA - Small & Midcap,construction,INDUSTRIALS,Construction,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/small-amp-midcap/
+str-ext-idia-agri,fund-058,IDIA - Agri & Food,agriculture,FOOD_AGRI,Agriculture,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/agri-agro-alimentaire/
+str-ext-idia-agri,fund-058,IDIA - Agri & Food,food,FOOD_AGRI,Food,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/agri-agro-alimentaire/
+str-ext-idia-agri,fund-058,IDIA - Agri & Food,agribusiness,FOOD_AGRI,Agribusiness,INCLUDED,DIRECT_TAG,https://www.ca-idia.com/agri-agro-alimentaire/
+str-ext-if-tomorrow,fund-060,Initiative & Finance - Tomorrow,environmental_transition,ENERGY_ENV,Environmental Transition,INCLUDED,DIRECT_TAG,https://www.initiative-finance.com/strategies/
+str-ext-mbo-buyout,fund-071,MBO+ - Buyout,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://mbo.plus/funds/buyout/
+str-ext-mbo-buyout,fund-071,MBO+ - Buyout,software,TECH_SOFTWARE,Software,INCLUDED,DIRECT_TAG,https://mbo.plus/funds/buyout/
+str-ext-mbo-buyout,fund-071,MBO+ - Buyout,b2b_services,BUSINESS_SERVICES,B2B Services,INCLUDED,DIRECT_TAG,https://mbo.plus/funds/buyout/
+str-ext-mfgi-holding,fund-075,MFGI - Owner-Led Industrial Buyouts,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.mfgi.fr/
+str-ext-mfgi-holding,fund-075,MFGI - Owner-Led Industrial Buyouts,manufacturing,INDUSTRIALS,Manufacturing,INCLUDED,DIRECT_TAG,https://www.mfgi.fr/
+str-ext-momentum-services,fund-076,Momentum Invest - Services Buyout & Growth,b2b_services,BUSINESS_SERVICES,B2B Services,INCLUDED,DIRECT_TAG,https://momentuminvest.fr/strategie/
+str-ext-momentum-services,fund-076,Momentum Invest - Services Buyout & Growth,it_services,TECH_SOFTWARE,It Services,INCLUDED,DIRECT_TAG,https://momentuminvest.fr/strategie/
+str-ext-momentum-services,fund-076,Momentum Invest - Services Buyout & Growth,professional_services,BUSINESS_SERVICES,Professional Services,INCLUDED,DIRECT_TAG,https://momentuminvest.fr/strategie/
+str-ext-moringa-impact,fund-078,Moringa - Agroforestry Impact,agroforestry,FOOD_AGRI,Agroforestry,INCLUDED,DIRECT_TAG,https://afr100.org/content/moringa-partnership
+str-ext-moringa-impact,fund-078,Moringa - Agroforestry Impact,agriculture,FOOD_AGRI,Agriculture,INCLUDED,DIRECT_TAG,https://afr100.org/content/moringa-partnership
+str-ext-ocean-industry,fund-084,Ocean Peak Capital - Industrial Transformation,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.opeo.consulting/page-actualit%C3%A9s-publications/ocean-peak-capital-entre-au-capital-dopeo-pour-accompagner-une-nouvelle-phase-de-d%C3%A9veloppement
+str-ext-ocean-industry,fund-084,Ocean Peak Capital - Industrial Transformation,industrial_services,INDUSTRIALS,Industrial Services,INCLUDED,DIRECT_TAG,https://www.opeo.consulting/page-actualit%C3%A9s-publications/ocean-peak-capital-entre-au-capital-dopeo-pour-accompagner-une-nouvelle-phase-de-d%C3%A9veloppement
+str-ext-pleiade-longterm,fund-092,Pléiade - Entrepreneur Long-Term Equity,ex_biotech,HEALTHCARE,Biotech,EXCLUDED_EXPLICIT,DIRECT_TAG,https://www.pleiadeinvestissement.com/fr/criteres/
+str-ext-pleiade-longterm,fund-092,Pléiade - Entrepreneur Long-Term Equity,ex_heavy_industry,INDUSTRIALS,Heavy Industry,EXCLUDED_EXPLICIT,DIRECT_TAG,https://www.pleiadeinvestissement.com/fr/criteres/
+str-ext-samfi-holding,fund-096,SAMFI Invest - Diversified Family Holding,logistics,INFRA_TRANSPORT,Logistics,INCLUDED,DIRECT_TAG,https://www.samfi-invest.fr/presentation/
+str-ext-samfi-holding,fund-096,SAMFI Invest - Diversified Family Holding,renewable_energy,ENERGY_ENV,Renewable Energy,INCLUDED,DIRECT_TAG,https://www.samfi-invest.fr/presentation/
+str-ext-samfi-holding,fund-096,SAMFI Invest - Diversified Family Holding,real_estate,REAL_ESTATE_HOSPITALITY,Real Estate,INCLUDED,DIRECT_TAG,https://www.samfi-invest.fr/presentation/
+str-ext-samfi-holding,fund-096,SAMFI Invest - Diversified Family Holding,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://www.samfi-invest.fr/presentation/
+str-ext-sofipaca-equity,fund-100,SOFIPACA - Regional Minority Capital,ex_real_estate,REAL_ESTATE_HOSPITALITY,Real Estate,EXCLUDED_EXPLICIT,DIRECT_TAG,https://www.sofipaca.fr/capital-investissement/
+str-ext-trail-slam,fund-104,"TRAIL - SLAM (Sport, Luxury, Art & Music)",sports,CONSUMER,Sports,INCLUDED,DIRECT_TAG,https://www.trailcapital.eu/fr/funds/fonds-dinvestisseurs-prives-slam
+str-ext-trail-slam,fund-104,"TRAIL - SLAM (Sport, Luxury, Art & Music)",luxury,CONSUMER,Luxury,INCLUDED,DIRECT_TAG,https://www.trailcapital.eu/fr/funds/fonds-dinvestisseurs-prives-slam
+str-ext-trail-slam,fund-104,"TRAIL - SLAM (Sport, Luxury, Art & Music)",art,CONSUMER,Art,INCLUDED,DIRECT_TAG,https://www.trailcapital.eu/fr/funds/fonds-dinvestisseurs-prives-slam
+str-ext-trail-slam,fund-104,"TRAIL - SLAM (Sport, Luxury, Art & Music)",music,CONSUMER,Music,INCLUDED,DIRECT_TAG,https://www.trailcapital.eu/fr/funds/fonds-dinvestisseurs-prives-slam
+str-ext-verdoso-industrials,fund-108,Verdoso - Industrial Carve-out & Turnaround,industrials,INDUSTRIALS,Industrials,INCLUDED,DIRECT_TAG,https://www.verdoso.com/
+str-ext-verdoso-industrials,fund-108,Verdoso - Industrial Carve-out & Turnaround,services,BUSINESS_SERVICES,Services,INCLUDED,DIRECT_TAG,https://www.verdoso.com/
+str-ext-vivalto-health,fund-109,Vivalto Partners - European Healthcare,healthcare,HEALTHCARE,Healthcare,INCLUDED,DIRECT_TAG,https://www.vivaltopartners.com/a-propos/
+str-ext-vivalto-health,fund-109,Vivalto Partners - European Healthcare,healthcare_services,HEALTHCARE,Healthcare Services,INCLUDED,DIRECT_TAG,https://www.vivaltopartners.com/a-propos/
+str-ext-vivalto-health,fund-109,Vivalto Partners - European Healthcare,medtech,HEALTHCARE,Medtech,INCLUDED,DIRECT_TAG,https://www.vivaltopartners.com/a-propos/

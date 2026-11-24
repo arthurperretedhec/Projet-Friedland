@@ -1,0 +1,113 @@
+﻿fund_id,management_company,strategy_count,equity_size_strategies,ev_size_strategies,research_coverage
+fund-001,Abenex Capital SAS,2,1,2,AT_LEAST_ONE_STRATEGY
+fund-002,Access Capital Partners Group SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-003,Activa Capital,1,1,1,AT_LEAST_ONE_STRATEGY
+fund-004,Adagia Partners SAS,1,0,1,AT_LEAST_ONE_STRATEGY
+fund-005,Adaxtra Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-006,Alba Infra Partners Holdco SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-007,Albarest Partners SAS,1,0,1,AT_LEAST_ONE_STRATEGY
+fund-008,Aldebaran Capital Partners SAS,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-009,Alpha Associes Conseil SAS - Groupe Alpha,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-010,Amethis,3,3,3,AT_LEAST_ONE_STRATEGY
+fund-011,Andera Partners SCA,6,5,0,AT_LEAST_ONE_STRATEGY
+fund-012,Antin Infrastructure Partners SAS,3,3,0,AT_LEAST_ONE_STRATEGY
+fund-013,Aquiti Gestion,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-014,ArchiMed SAS,1,0,1,AT_LEAST_ONE_STRATEGY
+fund-015,Ardian,2,1,1,AT_LEAST_ONE_STRATEGY
+fund-016,AREV Partners,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-017,Argos France SAS,2,0,1,AT_LEAST_ONE_STRATEGY
+fund-018,ARLANE,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-019,Artemis SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-020,Astorg Partners SA,2,0,2,AT_LEAST_ONE_STRATEGY
+fund-021,Azulis Capital SA,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-022,B & Capital SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-023,BlackFin Capital Partners SAS,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-024,Bpifrance Investissement SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-025,BTP Capital Investissement SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-026,Butler Capital Partners SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-027,Capelia SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-028,Capital Croissance,3,0,0,AT_LEAST_ONE_STRATEGY
+fund-029,Capital Export SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-030,Capital Grand Est SAS,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-031,CAPZA,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-032,Caravelle SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-033,Cathay Capital Private Equity SAS,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-034,Chequers Capital,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-035,Chevrillon & Associes SCA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-036,Ciclad,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-037,Credit Mutuel Equity,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-038,DEMEA Agro SAS,3,0,0,AT_LEAST_ONE_STRATEGY
+fund-039,Demea Sustainable Investment SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-040,Dentressangle Initiatives SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-041,Ekkio Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-042,Elaia,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-043,Elais Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-044,EMZ Partners SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-045,EPF Partners SA,0,0,0,NO_CURRENT_STRATEGY_RECORD
+fund-046,Equistone Partners France SAS,1,1,1,AT_LEAST_ONE_STRATEGY
+fund-047,Eurazeo SE,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-048,Evolem SA,2,1,0,AT_LEAST_ONE_STRATEGY
+fund-049,Extendam SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-050,Finadvance SA,0,0,0,NO_CURRENT_STRATEGY_RECORD
+fund-051,FrenchFood Capital SAS,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-052,Galia Gestion SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-053,Galiena Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-054,Groupe IDI,1,1,1,AT_LEAST_ONE_STRATEGY
+fund-055,Groupe Siparex,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-056,Hivest Capital Partners SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-057,HLD Associes SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-058,IDIA Capital Investissement,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-059,InfraVia Capital Partners SAS,2,1,0,AT_LEAST_ONE_STRATEGY
+fund-060,Initiative & Finance Investissement SA,2,0,1,AT_LEAST_ONE_STRATEGY
+fund-061,InnovaFonds,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-062,IRDI SORIDEC SA,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-063,Isatis Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-064,IXO Private Equity,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-065,Keensight Capital SAS,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-066,Latour Capital Management SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-067,LBO France Gestion SAS,1,0,1,AT_LEAST_ONE_STRATEGY
+fund-068,LFPI,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-069,LMBO,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-070,M Capital Partners SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-071,MBO & Co,3,0,2,AT_LEAST_ONE_STRATEGY
+fund-072,Meanings Capital Partners,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-073,Meridiam,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-074,Merieux Equity Partners SAS,2,1,0,AT_LEAST_ONE_STRATEGY
+fund-075,MFGI,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-076,Momentum Invest SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-077,Montefiore Investment SAS,1,0,1,AT_LEAST_ONE_STRATEGY
+fund-078,Moringa Partnership SASU,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-079,Natixis,0,0,0,NO_CURRENT_STRATEGY_RECORD
+fund-080,Naxicap,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-081,NCI SAS,1,0,1,AT_LEAST_ONE_STRATEGY
+fund-082,NextStage AM SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-083,Nord Croissance SAS,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-084,Ocean Peak Capital,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-085,Omnes Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-086,PAI Partners SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-087,Paluel Marmont Capital SA,1,1,0,AT_LEAST_ONE_STRATEGY
+fund-088,Parquest,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-089,Perceva Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-090,Phillimore Investissement SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-091,Picardie Investissement SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-092,Pleiade Investissement,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-093,Qualium Investissement SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-094,RAISE Investissement SAS,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-095,Sagard SAS,2,1,0,AT_LEAST_ONE_STRATEGY
+fund-096,Samfi Invest SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-097,Seven2 SAS,2,2,0,AT_LEAST_ONE_STRATEGY
+fund-098,Societe de Capital-Developpement d'Ile de France - SOCADIF,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-099,Sodero Participations SAS,3,0,1,AT_LEAST_ONE_STRATEGY
+fund-100,Sofipaca,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-101,Sparring Capital SAS,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-102,Tethys SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-103,Tikehau Capital SCA,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-104,Trail Capital SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-105,Truffle Capital,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-106,Turenne Capital Partenaires SASU,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-107,UI Investissement SAS,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-108,Verdoso Investments SA,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-109,Vivalto Partners,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-110,Weinberg Capital Partners,2,0,0,AT_LEAST_ONE_STRATEGY
+fund-111,Wendel SE,1,0,0,AT_LEAST_ONE_STRATEGY
+fund-112,Yotta Capital Partners SAS,2,0,0,AT_LEAST_ONE_STRATEGY

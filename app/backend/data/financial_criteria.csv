@@ -1,0 +1,42 @@
+﻿strategy_id,metric,min_eur_m,max_eur_m,bound_interpretation,source_url,note,collected_on
+str-adaxtra-pme,Revenue,5,80,Indicative target revenue,https://new.adaxtra.com/adaxtra-pme/,The official Adaxtra PME strategy page was rechecked on 2026-11-24.,2026-11-23
+str-aldebaran-transform,Revenue,20,300,Range,https://www.aldebaran.fr/en/manifest,Eligible target sales.,2026-11-23
+str-amethis-europe,Revenue,10,200,Range,https://amethis.com/en/investment-strategies/,Target European companies.,2026-11-23
+str-amethis-africa,Revenue,30,200,Range,https://amethis.com/en/investment-strategies/,Target Sub-Saharan businesses.,2026-11-23
+str-amethis-mena,Revenue,5,40,Range,https://amethis.com/en/investment-strategies/,Target MENA businesses.,2026-11-23
+str-aquiti-transmission,Revenue,1,,Strictly above lower bound,https://www.aquiti.fr/metiers/capital-developpement,Company should already be profitable.,2026-11-23
+str-capcroissance-pepites,Revenue,5,30,Range,https://capitalcroissance.fr/notre-metier/,Pépites strategy.,2026-11-23
+str-capcroissance-pme,Revenue,10,100,Range,https://capitalcroissance.fr/notre-metier/,PME growth strategy.,2026-11-23
+str-capcroissance-k2,Revenue,50,250,Range,https://capitalcroissance.fr/notre-metier/,K2/ETI strategy.,2026-11-23
+str-siparex-eti,Revenue,,500,Up to upper bound,https://www.siparex.com/plateforme/eti/,CA <=500 M€.,2026-11-23
+str-keensight-growth,Revenue,10,400,Range,https://keensight.com/about-us/,From previous sourced workbook; needs manual checking.,2026-11-23
+str-activa-core,Revenue,10,50,Range,https://activa.fr/vision,From previous sourced workbook; needs manual checking.,2026-11-23
+str-capza-flex,EBITDA,5,20,Range,https://capza.co/fr/expertise/flex-equity-fr,From previous sourced workbook; review mixed capital instruments.,2026-11-23
+str-capza-flex-mid,EBITDA,20,,Strictly above lower bound,https://capza.co/fr/expertise/flex-equity-mid-market-fr/,From previous sourced workbook.,2026-11-23
+str-hivest-sme,revenue,50,500,,https://hivestcapital.com/,,2026-11-23
+str-ekkio-direct,revenue,10,100,,https://ekkio.com/investissements,,2026-11-23
+str-sagard-newgen,revenue,,150,,https://www.sagard.com/fr/newgen/,,2026-11-23
+str-sodero-development,revenue,4,,greater_than_strict,https://www.sodero.fr/capital-developpement/,Published revenue threshold is strictly greater than the listed value; do not treat as inclusive.,2026-11-23
+str-sodero-transition,revenue,3,,greater_than_strict,https://www.sodero.fr/capital-transition/,Published revenue threshold is strictly greater than the listed value; do not treat as inclusive.,2026-11-23
+str-ext-arlane-smallcap,Revenue,10,50,Target range,https://www.arlane.com/fr/strategie,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-caravelle-holding,Revenue,50,300,Range,https://caravelle.fr/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-elais-buyout,Revenue,,,WITHHELD_PENDING_CORROBORATION,https://www.infocession.fr/investisseurs/elais-capital,Historical Infocession provenance. Revenue bounds are withheld pending independent confirmation.,2026-11-23
+str-ext-if-pme,Revenue,5,100,Target range,https://www.initiative-finance.com/strategies/fonds-pme/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-if-tomorrow,Revenue,50,250,Generally in this range,https://www.initiative-finance.com/strategies/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-momentum-services,Revenue,10,100,Target range,https://momentuminvest.fr/strategie/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-momentum-services,Operating profit,1,,Strictly greater than €1m - NOT EBITDA,https://momentuminvest.fr/strategie/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-nci-transmission,Revenue,10,,Minimum >= 10m,https://www.n-ci.com/nos-expertises/pme-eti/notre-strategie/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-nord-croissance,Revenue,,10,Usually less than €10m,https://mesaidespubliques.infogreffe.fr/aides/intervention-fonds-propres-nord-croissance,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-phillimore-niche,Revenue,,,WITHHELD_PENDING_CORROBORATION,https://www.infocession.fr/investisseurs/phillimore,Historical Infocession provenance. Revenue bounds are withheld pending independent confirmation.,2026-11-23
+str-ext-pleiade-longterm,Revenue,20,,Indicative >€20m; exceptions if add-on identified,https://www.pleiadeinvestissement.com/fr/criteres/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-ext-sofipaca-equity,Revenue,5,,Strictly > €5m,https://www.sofipaca.fr/capital-investissement/,User-facing matching must respect units and strict bounds.,2026-11-23
+str-amethis-europe,Revenue,10,200,PUBLISHED_STRATEGY_RANGE,https://amethis.com/en/investment-strategies/europe/,Sales; published strategy band,2026-11-23
+str-amethis-europe,Enterprise Value,20,200,PUBLISHED_STRATEGY_RANGE,https://amethis.com/en/investment-strategies/europe/,Target EV; published strategy band,2026-11-23
+str-amethis-africa,Revenue,30,200,PUBLISHED_STRATEGY_RANGE,https://amethis.com/en/investment-strategies/africa/,Sales; published strategy band,2026-11-23
+str-amethis-africa,Enterprise Value,20,150,PUBLISHED_STRATEGY_RANGE,https://amethis.com/en/investment-strategies/africa/,Target EV; published strategy band,2026-11-23
+str-amethis-mena,Revenue,5,40,PUBLISHED_STRATEGY_RANGE,https://amethis.com/en/investment-strategies/north-africa-and-the-middle-east/,Sales; published strategy band,2026-11-23
+str-amethis-mena,Enterprise Value,7,40,PUBLISHED_STRATEGY_RANGE,https://amethis.com/en/investment-strategies/north-africa-and-the-middle-east/,Target EV; published strategy band,2026-11-23
+str-evolem-platform,Revenue,10,100,PUBLISHED_STRATEGY_RANGE,https://evolem.com/activites/plateforme/,Typical company revenue; no minimum for add-on acquisitions,2026-11-23
+str-ardian-expansion,Enterprise Value,100,500,PUBLISHED_STRATEGY_RANGE,https://www.ardian.com/expertise/private-equity/expansion,Target EV; official page,2026-11-23
+str-montefiore-vi,Enterprise Value,100,500,PUBLISHED_STRATEGY_RANGE,https://montefiore.eu/strategie-investissement/,Target EV; official site,2026-11-23
+str-argos-midmarket,EBITDA,10,30,Published target range,https://argos.fund/argos-closes-its-ninth-mid-market-fund-at-e736-million-64-above-previous-vintage/,Argos Mid-Market IX announcement dated September 2026,2026-11-23

@@ -21,7 +21,7 @@ Status: agreed on 2026-11-17
 | API (routes) | `app/backend/app/main.py`, `app/backend/app/api/` | validate query parameters, call logic, return typed responses | read CSV files directly, contain rules |
 | Logic | `app/backend/app/logic/` | segment rule, filtering, counts, data checks (pure functions) | read files or call the network |
 | Data access | `app/backend/app/data/` | load and parse the CSV files into typed rows | contain business rules |
-| Data files | `app/backend/data/` | `strategies.csv`, `deals.csv`, `portfolio.csv`, `README.md` (sources, method) | be edited without updating `collected_on` and the source |
+| Data files | `app/backend/data/` | Public investor CSV snapshot and provenance tables | be edited without updating `collected_on` and the source |
 | Collection scripts | `app/backend/scripts/` | one-off helpers, e.g. NAF lookup through the public API | run when the app runs |
 | Tests | `app/backend/tests/`, `app/frontend/**/*.test.ts(x)`, `app/frontend/e2e/` | logic, data checks on the real CSV files, journeys | call live services |
 
@@ -39,33 +39,58 @@ Error envelope: `{"error": {"code": "...", "message": "...", "details": ...}}`. 
 
 ## Data and storage
 
-- Storage: CSV files in `app/backend/data/`, read-only at runtime, because the data is collected by hand, small
-  (about 100 strategies, a few hundred deals and portfolio rows) and must be readable in Excel. UTF-8, comma
-  separator, one header row. Multi-value cells use `; ` (semicolon + space).
-- Schema changes: add a column in the CSV, the loader, the checks and this table in the same change.
-- Every row of every file carries: `source_url`, `other_source_urls` (optional, `; `-separated),
-  `source_quote` (the exact passage(s) supporting the row), `collected_on` (YYYY-MM-DD), `verified_by`
-  (team member who checked the row against the source; empty until checked), `verified_on`.
-- Missing information stays empty. Never filled from memory or estimated.
+- FastAPI loads the public CSV snapshot from `app/backend/data/` at startup via `app.data.investors`.
+  It exposes a read-only in-memory catalog at `app.state.investor_data`. Imports are UTF-8 with an
+  optional BOM, comma-separated, and use semicolons for multi-value cells. IDs are read as-is.
+- Blank cells become `None` (JSON `null` at an API boundary). Monetary fields are positive decimals
+  in EUR millions, with ordered bounds when both exist. The catalog keeps source text and URLs as supplied.
+- This snapshot replaces the planned flat storage schema. The API routes above are still planned.
+  Research tables `entity_aliases.csv`, `sector_dictionary.csv` and `unresolved_entities.csv` remain
+  available in the import for review. Private transaction files are outside the runtime loader.
 
-| File | Fields (besides the source fields above) |
+| File | Keys and application fields |
 |---|---|
-| `strategies.csv` | `strategy_id` (slug, unique), `management_company`, `strategy_name`, `segment` (small / mid / large), `ticket_min_eur_m`, `ticket_max_eur_m`, `ev_min_eur_m`, `ev_max_eur_m`, `ebitda_min_eur_m`, `stake` (majority / minority / both), `deal_types`, `sectors`, `geography`, `other_criteria` (verbatim text of any other published criterion), `last_fund_name`, `last_fund_size_eur_m`, `last_fund_year`, `partner_name` (first and last name only), `website` |
-| `deals.csv` | `deal_id` (unique), `strategy_id` (lead strategy in our base), `target_name`, `target_naf_code`, `target_description`, `deal_date` (YYYY-MM or YYYY-MM-DD), `ev_eur_m` (only if published), `deal_type`, `role` (lead / co-investor), `co_investors` (text), `direction` (entry / exit) |
-| `portfolio.csv` | `strategy_id`, `company_name`, `company_naf_code`, `company_description`, `sector`, `entry_year` |
+| `funds.csv` | Unique `fund_id`, management company name and research coverage |
+| `strategies.csv` | Unique `strategy_id`, parent `fund_id`, original `strategy_name`, bucket and sector summaries, screening lane, stake and deal tags, `equity_ticket_*_eur_m`, `target_ev_*_eur_m`, `target_ebitda_min_eur_m`, fund name and source fields |
+| `buckets.csv`, `strategy_buckets.csv` | Unique `bucket_id`; one primary and zero or more secondary memberships per strategy, with classification quality |
+| `sectors.csv`, `strategy_sectors.csv` | Unique `sector_code`; strategy-to-sector rows retain raw tags, subsectors, polarity and mapping confidence. Several rows can describe the same code. |
+| `strategy_sector_summary.csv` | Unique `strategy_id`, parent `fund_id`, sector scope and summary screening rules |
+| `financial_criteria.csv`, `investment_amounts.csv` | Many rows per strategy with metric or amount type, EUR m bounds and supporting source. Unspecified investment amounts retain their own type. |
+| `deals.csv`, `portfolio.csv` | Public records link to exactly one of `strategy_id` or `fund_id`. Fund-level rows can identify a `reported_vehicle` outside the tracked strategy catalog. Deals have a unique `deal_id`. The loader exposes fund-level portfolio rows through `fund_portfolio`. |
+| `source_log.csv` | Unique `source_id`; strategy and deal references use IDs, portfolio references use a strategy ID or `strategy_id|company_name`, fund-level portfolio references use `fund_id|company_name`, and management-company references use the published company name. `source_paraphrase` stores editorial summaries. `evidence_status` separates `SOURCE_REFERENCE` from `RESEARCH_LEAD` at load time. References retain provenance and can require further verification. |
 
-Reference lists (in `app/backend/app/logic/reference.py`):
+The snapshot has 10 normalized sector codes and 8 bucket IDs. Strategy stake and deal tags, and public
+transaction role and direction values, differ from the legacy reference lists. The snapshot also omits
+strategy `segment`, `last_fund_year`, `last_fund_size_eur_m`, `partner_name`, and a strategy-level
+`collected_on` column. Source dates are available where supplied in `source_log.csv` and child tables.
+Verification columns from the original design are absent. These gaps matter before implementing the
+planned browse and detail routes.
 
-- `segment`: `small`, `mid`, `large`.
-- `deal_types`: `primary_lbo`, `secondary_lbo`, `build_up`, `growth`, `carve_out`.
-- `stake`: `majority`, `minority`, `both`.
-- `sectors` (agreed 2026-11-17): `software_it`, `healthcare`, `business_services`, `industrials`, `consumer_retail`,
-  `food_beverage`, `financial_services`, `education`, `energy_environment`, `construction_real_estate`,
-  `transport_logistics`, `media_telecom`, `agriculture`, `generalist`.
+`app.logic.investor_scoring.scoring_input` projects each strategy into the existing scoring branch's
+`Fund` model inputs. Deal types and sectors without a complete mapping return unknown. Generic buyout
+does not identify a primary or secondary LBO. Generalists with fully mapped preferences retain those
+preferences and the generalist marker. An explicit sector exclusion projects to unknown because the
+legacy model cannot express it. Subsector exclusions, bucket membership and screening lanes stay
+available in the catalog for the eventual eligibility rules. After strategy scoring, pass the engine's best-first eligible ranking to
+`buyer_longlist`. It keeps the first result for each `fund_id`, including the winning `strategy_id` and
+its score explanation. The full strategy ranking remains available to callers.
 
-**Selection rule for the 100 strategies** (agreed 2026-11-17): management company French or with a Paris office;
+**Original selection target for the 100 strategies** (agreed 2026-11-17): management company French or with a Paris office;
 member of France Invest or listed in the AMF GECO database; last fund raised in 2018 or later; active in LBO or
 growth investments in French companies. Target split: 35 small, 40 mid, 25 large.
+
+### Public snapshot preparation
+
+The release snapshot keeps source URLs and omits verbatim source excerpts. Financial facts previously
+present only in quote fields are preserved as attributed paraphrases where supported by the original
+record. The quotes stay blank. The two Infocession revenue ranges and six derived strategy-sector links
+were withheld pending independent corroboration. The strategy IDs and historical classifications remain,
+with the rows marked for historical review and the directory sources listed only as research leads.
+CFNEWS profiles are also research leads. Research leads are accessible separately from source references.
+
+The Dangel deal and portfolio record retain their original deal ID and company name. They point to
+Capital Grand Est via `fund_id` and record ReBest as the reported vehicle. ReBest has no strategy ID
+in this snapshot. Four public deal announcements or adviser pages have matching provenance entries.
 
 ## External services
 
@@ -109,3 +134,4 @@ None. The app reads the CSV files at startup.
 | 2026-11-18 | Correction: matching and ranked output (F6) are in the MVP delivered by 1 December, built after the database; the database is handed over on GitHub to a teammate for phase 2 | the agreed documents had wrongly put matching under "not in the MVP" | owner |
 | 2026-11-18 | Next.js and eslint-config-next 16.4.2 -> 16.4.6 in `app/frontend` (scaffold left unchanged) | 16.4.2 has a known moderate vulnerability (GHSA-mfr8-8qww-v76h, GHSA-vc7v-qv4w-wrv8) and `next build` refuses to run; 16.4.6 is the patched release of the same series | owner |
 | 2026-11-17 | Scope and architecture agreed (product.md, architecture.md, acceptance.md, plan.md) | documents reviewed after the product interview | owner (Constantin Sorel) |
+| 2026-11-24 | Load the normalized investor CSV snapshot and project legacy scoring inputs separately | Preserve source IDs, relationships and financial provenance while keeping the scoring branch independent | owner import and integration request |

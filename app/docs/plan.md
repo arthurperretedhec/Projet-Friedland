@@ -10,7 +10,7 @@ members are still to plan.
 | # | Slice | Acceptance criteria | Skills | Status |
 |---|---|---|---|---|
 | 1 | Walking skeleton: `npm run create-app`, `npm run setup`, page shows "Backend status: OK", `npm run verify` passes | – | product-interview | done |
-| 2 | Data format: empty CSV files with headers, reference lists, loader and data-quality tests (written first, on small test fixtures), data `README.md` (method, sources, GDPR note) | AC7, AC8, DQ1–DQ9, CALC1–CALC4 | manage-data, test-and-check | todo |
+| 2 | Normalized investor CSV import: startup loader, relationship and amount validation, and standalone scoring adapter | DQ2, DQ3 and import checks | manage-data, test-and-check | implemented |
 | 3 | Collection batch 1: 20 strategies (small cap), with source quotes | DQ1–DQ7 | – | todo |
 | 4 | Collection batch 2: 20 strategies (small and mid cap) | DQ1–DQ7 | – | todo |
 | 5 | Collection batch 3: 20 strategies (mid cap) | DQ1–DQ7 | – | todo |
@@ -32,6 +32,11 @@ members are still to plan.
 |---|---|---|---|---|
 | 2026-11-17 | – | Product interview; drafts of the four documents | `npm ci` (exit 0); `npm run setup` in template mode: Node 26.13.0, Python 3.12.4 found (exit 0) | documents not yet agreed |
 | 2026-11-18 | 1 | Documents agreed (2026-11-17); `npm run create-app`; `npm run setup`; Next.js 16.4.2 -> 16.4.6 after `next build` refused the vulnerable version | `npm run verify`: first run 1 step failed (frontend build, security refusal); after the update all 8 steps passed (exit 0); Playwright screenshots at 1366 and 390 px looked at by the assistant: "Backend status: OK" | `npm audit` still lists dev-only tooling findings (minimatch, picomatch), not shipped in the app |
+| 2026-11-24 | 2 | Loaded the 112-fund / 153-strategy import at startup and added a scoring adapter and fund-level longlist helper | Core validator passed; `npm run verify` passed (10 backend tests, 7 frontend tests and 2 health-page browser checks at 1366 and 390 px); all 153 strategies accepted by the separate scoring model | Source coverage, legacy vocabulary alignment and scoring/API wiring remain open |
+
+| 2026-11-24 | 2 review | Code, test and security reviews found two sector projection defects. Preserved generalist preferences and projected explicit exclusions as unknown. | Both regressions reproduced before the fix; `npm run verify` then passed all 8 stages (12 backend tests, 7 frontend tests, 2 Chromium smoke checks). The separate scoring checkout passed 132 tests. | Include the existing local-data ignore rule in the PR. Source redistribution rights and production eligibility remain open. |
+
+| 2026-11-24 | 2 publication | Prepared the clean investor snapshot from the main baseline. Preserved the original universe and financial criteria except unsupported Infocession bounds. Separated research leads, retained sourced paraphrases, and corrected ReBest attribution. | Dataset validator and unittest passed; `npm run verify` passed all eight stages with 15 backend tests, seven frontend tests and two browser checks; all 153 strategies validated against the separate scoring model | Original branch remains separate. Scoring production wiring and source publication decisions remain open. |
 
 ## Known problems and open questions
 

@@ -1,0 +1,42 @@
+﻿strategy_id,reported_min_eur_m,reported_max_eur_m,amount_type,currency_units,source_url,interpretation_note,collected_on
+str-albarest-core,5,15,investment_amount_unspecified,EUR m,https://albarest-partners.com/transmission-et-developpement/,"Official website: Ticket unitaire, investissements compris entre 5 et 15 M€.",2026-11-23
+str-amethis-europe,10,,investment_amount_minimum_open_ended,EUR m,https://amethis.com/en/investment-strategies/,"Site states €10–25m or more, not a hard cap; may include quasi-equity.",2026-11-23
+str-amethis-africa,25,,investment_amount_minimum_open_ended,EUR m,https://amethis.com/en/investment-strategies/,€25–40m or more; do not interpret €40m as maximum.,2026-11-23
+str-amethis-mena,5,15,investment_amount_unspecified,EUR m,https://amethis.com/en/investment-strategies/,,2026-11-23
+str-andera-acto,10,150,mezzanine_financing,EUR m,https://www.anderapartners.com/en/expertise/,,2026-11-23
+str-aquiti-transmission,,10,shares_or_convertible_bonds,EUR m,https://www.aquiti.fr/metiers/capital-developpement,,2026-11-23
+str-capcroissance-pepites,3,15,investment_amount_unspecified,EUR m,https://capitalcroissance.fr/notre-metier/,,2026-11-23
+str-capcroissance-pme,15,30,investment_amount_unspecified,EUR m,https://capitalcroissance.fr/notre-metier/,,2026-11-23
+str-capcroissance-k2,25,,investment_amount_unspecified,EUR m,https://capitalcroissance.fr/notre-metier/,,2026-11-23
+str-blackfin-venture,3,30,initial_investment_checks,EUR m,https://blackfin.com/tech-venture/,,2026-11-23
+str-siparex-midcap,5,30,investment_amount_unspecified,EUR m,https://www.siparex.com/plateforme/midcap/,,2026-11-23
+str-siparex-eti,20,50,investment_amount_unspecified,EUR m,https://www.siparex.com/plateforme/eti/,,2026-11-23
+str-infravia-growth,10,50,investment_amount_one_or_more_transactions,EUR m,https://infraviacapital.com/growth/,,2026-11-23
+str-argos-midmarket,30,100,entry_ticket_not_explicit_equity,,https://argos.fund/fr/argos-mid-market/,,2026-11-23
+str-elaia-dv5,1,15,investment_ticket_not_explicit_equity,,https://elaia.com/news/elaias-fifth-digital-venture-fund-dv5-announces-first-close-at-120m,,2026-11-23
+str-elaia-dts3,1,13,investment_ticket_not_explicit_equity,,https://elaia.com/news/elaia-announces-final-close-of-dts3-at-134m,,2026-11-23
+str-isatis-expansion,4,10,investment_ticket_not_explicit_equity,,https://isatis-capital.fr/actualites/isatis-capital-annonce-de-nouvelles-promotions-internes,,2026-11-23
+str-montefiore-vi,40,200,investment_ticket_not_explicit_equity,,https://montefiore.eu/en/strategy/,,2026-11-23
+str-naxicap-buyout,10,150,investment_ticket_not_explicit_equity,,https://naxicap.com/,,2026-11-23
+str-sparring-transmission,15,30,investment_ticket_not_explicit_equity,,https://sparringcapital.com/transmission/,,2026-11-23
+str-sparring-growth,3,8,investment_ticket_not_explicit_equity,,https://sparringcapital.com/en/,,2026-11-23
+str-weinberg-coinvest,6,25,investment_ticket_not_explicit_equity,,https://www.weinbergcapital.com/expertise/wp-co-invest/,,2026-11-23
+str-weinberg-defense,5,15,investment_ticket_not_explicit_equity,,https://www.weinbergcapital.com/actualites/dossier-defense-securite/,,2026-11-23
+str-ekkio-direct,5,50,investment_amount_not_explicit_equity,,https://ekkio.com/investissements,,2026-11-23
+str-frenchfood-agro,3,10,capital_and_quasi_equity_not_pure_equity,,https://frenchfoodcapital.com/frenchfood-agroinvest/,,2026-11-23
+str-galiena-small,10,30,investment_ticket_not_explicit_equity,,https://www.galiena-capital.com/nos-metiers/,,2026-11-23
+str-turenne-emergence,4,15,investment_ticket_not_explicit_equity,,https://www.turennecapital.com/expertises/emergence/presentation/,,2026-11-23
+str-turenne-industrie,5,,investment_ticket_lower_bound_not_explicit_equity,,https://www.turennecapital.com/expertises/industrie/presentation/,"Strictly greater than €5m, NOT inclusive. Source does not say pure equity. Manual review required.",2026-11-23
+str-sodero-development,0.5,10,equity_or_quasi_equity_co_investment,,https://www.sodero.fr/capital-developpement/,,2026-11-23
+str-ext-arlane-smallcap,5,20,investment_amount_unspecified,EUR m,https://www.arlane.com/fr/strategie,"Published investment ticket, not pure equity",2026-11-23
+str-ext-idia-smallmid,1,35,investment_amount_unspecified,EUR m,https://www.ca-idia.com/small-amp-midcap/,Published investment tickets; not labelled all-equity,2026-11-23
+str-ext-if-pme,3,20,investment_amount_unspecified,EUR m,https://www.initiative-finance.com/strategies/fonds-pme/,Published investment ticket; not stated as pure equity,2026-11-23
+str-ext-if-tomorrow,20,80,investment_amount_unspecified,EUR m,https://www.initiative-finance.com/strategies/,"Published ticket, not necessarily pure equity",2026-11-23
+str-ext-mbo-buyout,10,45,investment_amount_unspecified,EUR m,https://mbo.plus/funds/buyout/,Published ticket; may exceed 45m with LPs,2026-11-23
+str-ext-momentum-services,4,20,investment_amount_unspecified,EUR m,https://momentuminvest.fr/strategie/,Published investment size; no explicit all-equity assertion,2026-11-23
+str-ext-nci-transmission,3,15,investment_amount_unspecified,EUR m,https://www.n-ci.com/nos-expertises/pme-eti/notre-strategie/,"Published investment ticket, not explicit pure equity",2026-11-23
+str-ext-picardie-growth,0.3,10,investment_amount_unspecified,EUR m,https://www.picardie-investissement.fr/fr/pages/nos-fonds,Current dedicated fund page; general website shows 0.1m-10m for projects,2026-11-23
+str-ext-pleiade-longterm,8,25,investment_amount_unspecified,EUR m,https://www.pleiadeinvestissement.com/fr/criteres/,Initial investment range; follow-on to 30m,2026-11-23
+str-ext-socadif-growth,,10,investment_amount_maximum_indicative,EUR m,https://www.socadif.fr/politique-investissement/,"10m standalone, may exceed with Crédit Agricole group co-investors; shares + convertibles",2026-11-23
+str-ext-sofipaca-equity,1,7,investment_amount_hybrid,EUR m,https://www.sofipaca.fr/capital-investissement/,Shares + bonds; up to 30m with CA group coinvestors,2026-11-23
+str-adaxtra-pme,2,8,equity_and_quasi_equity_combined,EUR m,https://new.adaxtra.com/adaxtra-pme/,Official indexed excerpt reports 2–8m per deal; direct page unavailable during current pass. Not a pure equity bound.,2026-11-23

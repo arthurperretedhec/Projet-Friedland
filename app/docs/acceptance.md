@@ -19,14 +19,28 @@
 | Id | Rule | Status |
 |---|---|---|
 | DQ1 | every row has `source_url` (http/https) and `collected_on` (valid date, not in the future) | open |
-| DQ2 | `strategy_id` and `deal_id` are unique; every `strategy_id` in `deals.csv` and `portfolio.csv` exists in `strategies.csv` | open |
-| DQ3 | when both are present: `ticket_min ≤ ticket_max`, `ev_min ≤ ev_max`; all amounts > 0 | open |
+| DQ2 | `strategy_id` and `deal_id` are unique; every `strategy_id` in `deals.csv` and `portfolio.csv` exists in `strategies.csv` | passed on import |
+| DQ3 | when both are present: `ticket_min ≤ ticket_max`, `ev_min ≤ ev_max`; all amounts > 0 | passed on import |
 | DQ4 | `segment`, `stake`, `deal_types`, `sectors`, `deal_type`, `direction` only use reference-list values | open |
 | DQ5 | `last_fund_year` between 2018 and the current year (selection rule) | open |
 | DQ6 | `deal_date` within the last 3 years before `collected_on` | open |
 | DQ7 | `segment` agrees with the segment rule (CALC1) when the EV range is present | open |
 | DQ8 | NAF codes, when present, match the format `NN.NNL` (e.g. `62.01Z`) | open |
 | DQ9 | no column holds an email address or phone number | open |
+
+## Investor import checks
+
+- The startup integration test loads 112 funds, 153 strategies, 8 buckets and 10 sectors and checks
+  original IDs and names, bucket membership, subsectors, source-preserved exclusions and null bounds.
+- Negative cases cover orphaned sector links, inconsistent membership and fund links, zero amounts and
+  reversed ranges. Buyer-list tests confirm that excluded strategies cannot displace an eligible strategy
+  and the first eligible result per fund survives in the supplied ranking order. Adapter regressions
+  cover generalist sector preferences and explicit exclusions.
+- Publication checks cover research lead separation, null bounds for withheld directory figures,
+  attributed paraphrases, deal-specific sources, and Dangel's fund-level vehicle attribution.
+  Verbatim quote fields are intentionally blank. Four public deal dates remain unknown, and older
+  historical deals are retained with their original dates. Source-by-source permission and
+  factual verification are separate from this structural check.
 
 ## Screens (how each was checked)
 

@@ -63,6 +63,20 @@ large if midpoint > 500.
 | CALC4 | segment, EV range missing | no EV range | no midpoint | same as CALC3 | – | open |
 | CALC5 | count cards | 3 test rows: small, mid, mid | 1 small, 2 mid, 0 large; total 1 + 2 + 0 = 3 | total 3, small 1, mid 2, large 0 | exact | open |
 
+## Scoring (F6, known answers)
+
+Rules, weights and thresholds: `app/docs/scoring.md` (agreed by Arthur Perret on 2026-11-20, to be
+submitted to the group). Weights: sector 35, enterprise value fit 35, fund size 20, investment period
+10. Synthetic operation A: `primary_lbo`, equity ticket 15, EV 60 (EUR m), `software_it`, majority,
+analysis date 2026-11-20. Fund data is fictitious (`app/backend/tests/fixtures/synthetic_scoring_data.py`).
+
+| Id | Fund (synthetic) | Hand working | Expected score | Tolerance | Test | Status |
+|---|---|---|---|---|---|---|
+| SC1 | Bravo: primary_lbo + build_up, ticket 5–20, EV 20–100, stake both, `generalist`, last fund 100 in 2021 | kept (5 ≤ 15 ≤ 20, both); sector generalist 35 × 0.5 = 17.5; EV 20 ≤ 60 ≤ 100 → 35; 15 / 100 = 15 % → 20 × 0.5 = 10; 2026 − 2021 = 5 years → 10 × 0.5 = 5; 17.5 + 35 + 10 + 5 | 67.5 | exact | `test_hand_case_1_bravo_for_operation_a_is_67_5` | passing |
+| SC2 | Foxtrot: primary_lbo, ticket 10–15, EV 70–150, stake both, `industrials`, last fund 75 in 2019 | kept (ticket = maximum 15 is accepted); sector 0; EV 60 < 70 but 0.75 × 70 = 52.5 ≤ 60 → 35 × 0.5 = 17.5; 15 / 75 = 20 % → 20 × 0.5 = 10; 2026 − 2019 = 7 years → 0; 0 + 17.5 + 10 + 0 | 27.5 | exact | `test_hand_case_2_foxtrot_for_operation_a_is_27_5` | passing |
+| SC3 | Alpha with EV range 80.4–200 (other fields as Alpha: primary_lbo, ticket 5–20, majority, `software_it`, last fund 200 in 2023); operation A with EV 60.3 | kept; sector 35; EV 60.3 < 80.4 but 0.75 × 80.4 = 60.3 exactly (bound included) → 35 × 0.5 = 17.5; 15 / 200 = 7.5 % → 20; 2026 − 2023 = 3 years → 10; 35 + 17.5 + 20 + 10. Decimal boundary: without the tolerance the computer gives 60.300000000000004 and the fund would get 0 | 82.5 | exact | `test_full_score_with_a_decimal_near_boundary` | passing |
+| SC4 | Bravo (SC1) with a modified configuration: sector weight 33 with generalist ratio 0.25, EV weight 37 (fund size 20, period 10) | sector 33 × 0.25 = 8.25; EV 37 × 1 = 37; fund size 20 × 0.5 = 10; period 10 × 0.5 = 5; total 8.25 + 37 + 10 + 5 = 60.25, rounded to 0.1 half up | 60.3 (not 60.2) | exact | `test_total_is_rounded_half_up` | passing |
+
 ## Edge cases and errors
 
 | Id | Situation | Expected behaviour | Status |

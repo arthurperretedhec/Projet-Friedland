@@ -195,3 +195,17 @@ def test_confidence_spread_snapshot(data):
         77,
         5,
     ), DATA_CHANGED
+
+
+def test_v1_confidence_counts_a_missing_ev_bound(data):
+    # Relecture : en v1, une seule borne de VE publiée laisse G2 calculé (« complet ») mais
+    # ajoute la borne absente à missing_data. L'indice doit compter cette donnée manquante.
+    # Abenex Industries 9.0 (strategies.csv ligne 2), v1 : 8 critères actifs (E1-E4, G1-G4) ;
+    # manquants : ev_min_eur_m, last_fund_size_eur_m, last_fund_year = 3 -> 5 / 8, moyen.
+    config_v1 = load_config(SCORING_CONFIG_V1)
+    result = by_id(score_operation_on_base(LBO_SMALL, data, config_v1), "str-abenex-industries-90")
+    assert sorted(result.missing_data) == ["ev_min_eur_m", "last_fund_size_eur_m", "last_fund_year"]
+    assert (result.confidence.criteria_known, result.confidence.criteria_total) == (5, 8)
+    assert result.confidence.level == "moyen"
+    for r in score_operation_on_base(LBO_SMALL, data, config_v1).ranked:
+        assert r.confidence.criteria_total - r.confidence.criteria_known == len(r.missing_data)

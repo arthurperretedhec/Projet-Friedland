@@ -596,8 +596,9 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
                 )
             )
         score = _round(total, "0.1")
-        known = sum(c.status != "missing" for c in criteria)
-        confidence = _confidence(known, len(criteria), missing, config)
+        # Une donnée manquante = une entrée de `missing` (chaque critère en ajoute au plus une, y
+        # compris une borne de VE absente en v1, où le critère reste calculé sur l'autre borne).
+        confidence = _confidence(len(criteria) - len(missing), len(criteria), missing, config)
 
     return FundResult(
         rank=None,
@@ -615,7 +616,8 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
 
 
 def _confidence(known: int, total: int, missing: list[str], config: ScoringConfig) -> Confidence:
-    """Indice de confiance : critères actifs (éliminatoires ET notés) dont la donnée est publiée.
+    """Indice de confiance sur les critères actifs (éliminatoires ET notés) : `known` = critères
+    actifs moins le nombre de données manquantes (longueur de `missing_data`).
 
     Niveau selon le nombre de données manquantes : élevé si au plus `confidence_high_max_missing`,
     moyen si au plus `confidence_medium_max_missing`, faible au-delà.

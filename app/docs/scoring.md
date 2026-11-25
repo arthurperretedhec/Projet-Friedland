@@ -13,7 +13,8 @@ v1 (35 / 35 / 20 / 10, décrits plus bas dans « Règles ») restent dans le cod
 
 **Pourquoi** : sur la vraie base, la VE n'est publiée que pour 22 stratégies sur 153, et la taille et
 l'année du dernier fonds ne le sont jamais. G2, G3 et G4 donnaient donc presque le même nombre de points
-à tout le monde (41 stratégies ex æquo à 67,5 pour le LBO d'exemple). La v2 n'utilise que des
+à tout le monde (42 stratégies ex æquo à 67,5 pour le LBO d'exemple, 41 avant la traduction de
+`family_succession`). La v2 n'utilise que des
 colonnes remplies.
 
 ### Critères éliminatoires : inchangés (E1 à E4)
@@ -83,7 +84,8 @@ Les points en secteur ne départagent plus (règle v1 abandonnée).
 Pour chaque stratégie classée : `criteria_known / criteria_total` = critères actifs dont la donnée
 est publiée, sur les **9 critères actifs**, éliminatoires compris (E1 à E4, G1, G5 à G8 ; un ticket
 minimum ou maximum non publié compte) ; `level` ; `missing_data` = la même liste que
-`FundResult.missing_data`, recopiée volontairement pour que l'indice se lise seul dans l'interface.
+`FundResult.missing_data` (le niveau se calcule sur sa longueur ; en v1, une borne de VE absente y
+compte aussi), recopiée volontairement pour que l'indice se lise seul dans l'interface.
 
 | Niveau | Règle (config.py) | LBO d'exemple (95 stratégies) | Build-up d'exemple (41) |
 |---|---|---|---|
@@ -410,7 +412,8 @@ un secteur (2 fonds) → donnée manquante, car le moteur ne sait pas exprimer u
   (20 × 0,5 + 10 × 0,5). Ils ne départagent aucun fonds ; le classement repose sur le secteur (G1)
   et la VE (G2). Une proposition pour les remplacer est à soumettre au groupe.
 - La VE manquant pour 131 fonds, la plupart reçoivent 17,5 points sur G2 : beaucoup d'ex æquo
-  (par exemple 41 fonds à 67,5 pour un LBO small cap), départagés par le nombre de données
+  (par exemple 42 stratégies à 67,5 pour un LBO small cap, 41 avant la traduction de
+  `family_succession`), départagés par le nombre de données
   manquantes, puis les points en secteur, puis **l'ordre alphabétique** de `strategy_id`.
 - E1 est strict : un fonds qui publie `buyout` sans `build_up` est **exclu d'un build-up**. Pour
   le build-up mid cap d'exemple, **112 stratégies sont exclues au total, dont 107 au moins en

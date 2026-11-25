@@ -16,30 +16,16 @@ Validés par Arthur le 2026-11-20 (poids 35 / 35 / 20 / 10).
 """
 
 # --- Listes de valeurs autorisées ----------------------------------------------------------------
-# Copie des listes de référence d'app/docs/architecture.md (agréées le 2026-11-17). À remplacer
-# par un import de app/logic/reference.py quand ce fichier existera (slice 2 du plan), pour
-# n'avoir qu'une seule source.
-DEAL_TYPES = ("primary_lbo", "secondary_lbo", "build_up", "growth", "carve_out")
-STAKES = ("majority", "minority", "both")
-SECTORS = (
-    "software_it",
-    "healthcare",
-    "business_services",
-    "industrials",
-    "consumer_retail",
-    "food_beverage",
-    "financial_services",
-    "education",
-    "energy_environment",
-    "construction_real_estate",
-    "transport_logistics",
-    "media_telecom",
-    "agriculture",
-    "generalist",
+# Source unique : app/logic/reference.py (partagé avec le branchement sur la vraie base). Pour
+# ajouter un secteur ou un type d'opération, le modifier là-bas, pas ici.
+from app.logic.reference import (  # noqa: F401  (ré-exportés pour models.py et engine.py)
+    DEAL_TYPES,
+    FUND_DEAL_TYPES,
+    GENERALIST_SECTOR,
+    NON_PE_DEAL_TYPE,
+    SECTORS,
+    STAKES,
 )
-# Valeur de `sectors` d'un fonds qui accepte tous les secteurs (ne peut pas être le secteur d'une
-# opération).
-GENERALIST_SECTOR = "generalist"
 
 # --- Critères, poids et seuils -------------------------------------------------------------------
 SCORING_CONFIG = {

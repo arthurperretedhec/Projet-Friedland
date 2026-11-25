@@ -66,12 +66,19 @@ strategy `segment`, `last_fund_year`, `last_fund_size_eur_m`, `partner_name`, an
 Verification columns from the original design are absent. These gaps matter before implementing the
 planned browse and detail routes.
 
-`app.logic.investor_scoring.scoring_input` projects each strategy into the existing scoring branch's
-`Fund` model inputs. Deal types and sectors without a complete mapping return unknown. Generic buyout
-does not identify a primary or secondary LBO. Generalists with fully mapped preferences retain those
-preferences and the generalist marker. An explicit sector exclusion projects to unknown because the
-legacy model cannot express it. Subsector exclusions, bucket membership and screening lanes stay
-available in the catalog for the eventual eligibility rules. After strategy scoring, pass the engine's best-first eligible ranking to
+**Scoring on the real base (2026-11-25).** The score engine reads the base through
+`app.logic.scoring.real_data`: `score_operation_on_base(operation, data)` receives the base already
+loaded by `load_investors` (once, at startup or in a test; logic reads no file), translates each of the
+153 strategies into the engine's `Fund` model with the tables of `app/logic/reference.py`, and calls the
+engine. `reference.py` is the single source of the engine's value lists (sectors, deal types, stakes)
+and of the translations from the base (rules validated by Arthur on 2026-11-25, detailed in
+`scoring.md`): a generic `buyout` covers both primary and secondary LBO; tags outside private equity
+give the fund value `non_pe`; vague tags are ignored; generalists keep their marker; an explicit sector
+exclusion stays unknown because the engine cannot express it. `app.logic.investor_scoring.scoring_input`
+and its `LEGACY_*` tables are superseded and no longer used by the engine (left unchanged; Simon to
+remove them or point them to `reference.py`). Subsector exclusions, bucket membership and screening
+lanes stay available in the catalog for the eventual eligibility rules. After strategy scoring,
+`best_strategy_per_management_company` passes the engine's best-first eligible ranking to
 `buyer_longlist`. It keeps the first result for each `fund_id`, including the winning `strategy_id` and
 its score explanation. The full strategy ranking remains available to callers.
 
@@ -134,5 +141,6 @@ None. The app reads the CSV files at startup.
 | 2026-11-18 | Correction: matching and ranked output (F6) are in the MVP delivered by 1 December, built after the database; the database is handed over on GitHub to a teammate for phase 2 | the agreed documents had wrongly put matching under "not in the MVP" | owner |
 | 2026-11-18 | Next.js and eslint-config-next 16.4.2 -> 16.4.6 in `app/frontend` (scaffold left unchanged) | 16.4.2 has a known moderate vulnerability (GHSA-mfr8-8qww-v76h, GHSA-vc7v-qv4w-wrv8) and `next build` refuses to run; 16.4.6 is the patched release of the same series | owner |
 | 2026-11-20 | Score engine as a separate pure module `app/backend/app/logic/scoring/` (config, models, engine), entry point `score_operation(operation, funds)`; criteria, weights (35/35/20/10) and thresholds in `config.py`; sector matched by reference-list category; stage measured by EV, investment period approximated by `last_fund_year`; no geography criterion. Details: `scoring.md` | deterministic, configurable while the group has not agreed the criteria; reuses `strategies.csv` columns; no new library | Arthur Perret (proposal, group agreement pending) |
+| 2026-11-25 | Score engine connected to the real base: `app/logic/reference.py` becomes the single source of value lists and of the translations from the base (deal types: union of covered types, `buyout` = primary + secondary LBO, non-PE tags → `non_pe`, vague tags ignored; sectors: 10 codes mapped, REAL_ESTATE_HOSPITALITY → construction_real_estate as an approximation; stakes: co-investor and reference_shareholder → minority); `app/logic/scoring/real_data.py` receives the loaded base. Criteria and weights unchanged (35/35/20/10); G3 and G4 have no data (153/153 missing) and give 15 neutral points | the base uses its own vocabulary; one shared table avoids divergent copies; logic stays free of file access | Arthur Perret (Simon's files unchanged) |
 | 2026-11-17 | Scope and architecture agreed (product.md, architecture.md, acceptance.md, plan.md) | documents reviewed after the product interview | owner (Constantin Sorel) |
 | 2026-11-24 | Load the normalized investor CSV snapshot and project legacy scoring inputs separately | Preserve source IDs, relationships and financial provenance while keeping the scoring branch independent | owner import and integration request |

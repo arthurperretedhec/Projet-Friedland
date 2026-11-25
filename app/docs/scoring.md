@@ -2,7 +2,8 @@
 
 Statut : moteur et tests écrits le 2026-11-20 sur la branche `arthur/scoring-engine` (Arthur Perret).
 Règles, poids et seuils validés par Arthur le 2026-11-20 ; **à soumettre au groupe** (la liste
-définitive des critères n'est pas encore validée par l'équipe).
+définitive des critères n'est pas encore validée par l'équipe). Branché sur la vraie base de Simon le
+2026-11-25 (branche `arthur/connect-real-data`, voir « Branchement sur la vraie base »).
 
 ## À quoi il sert
 
@@ -23,7 +24,9 @@ d'exclusion**. Il renvoie les fonds classés du meilleur au moins bon.
 | `app/backend/app/logic/scoring/config.py` | **le seul fichier à modifier** : critères, poids, seuils |
 | `app/backend/app/logic/scoring/models.py` | formats d'entrée (fiche fonds, fiche opération) et du résultat |
 | `app/backend/app/logic/scoring/engine.py` | les règles de calcul et le classement |
-| `app/backend/tests/test_scoring_*.py` | tests pytest (critères, classement, configuration, corrections après revue) |
+| `app/backend/app/logic/reference.py` | **source unique** des listes de valeurs (secteurs, types d'opération, positions) et des traductions depuis la base |
+| `app/backend/app/logic/scoring/real_data.py` | branchement sur la vraie base : traduit chaque stratégie en fiche fonds, puis appelle le moteur (`score_operation_on_base`) |
+| `app/backend/tests/test_scoring_*.py` | tests pytest (critères, classement, configuration, corrections après revue, vraie base) |
 | `app/backend/tests/fixtures/synthetic_scoring_data.py` | 7 fonds et 3 opérations **fictifs** (tests uniquement) |
 
 ## Hypothèses (à connaître pour l'oral)
@@ -192,11 +195,110 @@ l'enregistrer dans `ELIMINATORY_RULES` ou `GRADED_RULES`) et ses tests.
 Après toute modification : `npm run verify`, puis mettre à jour ce fichier et, si les exemples
 changent, les cas SC1 et SC2 d'acceptance.md (recalculés à la main).
 
+## Branchement sur la vraie base (2026-11-25)
+
+**Source des données** : la base de Simon, `app/backend/data/` : **153 stratégies appartenant à
+109 sociétés de gestion** (`funds.csv` en liste 112, dont 3 sans aucune stratégie ; une société peut
+avoir jusqu'à 6 stratégies). Lue par son chargeur `app/data/investors.py` (`load_investors`).
+Chaque stratégie a une `source_url` ; la trace des sources est dans `source_log.csv`. Aucune donnée
+synthétique dans la base (les données fictives restent dans `tests/fixtures/`).
+
+**Niveau de calcul** : le moteur note des **stratégies** (153). Pour afficher une ligne par
+société de gestion, `best_strategy_per_management_company(data, result)` garde la stratégie la
+mieux classée de chaque société (fonction `buyer_longlist` de Simon, regroupement par `fund_id`).
+
+**Utilisation** : la base est chargée **une fois** (au démarrage de l'application,
+`app.state.investor_data`, ou dans un test), puis passée au moteur :
+`score_operation_on_base(operation, data)` traduit les 153 stratégies (`real_data.py`, avec les
+tables de `reference.py`) et appelle le moteur ; `real_data.py` ne lit aucun fichier. Les fichiers
+de Simon ne sont pas modifiés ; les tables `LEGACY_*` et `scoring_input` de son `investor_scoring.py`
+ne sont plus utilisées par le moteur (à retirer ou faire pointer vers `reference.py` par Simon).
+
+### Correspondance colonnes et critères
+
+| Critère | Colonne(s) de la base | Format | Traduction |
+|---|---|---|---|
+| E1 Type d'opération | `strategies.deal_types` | ~55 libellés libres, séparés par « ; » | union de ce que couvrent les libellés (table ci-dessous) |
+| E2 Ticket minimum | `equity_ticket_min_eur_m` | M€ | directe |
+| E3 Ticket maximum | `equity_ticket_max_eur_m` | M€ | directe |
+| E4 Position | `stake` | libellés séparés par « ; » | `majority` ; `minority`, `controlling_minority`, `significant_minority`, `lead_minority`, `co-investor`, `reference_shareholder` → minoritaire ; majoritaire + minoritaire → `both` ; `control_not_explicit` ignoré |
+| G1 Secteur | `normalized_sector_codes` + `strategy_sector_summary.sector_scope` + `strategy_sectors.polarity` | 10 codes (`sectors.csv`) | voir ci-dessous |
+| G2 VE | `target_ev_min_eur_m`, `target_ev_max_eur_m` | M€ | directe |
+| G3 Taille du fonds | **aucune** | – | toujours donnée manquante |
+| G4 Période d'investissement | **aucune** | – | toujours donnée manquante |
+
+Toutes les colonnes de montants sont en **M€** (de 0,15 à 800 M€ dans la base : aucune valeur en €).
+
+**Types d'opération (E1)** :
+- `buyout`, `lbo`, `transmission` → LBO primaire **et** secondaire (« buyout » ne précise pas) ;
+- `primary_lbo`, `mbo`, `mbi`, `obo`, `management_buyout`, `primary_buyout` → LBO primaire ;
+- `growth`, `growth_capital`, `growth_equity` → growth ; `growth_buyout` → growth et LBO primaire ;
+- `build_up`, `buy_and_build`, `add_on` → build-up ; `carve_out` → carve-out ;
+- libellés **hors PE** (venture, mezzanine, dette senior, quasi-fonds propres, infrastructure,
+  financement de projet, immobilier hôtelier, création d'entreprise...) : connus, ne couvrent rien ;
+  un fonds qui n'a que ceux-là reçoit `non_pe` et est exclu de toute opération de PE ;
+- libellés **vagues** (`impact`, `long_term`, `turnaround`, `family_succession`,
+  `market_consolidation`, `public_to_private`...) : ignorés ; un fonds qui n'a que ceux-là a une
+  liste « donnée manquante ».
+
+Listes complètes (recopiées dans les tests, `test_scoring_real_data_guards.py`) :
+- **hors PE (18)** : `venture`, `venture_growth`, `mezzanine`, `senior_debt`, `quasi_equity`,
+  `hybrid_capital`, `convertible_financing`, `acquisition_financing`, `sponsorless_financing`,
+  `infrastructure`, `infrastructure_equity`, `infrastructure_growth`, `growth_infrastructure`,
+  `project_finance`, `greenfield`, `brownfield`, `hospitality_real_estate`, `company_creation` ;
+- **vagues (20)** : `impact`, `long_term`, `evergreen`, `long_term_direct_investment`, `technology`,
+  `transformation`, `special_situations`, `turnaround`, `restructuring`, `co_investment`,
+  `minority_co_investment`, `flexible_capital`, `international_expansion`, `acquisition`,
+  `change_of_ownership`, `family_succession`, `shareholder_reorganisation`, `public_to_private`,
+  `market_consolidation`, `sponsorless`.
+- `sector_scope` connus : `GENERALIST_OPEN`, `GENERALIST_PLUS_PREFERENCES`, `SECTOR_THEMES`,
+  `UNKNOWN_SECTOR` (3 stratégies, secteur → donnée manquante) ; `polarity` : `INCLUDED`,
+  `EXCLUDED_EXPLICIT`.
+
+**Secteurs (G1)** : `TECH_SOFTWARE` → logiciel ; `HEALTHCARE` → santé ; `BUSINESS_SERVICES` →
+services aux entreprises ; `INDUSTRIALS` → industrie ; `CONSUMER` → consommation et distribution ;
+`FINANCIAL_SERVICES` → services financiers ; `ENERGY_ENV` → énergie et environnement ; `FOOD_AGRI` →
+agroalimentaire **et** agriculture ; `INFRA_TRANSPORT` → transport et logistique ;
+`REAL_ESTATE_HOSPITALITY` → construction et immobilier (**approximation** : l'hôtellerie n'a pas
+d'équivalent dans le vocabulaire du moteur). `sector_scope` = `GENERALIST_OPEN` → fonds généraliste ;
+`GENERALIST_PLUS_PREFERENCES` → secteurs préférés + généraliste. Un fonds qui **exclut** explicitement
+un secteur (2 fonds) → donnée manquante, car le moteur ne sait pas exprimer une exclusion.
+
+### Qualité des données, critère par critère (après traduction, 153 stratégies)
+
+| Critère | Donnée manquante | Remarque |
+|---|---|---|
+| E1 Type d'opération | 5 | 14 fonds reconnus hors PE (`non_pe`) |
+| E2 / E3 Ticket | 124 / 124 | |
+| E4 Position | 57 | |
+| G1 Secteur | 5 | |
+| G2 VE | **131 sans aucune borne** (+ 3 avec une seule borne) | la VE manque pour 131 fonds sur 153 |
+| G3 Taille du fonds | **153** | colonne absente de la base |
+| G4 Période d'investissement | **153** | colonne absente de la base |
+
+**Conséquences à connaître** :
+- **G3 et G4 n'ont aucune donnée** : chaque fonds reçoit les mêmes **15 points neutres**
+  (20 × 0,5 + 10 × 0,5). Ils ne départagent aucun fonds ; le classement repose sur le secteur (G1)
+  et la VE (G2). Une proposition pour les remplacer est à soumettre au groupe.
+- La VE manquant pour 131 fonds, la plupart reçoivent 17,5 points sur G2 : beaucoup d'ex æquo
+  (par exemple 41 fonds à 67,5 pour un LBO small cap), départagés par le nombre de données
+  manquantes, puis les points en secteur, puis **l'ordre alphabétique** de `strategy_id`.
+- E1 est strict : un fonds qui publie `buyout` sans `build_up` est **exclu d'un build-up**. Pour
+  le build-up mid cap d'exemple, **112 stratégies sont exclues au total, dont 107 au moins en
+  partie par E1** (84 par E1 seul). Règle à rediscuter avec le groupe.
+- Libellés « vagues » à rediscuter : `public_to_private`, `change_of_ownership`,
+  `family_succession`, `shareholder_reorganisation` et `acquisition` décrivent des LBO et
+  pourraient couvrir le LBO comme `transmission`. **Effet si on le faisait** : 3 stratégies
+  (`str-aldebaran-transform`, `str-ext-caravelle-holding`, `str-ext-samfi-holding`), aujourd'hui
+  exclues d'un LBO par E1 seul, deviendraient éligibles. À décider avec le groupe.
+
 ## Limites connues
 
 - Les seuils sont des conventions, pas des données sourcées.
 - Le stade et la période d'investissement reposent sur des approximations (hypothèses 2 et 3).
 - Les fonds régionaux ne sont pas distingués (hypothèse 4).
-- Les listes de valeurs sont recopiées d'architecture.md dans `config.py` ; à remplacer par un import
-  de `app/logic/reference.py` quand la slice 2 l'aura créé.
-- Testé uniquement sur des données fictives : à vérifier sur la vraie base quand elle existera.
+- Sur la vraie base, G3 et G4 n'ont aucune donnée (voir ci-dessus) et la VE manque pour 131 fonds.
+- La traduction des libellés de la base est un choix (validé par Arthur, 2026-11-25), pas une donnée
+  sourcée ; une nouvelle valeur dans le CSV (type d'opération, position, code secteur,
+  `sector_scope` ou `polarity`) fait échouer un test tant qu'elle n'est pas classée dans
+  `reference.py`.

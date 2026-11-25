@@ -21,7 +21,7 @@
 | DQ1 | every row has `source_url` (http/https) and `collected_on` (valid date, not in the future) | open |
 | DQ2 | `strategy_id` and `deal_id` are unique; every `strategy_id` in `deals.csv` and `portfolio.csv` exists in `strategies.csv` | passed on import |
 | DQ3 | when both are present: `ticket_min ≤ ticket_max`, `ev_min ≤ ev_max`; all amounts > 0 | passed on import |
-| DQ4 | `segment`, `stake`, `deal_types`, `sectors`, `deal_type`, `direction` only use reference-list values | open |
+| DQ4 | `segment`, `stake`, `deal_types`, `sectors`, `deal_type`, `direction` only use reference-list values | partly covered (2026-11-25): every `deal_types`, `stake`, sector code, `sector_scope` and `polarity` value of the snapshot has a translation in `reference.py` (`test_every_value_of_the_base_has_a_translation`, `test_sector_scope_and_polarity_values_are_all_known`); `segment` and `direction` not covered |
 | DQ5 | `last_fund_year` between 2018 and the current year (selection rule) | open |
 | DQ6 | `deal_date` within the last 3 years before `collected_on` | open |
 | DQ7 | `segment` agrees with the segment rule (CALC1) when the EV range is present | open |
@@ -76,6 +76,14 @@ analysis date 2026-11-20. Fund data is fictitious (`app/backend/tests/fixtures/s
 | SC2 | Foxtrot: primary_lbo, ticket 10–15, EV 70–150, stake both, `industrials`, last fund 75 in 2019 | kept (ticket = maximum 15 is accepted); sector 0; EV 60 < 70 but 0.75 × 70 = 52.5 ≤ 60 → 35 × 0.5 = 17.5; 15 / 75 = 20 % → 20 × 0.5 = 10; 2026 − 2019 = 7 years → 0; 0 + 17.5 + 10 + 0 | 27.5 | exact | `test_hand_case_2_foxtrot_for_operation_a_is_27_5` | passing |
 | SC3 | Alpha with EV range 80.4–200 (other fields as Alpha: primary_lbo, ticket 5–20, majority, `software_it`, last fund 200 in 2023); operation A with EV 60.3 | kept; sector 35; EV 60.3 < 80.4 but 0.75 × 80.4 = 60.3 exactly (bound included) → 35 × 0.5 = 17.5; 15 / 200 = 7.5 % → 20; 2026 − 2023 = 3 years → 10; 35 + 17.5 + 20 + 10. Decimal boundary: without the tolerance the computer gives 60.300000000000004 and the fund would get 0 | 82.5 | exact | `test_full_score_with_a_decimal_near_boundary` | passing |
 | SC4 | Bravo (SC1) with a modified configuration: sector weight 33 with generalist ratio 0.25, EV weight 37 (fund size 20, period 10) | sector 33 × 0.25 = 8.25; EV 37 × 1 = 37; fund size 20 × 0.5 = 10; period 10 × 0.5 = 5; total 8.25 + 37 + 10 + 5 = 60.25, rounded to 0.1 half up | 60.3 (not 60.2) | exact | `test_total_is_rounded_half_up` | passing |
+
+Real funds (`app/backend/data/strategies.csv`, snapshot of 2026-11-24, checked 2026-11-25), current criteria (35/35/20/10). Operation LBO small: `primary_lbo`, ticket 15, EV 40 (EUR m), `industrials`, majority, 2026-11-25. Operation build-up mid: `build_up`, ticket 40, EV 150, `business_services`, majority, 2026-11-25.
+
+| Id | Real strategy (CSV values) | Hand working | Expected score | Tolerance | Test | Status |
+|---|---|---|---|---|---|---|
+| SC5 | `str-abenex-industries-90`, LBO small: deal_types `buyout;growth`, stake `majority;controlling_minority`, sector `INDUSTRIALS` (themes), ticket 5–20, EV min empty, EV max 60; source abenex.com (first closing) | kept: buyout covers primary LBO, 5 ≤ 15 ≤ 20, stake both; sector 35; EV 40 ≤ 60 (one bound) 35; fund size missing 20 × 0.5 = 10; fund year missing 10 × 0.5 = 5; 35 + 35 + 10 + 5 | 85 | exact | `test_real_fund_1_abenex_industries_for_lbo_small_is_85` | passing |
+| SC6 | `str-argos-midmarket`, build-up mid: deal_types `buyout;build_up`, stake `majority`, sectors `BUSINESS_SERVICES;INDUSTRIALS` (generalist plus preferences), tickets empty, EV 50–250; source argos.fund | kept: build_up covered, tickets missing (not excluded, 2 warnings), majority; sector 35; 50 ≤ 150 ≤ 250 35; 10; 5; 35 + 35 + 10 + 5 | 85 | exact | `test_real_fund_2_argos_midmarket_for_buildup_mid_is_85` | passing |
+| SC7 | `str-antin-flagship`, LBO small: deal_types `infrastructure_equity` (non-PE), ticket min 400, stake empty | excluded: no PE deal type (E1) and 15 < 400 (E2); score 0 | excluded, 0 | exact | `test_real_fund_3_antin_flagship_is_excluded_from_lbo_small` | passing |
 
 ## Edge cases and errors
 

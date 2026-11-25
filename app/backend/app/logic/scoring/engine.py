@@ -22,7 +22,7 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from .config import GENERALIST_SECTOR, SCORING_CONFIG
+from .config import GENERALIST_SECTOR, NON_PE_DEAL_TYPE, SCORING_CONFIG
 from .models import (
     STATUS_LABELS,
     CriterionConfig,
@@ -105,7 +105,12 @@ def _rule_deal_type(op: Operation, fund: Fund, params: Mapping[str, float]) -> _
         return _missing("deal_types")
     if op.deal_type in fund.deal_types:
         return _Outcome("pass", f"Le fonds accepte les opérations {op.deal_type}.")
-    accepted = ", ".join(fund.deal_types)
+    accepted = ", ".join(
+        "aucun type de private equity (venture, dette, actifs réels...)"
+        if t == NON_PE_DEAL_TYPE
+        else t
+        for t in fund.deal_types
+    )
     return _Outcome(
         "fail", f"Le fonds n'accepte pas les opérations {op.deal_type} (accepte : {accepted})."
     )

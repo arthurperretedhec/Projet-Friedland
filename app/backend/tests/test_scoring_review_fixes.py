@@ -13,9 +13,13 @@ import pytest
 from pydantic import ValidationError
 
 from app.logic.scoring import ConfigError, Fund, load_config, score_operation
-from app.logic.scoring.config import SCORING_CONFIG
+from app.logic.scoring.config import SCORING_CONFIG_V1 as SCORING_CONFIG
 from app.logic.scoring.models import ScoringConfig
 from tests.fixtures.synthetic_scoring_data import FUNDS, compatible_fund, fund, operation
+
+# Critères v1 (2026-11-20) : ces tests vérifient les règles v1, toujours présentes dans le code.
+# Depuis le 2026-11-25, la configuration par défaut est la v2 : on remet la v1 (tests/conftest.py).
+pytestmark = pytest.mark.usefixtures("scoring_v1")
 
 
 def score_one(fund_changes: dict | None = None, config=None, **op_changes):
@@ -177,7 +181,7 @@ def _disable_g4(r):
         (lambda r: graded(r, "G1").update(weight=None), "nombre positif"),
         (lambda r: r["eliminatory"][0].update(weight=5), "n'a pas de poids"),
         (lambda r: r["eliminatory"][0].update(params={"seuil": 1}), "n'a pas de paramètres"),
-        (lambda r: graded(r, "G1").update(rule="geography"), "règle graduelle"),
+        (lambda r: graded(r, "G1").update(rule="regle_inexistante"), "règle graduelle"),
         (_disable_g4, "n'est pas un critère graduel actif"),
         (
             lambda r: graded(r, "G4")["params"].update(partial_max_age=3),

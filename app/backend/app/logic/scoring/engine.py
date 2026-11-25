@@ -22,9 +22,20 @@ from typing import Any
 
 from pydantic import ValidationError
 
+from app.logic.reference import (
+    GEO_FRANCE,
+    GEO_FRENCH_REGIONS,
+    GEO_WIDE_INCLUDING_FRANCE,
+    LEAD_CAPACITY,
+    OPERATION_BUCKET,
+    OPERATION_MODIFIER,
+    SOURCE_QUALITY_ORDER,
+)
+
 from .config import GENERALIST_SECTOR, NON_PE_DEAL_TYPE, SCORING_CONFIG
 from .models import (
     STATUS_LABELS,
+    Confidence,
     CriterionConfig,
     CriterionResult,
     Fund,
@@ -280,6 +291,92 @@ def _rule_investment_period(op: Operation, fund: Fund, params: Mapping[str, floa
     )
 
 
+# --- Règles graduelles des critères v2 (colonnes réellement remplies de la base) ------------
+
+
+def _rule_fund_type(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
+    if fund.primary_bucket is None:
+        return _missing("primary_bucket")
+    expected = OPERATION_BUCKET[op.deal_type]
+    if fund.primary_bucket == expected:
+        return _Outcome("full", f"Type de fonds principal {expected}, celui de l'opération.", 1.0)
+    if expected in (fund.secondary_buckets or []):
+        return _Outcome(
+            "partial",
+            f"Type de fonds principal {fund.primary_bucket} ; {expected} seulement en secondaire.",
+            params["secondary_ratio"],
+        )
+    return _Outcome(
+        "none",
+        f"Type de fonds {fund.primary_bucket}, différent de {expected} attendu pour l'opération.",
+        0.0,
+    )
+
+
+def _rule_lead_capacity(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
+    if fund.buyer_role is None:
+        return _missing("buyer_role")
+    level = LEAD_CAPACITY[op.stake_sought].get(fund.buyer_role)
+    wanted = _STAKE_OPERATION[op.stake_sought]
+    if level == "full":
+        return _Outcome(
+            "full", f"Rôle {fund.buyer_role} : adapté pour mener une opération {wanted}.", 1.0
+        )
+    if level == "partial":
+        return _Outcome(
+            "partial",
+            f"Rôle {fund.buyer_role} : peut mener une opération {wanted}, sans que ce soit prouvé "
+            "ou que ce soit son métier principal.",
+            params["partial_ratio"],
+        )
+    return _Outcome(
+        "none", f"Rôle {fund.buyer_role} : pas en position de mener une opération {wanted}.", 0.0
+    )
+
+
+def _rule_geography(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
+    tags = set(fund.geography_tags or [])
+    if not tags:
+        return _missing("geography_tags")
+    zones = ", ".join(sorted(tags))
+    if GEO_FRANCE in tags:
+        return _Outcome("full", f"Zone d'investissement incluant la France ({zones}).", 1.0)
+    if tags & GEO_FRENCH_REGIONS:
+        return _Outcome(
+            "partial",
+            f"Fonds régional ({zones}) : la région de l'entreprise n'est pas connue.",
+            params["partial_ratio"],
+        )
+    if tags & GEO_WIDE_INCLUDING_FRANCE:
+        return _Outcome(
+            "partial",
+            f"Zone large ({zones}) : la France est incluse sans être une priorité affichée.",
+            params["partial_ratio"],
+        )
+    return _Outcome("none", f"Zone d'investissement hors France ({zones}).", 0.0)
+
+
+def _rule_transaction_speciality(
+    op: Operation, fund: Fund, params: Mapping[str, float]
+) -> _Outcome:
+    expected = OPERATION_MODIFIER.get(op.deal_type)
+    # D'abord : y a-t-il une spécialité à chercher ? Pour un growth, non : part neutre pour tous,
+    # sans regarder la donnée du fonds (donc jamais « donnée manquante »).
+    if expected is None:
+        return _Outcome(
+            "partial",
+            f"Pas de spécialité définie pour une opération {op.deal_type} : part neutre.",
+            params["no_speciality_ratio"],
+        )
+    if not fund.transaction_modifiers:
+        return _missing("transaction_modifiers")
+    if expected in fund.transaction_modifiers:
+        return _Outcome("full", f"Le fonds affiche la spécialité {expected}.", 1.0)
+    return _Outcome(
+        "none", f"Le fonds n'affiche pas la spécialité {expected} attendue pour l'opération.", 0.0
+    )
+
+
 _Rule = Callable[[Operation, Fund, Mapping[str, float]], _Outcome]
 
 ELIMINATORY_RULES: dict[str, _Rule] = {
@@ -293,6 +390,10 @@ GRADED_RULES: dict[str, _Rule] = {
     "enterprise_value": _rule_enterprise_value,
     "fund_size": _rule_fund_size,
     "investment_period": _rule_investment_period,
+    "fund_type": _rule_fund_type,
+    "lead_capacity": _rule_lead_capacity,
+    "geography": _rule_geography,
+    "transaction_speciality": _rule_transaction_speciality,
 }
 
 # Paramètres obligatoires de chaque règle graduelle : nom -> (minimum, maximum) autorisés.
@@ -305,6 +406,10 @@ _PARAM_RANGES: dict[str, dict[str, tuple[float, float]]] = {
         "partial_max_age": (0, 100),
         "partial_ratio": (0, 1),
     },
+    "fund_type": {"secondary_ratio": (0, 1)},
+    "lead_capacity": {"partial_ratio": (0, 1)},
+    "geography": {"partial_ratio": (0, 1)},
+    "transaction_speciality": {"no_speciality_ratio": (0, 1)},
 }
 # Seuils dont le « partiel » ne peut pas être plus strict que le « complet ».
 _ORDERED_PARAMS = {
@@ -326,6 +431,11 @@ def load_config(raw: Mapping[str, Any] | None = None) -> ScoringConfig:
     except ValidationError as error:
         raise ConfigError(f"Configuration du score mal formée : {error}") from error
 
+    if config.confidence_high_max_missing > config.confidence_medium_max_missing:
+        raise ConfigError(
+            f"confidence_high_max_missing ({config.confidence_high_max_missing}) supérieur à "
+            f"confidence_medium_max_missing ({config.confidence_medium_max_missing})"
+        )
     if config.active_criteria_min > config.active_criteria_max:
         raise ConfigError(
             f"active_criteria_min ({config.active_criteria_min}) supérieur à "
@@ -450,6 +560,7 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
 
     excluded = bool(reasons)
     score = 0.0
+    confidence = None
     if not excluded:
         total = Decimal(0)
         for criterion in (c for c in config.graded if c.enabled):
@@ -485,6 +596,8 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
                 )
             )
         score = _round(total, "0.1")
+        known = sum(c.status != "missing" for c in criteria)
+        confidence = _confidence(known, len(criteria), missing, config)
 
     return FundResult(
         rank=None,
@@ -497,7 +610,33 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
         criteria=criteria,
         missing_data=missing,
         warnings=warnings,
+        confidence=confidence,
     )
+
+
+def _confidence(known: int, total: int, missing: list[str], config: ScoringConfig) -> Confidence:
+    """Indice de confiance : critères actifs (éliminatoires ET notés) dont la donnée est publiée.
+
+    Niveau selon le nombre de données manquantes : élevé si au plus `confidence_high_max_missing`,
+    moyen si au plus `confidence_medium_max_missing`, faible au-delà.
+    """
+    missing_count = total - known
+    if missing_count <= config.confidence_high_max_missing:
+        level = "élevé"
+    elif missing_count <= config.confidence_medium_max_missing:
+        level = "moyen"
+    else:
+        level = "faible"
+    return Confidence(
+        criteria_known=known, criteria_total=total, level=level, missing_data=list(missing)
+    )
+
+
+def _source_quality_rank(basis: str | None) -> int:
+    """0 = meilleure source ; une valeur absente ou inconnue passe après la dernière."""
+    if basis in SOURCE_QUALITY_ORDER:
+        return SOURCE_QUALITY_ORDER.index(basis)
+    return len(SOURCE_QUALITY_ORDER)
 
 
 def _points_of(result: FundResult, criterion_id: str | None) -> float:
@@ -507,16 +646,19 @@ def _points_of(result: FundResult, criterion_id: str | None) -> float:
     return 0.0
 
 
-def _ranking_key(result: FundResult, config: ScoringConfig) -> tuple[float, int, float, str]:
+def _ranking_key(
+    result: FundResult, config: ScoringConfig, quality: int
+) -> tuple[float, int, float, int, str]:
     """Ordre du classement, règle de départage incluse :
-    1. score le plus haut ; 2. le moins de données manquantes ; 3. le plus de points sur le critère
-    `tie_break_criterion` (secteur) ; 4. strategy_id par ordre alphabétique (toujours le même
-    ordre).
+    1. score le plus haut ; 2. le moins de données manquantes ; 3. v1 : le plus de points sur le
+    critère `tie_break_criterion` (secteur) ; v2 : la meilleure qualité de source
+    (`tie_break_source_quality`) ; 4. strategy_id par ordre alphabétique (toujours le même ordre).
     """
     return (
         -result.score,
         len(result.missing_data),
         -_points_of(result, config.tie_break_criterion),
+        quality if config.tie_break_source_quality else 0,
         result.strategy_id,
     )
 
@@ -537,8 +679,12 @@ def score_operation(
     if duplicates:
         raise ValueError(f"strategy_id en double dans la liste des fonds : {duplicates}")
 
+    quality = {f.strategy_id: _source_quality_rank(f.classification_basis) for f in funds}
     results = [_score_fund(operation, fund, config) for fund in funds]
-    kept = sorted((r for r in results if not r.excluded), key=lambda r: _ranking_key(r, config))
+    kept = sorted(
+        (r for r in results if not r.excluded),
+        key=lambda r: _ranking_key(r, config, quality[r.strategy_id]),
+    )
     ranked = [r.model_copy(update={"rank": i}) for i, r in enumerate(kept, start=1)]
     excluded = sorted((r for r in results if r.excluded), key=lambda r: r.strategy_id)
     return ScoringResult(

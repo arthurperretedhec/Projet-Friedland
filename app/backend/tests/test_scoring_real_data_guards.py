@@ -51,7 +51,9 @@ def test_non_pe_tags_are_the_18_validated_ones():
     }
 
 
-def test_vague_tags_are_the_20_validated_ones():
+def test_vague_tags_are_the_19_validated_ones():
+    # Critères v2 (2026-11-25) : family_succession est sorti de cette liste (il couvre le LBO
+    # primaire) ; acquisition y reste volontairement.
     assert DATA_VAGUE_DEAL_TAGS == {
         "impact",
         "long_term",
@@ -68,7 +70,6 @@ def test_vague_tags_are_the_20_validated_ones():
         "international_expansion",
         "acquisition",
         "change_of_ownership",
-        "family_succession",
         "shareholder_reorganisation",
         "public_to_private",
         "market_consolidation",

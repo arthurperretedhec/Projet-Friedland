@@ -11,7 +11,8 @@ from __future__ import annotations
 import pytest
 
 from app.data.investors import load_investors
-from app.logic.scoring import Operation, score_operation
+from app.logic.scoring import Operation, load_config, score_operation
+from app.logic.scoring.config import SCORING_CONFIG_V1
 from app.logic.scoring.real_data import (
     best_strategy_per_management_company,
     deal_types_from_tags,
@@ -22,6 +23,10 @@ from app.logic.scoring.real_data import (
     stake_from_tags,
     unclassified_values,
 )
+
+# Critères v1 (2026-11-20) pour les tests écrits avant les critères v2 : leurs valeurs attendues
+# ne changent pas. Les valeurs v2 sont dans test_scoring_v2_*.py.
+CONFIG_V1 = load_config(SCORING_CONFIG_V1)
 
 
 @pytest.fixture(scope="module")
@@ -92,7 +97,7 @@ def test_both_example_operations_score_every_fund(data, operation):
 
 
 def test_g3_and_g4_have_no_data_and_give_15_neutral_points(data):
-    result = score_operation_on_base(LBO_SMALL, data)
+    result = score_operation_on_base(LBO_SMALL, data, CONFIG_V1)
     for r in result.ranked:
         assert {"last_fund_size_eur_m", "last_fund_year"} <= set(r.missing_data)
         assert points(r)["G3"] + points(r)["G4"] == 15  # 20 x 0,5 + 10 x 0,5
@@ -172,7 +177,7 @@ def test_real_fund_1_abenex_industries_for_lbo_small_is_85(data):
     # G1 industrials ciblé : 35. G2 40 <= 60 (une seule borne) : 35, ev_min listé manquant.
     # G3 manquant : 20 x 0,5 = 10. G4 manquant : 10 x 0,5 = 5.
     # Total : 35 + 35 + 10 + 5 = 85.
-    result = by_id(score_operation_on_base(LBO_SMALL, data), "str-abenex-industries-90")
+    result = by_id(score_operation_on_base(LBO_SMALL, data, CONFIG_V1), "str-abenex-industries-90")
     assert result.excluded is False
     assert points(result) == {"G1": 35, "G2": 35, "G3": 10, "G4": 5}
     assert result.score == 85
@@ -188,7 +193,7 @@ def test_real_fund_2_argos_midmarket_for_buildup_mid_is_85(data):
     # E1 build_up couvert : rempli. E2, E3 : donnée manquante (conservé, alerte). E4 : rempli.
     # G1 business_services ciblé : 35. G2 50 <= 150 <= 250 : 35.
     # G3 manquant : 10. G4 manquant : 5. Total : 35 + 35 + 10 + 5 = 85.
-    result = by_id(score_operation_on_base(BUILDUP_MID, data), "str-argos-midmarket")
+    result = by_id(score_operation_on_base(BUILDUP_MID, data, CONFIG_V1), "str-argos-midmarket")
     assert result.excluded is False
     assert points(result) == {"G1": 35, "G2": 35, "G3": 10, "G4": 5}
     assert result.score == 85

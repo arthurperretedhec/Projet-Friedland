@@ -65,6 +65,10 @@ large if midpoint > 500.
 
 ## Scoring (F6, known answers)
 
+**Two configurations.** Criteria v2 are the default since 2026-11-25 (section "Criteria v2" below). The v1 cases (SC1–SC7 with weights 35/35/20/10) are kept: the v1 rules still exist in the code and their tests now run with `SCORING_CONFIG_V1`; their expected values are unchanged.
+
+### Criteria v1 (2026-11-20, `SCORING_CONFIG_V1`)
+
 Rules, weights and thresholds: `app/docs/scoring.md` (agreed by Arthur Perret on 2026-11-20, to be
 submitted to the group). Weights: sector 35, enterprise value fit 35, fund size 20, investment period
 10. Synthetic operation A: `primary_lbo`, equity ticket 15, EV 60 (EUR m), `software_it`, majority,
@@ -84,6 +88,25 @@ Real funds (`app/backend/data/strategies.csv`, snapshot of 2026-11-24, checked 2
 | SC5 | `str-abenex-industries-90`, LBO small: deal_types `buyout;growth`, stake `majority;controlling_minority`, sector `INDUSTRIALS` (themes), ticket 5–20, EV min empty, EV max 60; source abenex.com (first closing) | kept: buyout covers primary LBO, 5 ≤ 15 ≤ 20, stake both; sector 35; EV 40 ≤ 60 (one bound) 35; fund size missing 20 × 0.5 = 10; fund year missing 10 × 0.5 = 5; 35 + 35 + 10 + 5 | 85 | exact | `test_real_fund_1_abenex_industries_for_lbo_small_is_85` | passing |
 | SC6 | `str-argos-midmarket`, build-up mid: deal_types `buyout;build_up`, stake `majority`, sectors `BUSINESS_SERVICES;INDUSTRIALS` (generalist plus preferences), tickets empty, EV 50–250; source argos.fund | kept: build_up covered, tickets missing (not excluded, 2 warnings), majority; sector 35; 50 ≤ 150 ≤ 250 35; 10; 5; 35 + 35 + 10 + 5 | 85 | exact | `test_real_fund_2_argos_midmarket_for_buildup_mid_is_85` | passing |
 | SC7 | `str-antin-flagship`, LBO small: deal_types `infrastructure_equity` (non-PE), ticket min 400, stake empty | excluded: no PE deal type (E1) and 15 < 400 (E2); score 0 | excluded, 0 | exact | `test_real_fund_3_antin_flagship_is_excluded_from_lbo_small` | passing |
+
+### Criteria v2 (default since 2026-11-25, `SCORING_CONFIG`)
+
+Weights: sector 40, fund type 25, lead capacity 15, geography 10, transaction speciality 10; EV, fund size and
+fund age disabled. Eliminatory criteria unchanged. Tie-break: fewer missing data, then source quality
+(`classification_basis`: SOURCE_DESCRIPTION > INTERPRETED_DESCRIPTION > BROAD_MAPPING > HISTORICAL_DIRECTORY_LABEL),
+then `strategy_id`. Confidence: missing data over the 9 active criteria (eliminatory included): 0–1 high, 2–3 medium, 4+ low. Synthetic operation A and funds as above, with the v2 columns added to the fixtures on
+2026-11-25 (`app/backend/tests/fixtures/synthetic_scoring_data.py`). Real operations as in SC5–SC7.
+
+| Id | Case | v1 value | Hand working (v2) | v2 value | Test | Status |
+|---|---|---|---|---|---|---|
+| SC1 | Bravo, operation A: generalist; GROWTH_EQUITY with BUYOUT secondary; CONTROL_NOT_VERIFIED; Europe; `thematic_sector_focus` | 67.5 | sector 40 × 0.5 = 20; fund type BUYOUT secondary 25 × 0.5 = 12.5; lead 15 × 0.5 = 7.5; Europe 10 × 0.5 = 5; no `transmission` 0; 20 + 12.5 + 7.5 + 5 + 0 | 45 | `test_sc1_v2_bravo_is_45` | passing |
+| SC2 | Foxtrot, operation A: `industrials`; SPECIAL_SITUATIONS; CONTROL_NOT_VERIFIED; Nouvelle_Aquitaine; `carve_out` | 27.5 | 0 + 0 + 7.5 + French region 5 + 0 | 12.5 | `test_sc2_v2_foxtrot_is_12_5` | passing |
+| SC3 | Alpha with EV 80.4–200, operation A with EV 60.3 | 82.5 | EV no longer scored; 40 + 25 + 15 + France 10 + `transmission` 10 | 100 | `test_sc3_v2_decimal_ev_no_longer_counts_and_alpha_is_100` | passing |
+| SC4 | Half-up rounding with a modified v1 configuration | 60.3 | rounding mechanism, unchanged in v2 (same `_round`); kept as a v1 configuration test | – | `test_total_is_rounded_half_up` (v1) | passing |
+| SC5 | `str-abenex-industries-90`, LBO small (strategies.csv line 2): BUYOUT; CONTROL_POSSIBLE; France;Italy;Benelux; `thematic_sector_focus` | 85 | `industrials` 40 + BUYOUT 25 + CONTROL_POSSIBLE 15 + France 10 + no `transmission` 0; confidence 9/9 (0 missing) high | 90 | `test_sc5_v2_abenex_industries_for_lbo_small_is_90` | passing |
+| SC6 | `str-argos-midmarket`, build-up mid (line 46): BUYOUT; CONTROL_POSSIBLE; France;...;Europe; `buy_and_build`; tickets empty | 85 | 40 + 25 + 15 + 10 + `buy_and_build` 10; confidence 7/9 (2 tickets missing) medium | 100 | `test_sc6_v2_argos_midmarket_for_buildup_mid_is_100` | passing |
+| SC7 | `str-antin-flagship`, LBO small | excluded | unchanged: E1 (non-PE) and E2 (15 < 400) | excluded | `test_sc7_v2_antin_flagship_still_excluded` | passing |
+| SC8 | `str-aldebaran-transform`, LBO small: `family_succession` now covers primary LBO; SPECIAL_SITUATIONS with BUYOUT secondary; CONTROL_POSSIBLE; France; no `transmission` | excluded (E1) before 2026-11-25; 67.5 under `SCORING_CONFIG_V1` since then, because the `family_succession` translation is shared by both configurations (sector 35 + EV both bounds missing 17.5 + 10 + 5) | 40 + 12.5 + 15 + 10 + 0 | 77.5 | `test_aldebaran_now_eligible_thanks_to_family_succession` | passing |
 
 ## Edge cases and errors
 

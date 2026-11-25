@@ -12,7 +12,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from .config import DEAL_TYPES, GENERALIST_SECTOR, SECTORS, STAKES
+from .config import DEAL_TYPES, FUND_DEAL_TYPES, GENERALIST_SECTOR, SECTORS, STAKES
 
 # --- Entrées -------------------------------------------------------------------------------------
 
@@ -82,7 +82,8 @@ class Fund(BaseModel):
 
     @model_validator(mode="after")
     def _check_values(self) -> Fund:
-        _check_allowed(self.deal_types, DEAL_TYPES, "deal_types")
+        # Un fonds peut avoir « non_pe » (activité hors PE publiée) ; une opération, jamais.
+        _check_allowed(self.deal_types, FUND_DEAL_TYPES, "deal_types")
         _check_allowed(self.sectors, SECTORS, "sectors")
         if self.stake is not None:
             _check_allowed([self.stake], STAKES, "stake")

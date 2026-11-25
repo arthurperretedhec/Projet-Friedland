@@ -135,6 +135,116 @@ critères actifs, E1 à E4 puis G1, G5 à G8.) `status` : `pass` / `fail` (élim
 `partial` / `none` (noté), `missing`. `other_strategies.rank` est `null` pour une stratégie exclue.
 Le classement complet par stratégie reste disponible (`score_operation_on_base`).
 
+## Route d'API POST /api/score (pour l'interface, Antoine)
+
+Le moteur est appelé par **`POST /api/score`** (fichier `app/backend/app/api/score.py`). La base et
+ses 153 fiches sont chargées et traduites **une seule fois au démarrage** du backend
+(`app.state.scoring_base`), pas à chaque appel. Depuis le navigateur, appeler `/api/score` sur le
+même site : Next.js transmet `/api/*` au backend.
+
+### Requête (JSON)
+
+| Champ | Obligatoire | Valeurs |
+|---|---|---|
+| `deal_type` | oui | `primary_lbo`, `secondary_lbo`, `build_up`, `growth`, `carve_out` |
+| `sector` | oui | `software_it`, `healthcare`, `business_services`, `industrials`, `consumer_retail`, `food_beverage`, `financial_services`, `education`, `energy_environment`, `construction_real_estate`, `transport_logistics`, `media_telecom`, `agriculture` (pas `generalist`) |
+| `equity_ticket_eur_m` | oui | nombre > 0 (fonds propres recherchés, M€) |
+| `stake_sought` | oui | `majority` ou `minority` |
+| `enterprise_value_eur_m` | oui | nombre > 0 (M€) ; demandé par le format, mais pas noté en v2 |
+| `company_name` | non | texte ; par défaut « Opération sans nom » |
+| `operation_id` | non | texte ; par défaut « operation » |
+| `analysis_date` | non | AAAA-MM-JJ ; par défaut la date du jour (sans effet sur le score en v2) |
+
+Tout autre champ est refusé.
+
+```json
+POST /api/score
+{
+  "deal_type": "primary_lbo",
+  "sector": "industrials",
+  "equity_ticket_eur_m": 15,
+  "stake_sought": "majority",
+  "enterprise_value_eur_m": 40,
+  "company_name": "PME industrielle (exemple)",
+  "analysis_date": "2026-11-25"
+}
+```
+
+### Réponse (200)
+
+- `companies` : le classement par société de gestion (format « Classement par société de
+  gestion » ci-dessus : rang, société, meilleure stratégie, score, détail par critère, indice de
+  confiance, données manquantes, alertes, autres stratégies) ;
+- `excluded` : les **stratégies** exclues, chacune avec ses raisons ;
+- `counts` : nombre de stratégies (total, classées, exclues) et de sociétés classées ;
+- `message` : « Aucun fonds de la base n'est compatible avec cette opération. » quand
+  `companies` est vide, sinon `null`.
+
+Réponse réelle pour la requête ci-dessus, abrégée (1 société sur 82, 2 critères sur 9, 1 exclusion
+sur 58) :
+
+```json
+{
+  "operation_id": "operation",
+  "company_name": "PME industrielle (exemple)",
+  "analysis_date": "2026-11-25",
+  "config_version": "2026-11-25-v2",
+  "message": null,
+  "counts": {"strategies_total": 153, "strategies_ranked": 95, "strategies_excluded": 58,
+             "companies_ranked": 82},
+  "companies": [
+    {
+      "rank": 1,
+      "fund_id": "fund-075",
+      "management_company": "MFGI",
+      "best_strategy_id": "str-ext-mfgi-holding",
+      "best_strategy_name": "MFGI - Owner-Led Industrial Buyouts",
+      "score": 100.0,
+      "criteria": [
+        {"id": "E1", "label": "Type d'opération", "kind": "eliminatory", "status": "pass",
+         "status_label": "Critère rempli", "points": null, "max_points": null,
+         "explanation": "Le fonds accepte les opérations primary_lbo."},
+        {"id": "G1", "label": "Secteur", "kind": "graded", "status": "full",
+         "status_label": "Correspondance complète", "points": 40.0, "max_points": 40.0,
+         "explanation": "Secteur industrials ciblé par le fonds."}
+      ],
+      "confidence": {"criteria_known": 7, "criteria_total": 9, "level": "moyen",
+                     "missing_data": ["ticket_min_eur_m", "ticket_max_eur_m"]},
+      "missing_data": ["ticket_min_eur_m", "ticket_max_eur_m"],
+      "warnings": ["Ticket minimum : donnée manquante, à vérifier avant contact.",
+                   "Ticket maximum : donnée manquante, à vérifier avant contact."],
+      "other_strategies": []
+    }
+  ],
+  "excluded": [
+    {"strategy_id": "str-access-smallcap-coinvest",
+     "strategy_name": "Small-cap Buy-out Co-investments",
+     "management_company": "Access Capital Partners Group SA",
+     "exclusion_reasons": ["Position recherchée : Le fonds ne prend que des participations minoritaires ; l'opération est majoritaire."]}
+  ]
+}
+```
+
+### Erreur (422)
+
+Format commun d'architecture.md, messages en français, un détail par champ fautif :
+
+```json
+{
+  "error": {
+    "code": "invalid_request",
+    "message": "Requête invalide : sector : secteur inconnu « aerospace » ; valeurs autorisées : software_it, ... ; equity_ticket_eur_m : doit être strictement supérieur à 0",
+    "details": [
+      {"field": "sector", "message": "secteur inconnu « aerospace » ; valeurs autorisées : software_it, ..."},
+      {"field": "equity_ticket_eur_m", "message": "doit être strictement supérieur à 0"}
+    ]
+  }
+}
+```
+
+Autres messages : « champ obligatoire manquant », « champ inconnu », « doit être un nombre »,
+« date invalide (format attendu : AAAA-MM-JJ) », « JSON invalide ».
+
 ## À quoi il sert
 
 Pour une opération (l'entreprise décrite par le banquier) et la liste des fonds de la base, le moteur

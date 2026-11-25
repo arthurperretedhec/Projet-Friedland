@@ -8,6 +8,9 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.api.errors import register_error_handlers
+from app.api.score import build_scoring_base
+from app.api.score import router as score_router
 from app.data.investors import load_investors
 
 APP_NAME = "Friedland Buyer Screening"
@@ -16,10 +19,14 @@ APP_NAME = "Friedland Buyer Screening"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.investor_data = load_investors()
+    # Moteur de score : les 153 fiches sont traduites une seule fois, ici, pas à chaque appel.
+    app.state.scoring_base = build_scoring_base(app.state.investor_data)
     yield
 
 
 app = FastAPI(title=APP_NAME, lifespan=lifespan)
+register_error_handlers(app)
+app.include_router(score_router)
 
 
 @app.get("/api/health")

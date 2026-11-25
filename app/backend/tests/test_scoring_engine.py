@@ -20,6 +20,10 @@ from tests.fixtures.synthetic_scoring_data import (
     operation,
 )
 
+# Critères v1 (2026-11-20) : ces tests vérifient les règles v1, toujours présentes dans le code.
+# Depuis le 2026-11-25, la configuration par défaut est la v2 : on remet la v1 (tests/conftest.py).
+pytestmark = pytest.mark.usefixtures("scoring_v1")
+
 
 def by_id(result, strategy_id):
     return next(r for r in [*result.ranked, *result.excluded] if r.strategy_id == strategy_id)

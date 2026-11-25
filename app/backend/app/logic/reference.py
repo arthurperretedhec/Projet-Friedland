@@ -53,6 +53,8 @@ DATA_DEAL_TYPE_COVERAGE: dict[str, tuple[str, ...]] = {
     "mbi": ("primary_lbo",),
     "obo": ("primary_lbo",),
     "management_buyout": ("primary_lbo",),
+    # Décision du 2026-11-25 (critères v2) : la succession familiale est une transmission.
+    "family_succession": ("primary_lbo",),
     "primary_buyout": ("primary_lbo",),
     "growth": ("growth",),
     "growth_capital": ("growth",),
@@ -89,11 +91,13 @@ DATA_NON_PE_DEAL_TAGS = frozenset(
 )
 # Libellés trop vagues pour dire quel type d'opération le fonds fait : ignorés. Un fonds qui n'a
 # que ceux-là a une liste « donnée manquante » (critère non vérifiable, fonds conservé).
-# À reposer au groupe : public_to_private, change_of_ownership, family_succession,
-# shareholder_reorganisation et acquisition décrivent des LBO ; ils pourraient couvrir le LBO comme
-# « transmission ». Effet si on le faisait : 3 stratégies (str-aldebaran-transform,
-# str-ext-caravelle-holding, str-ext-samfi-holding), aujourd'hui exclues d'un LBO par E1 seul,
-# deviendraient éligibles.
+# `acquisition` reste ici volontairement (décision du 2026-11-25) : « acquisition » peut désigner un
+# rachat par le fonds, mais aussi une acquisition par une société du portefeuille ou un financement
+# d'acquisition ; il ne prouve pas que le fonds mène un LBO.
+# `family_succession` couvre désormais le LBO primaire (voir DATA_DEAL_TYPE_COVERAGE) : effet,
+# str-aldebaran-transform devient éligible aux LBO primaires. Restent à reposer au groupe :
+# public_to_private, change_of_ownership et shareholder_reorganisation (sans effet sur un fonds
+# aujourd'hui exclu) ; acquisition ferait entrer str-ext-caravelle-holding et str-ext-samfi-holding.
 DATA_VAGUE_DEAL_TAGS = frozenset(
     {
         "impact",
@@ -111,7 +115,6 @@ DATA_VAGUE_DEAL_TAGS = frozenset(
         "international_expansion",
         "acquisition",
         "change_of_ownership",
-        "family_succession",
         "shareholder_reorganisation",
         "public_to_private",
         "market_consolidation",
@@ -155,3 +158,113 @@ DATA_STAKES: dict[str, str | None] = {
     "reference_shareholder": "minority",
     "control_not_explicit": None,
 }
+
+# --- 3. Critères v2 (proposition D, codée le 2026-11-25) ---------------------------------------
+
+# Types de fonds (buckets.csv) et famille attendue selon le type d'opération (critère « Type de
+# fonds »).
+BUCKETS = (
+    "BUYOUT",
+    "GROWTH_EQUITY",
+    "VENTURE_CAPITAL",
+    "SPECIAL_SITUATIONS",
+    "REAL_ASSETS",
+    "DEBT_HYBRID",
+    "CO_INVESTMENT",
+    "PERMANENT_CAPITAL",
+)
+OPERATION_BUCKET: dict[str, str] = {
+    "primary_lbo": "BUYOUT",
+    "secondary_lbo": "BUYOUT",
+    "build_up": "BUYOUT",
+    "carve_out": "BUYOUT",
+    "growth": "GROWTH_EQUITY",
+}
+
+# Rôles d'acquéreur (strategies.buyer_role) et capacité à mener l'opération, selon la position
+# recherchée : "full" = 100 %, "partial" = part `partial_ratio` de config.py, absent = 0.
+BUYER_ROLES = (
+    "CONTROL_POSSIBLE",
+    "CONTROL_NOT_VERIFIED",
+    "MINORITY_CAPITAL_PARTNER",
+    "SPECIALIST_REAL_ASSET_BUYER",
+    "VENTURE_INVESTOR",
+    "LENDER_OR_HYBRID_FINANCIER",
+    "CO_INVESTOR_NOT_LEAD",
+    "HISTORICAL_NOT_ACTIVE_CONFIRMED",
+    "ADD_ON_OR_PLATFORM_ONLY",
+)
+LEAD_CAPACITY: dict[str, dict[str, str]] = {
+    "majority": {"CONTROL_POSSIBLE": "full", "CONTROL_NOT_VERIFIED": "partial"},
+    # Opération minoritaire : le partenaire minoritaire est le métier exact ; un fonds de contrôle
+    # peut aussi prendre une minorité, mais ce n'est pas son métier principal.
+    "minority": {
+        "MINORITY_CAPITAL_PARTNER": "full",
+        "CONTROL_POSSIBLE": "partial",
+        "CONTROL_NOT_VERIFIED": "partial",
+    },
+}
+
+# Géographie (strategies.geography_tags) : France = 100 % ; région française ou zone large qui
+# inclut la France = part `partial_ratio` ; autres zones (pays étrangers seuls, autres
+# continents) = 0.
+GEO_FRANCE = "France"
+GEO_FRENCH_REGIONS = frozenset(
+    {
+        "Bretagne",
+        "France_Southeast",
+        "Grand Est",
+        "Grand Ouest",
+        "Hauts_de_France",
+        "Ile_de_France",
+        "Normandie",
+        "Nouvelle Aquitaine",
+        "Nouvelle_Aquitaine",
+        "Occitanie",
+        "Pays_de_la_Loire",
+        "Provence_Alpes_Cote_d_Azur",
+    }
+)
+GEO_WIDE_INCLUDING_FRANCE = frozenset(
+    {"Europe", "Continental_Europe", "Eurozone", "Global", "International", "OECD"}
+)
+GEO_OTHER = frozenset(
+    {
+        "Africa",
+        "Asia",
+        "Belgium",
+        "Benelux",
+        "DACH",
+        "Germany",
+        "Italy",
+        "Latin_America",
+        "Middle_East",
+        "Neighboring_countries",
+        "North America",
+        "North_America",
+        "North_Africa",
+        "Spain",
+        "Sub_Saharan_Africa",
+        "Switzerland",
+        "UK",
+        "USA",
+    }
+)
+
+# Spécialité de transaction (strategies.transaction_modifiers) attendue selon l'opération.
+# Pas de spécialité définie pour le growth : part neutre `no_speciality_ratio`.
+OPERATION_MODIFIER: dict[str, str] = {
+    "primary_lbo": "transmission",
+    "secondary_lbo": "transmission",
+    "build_up": "buy_and_build",
+    "carve_out": "carve_out",
+}
+
+# Qualité de la source (strategies.classification_basis), de la meilleure à la moins bonne :
+# sert au départage des ex æquo. Valeur absente = après la dernière.
+SOURCE_QUALITY_ORDER = (
+    "SOURCE_DESCRIPTION",
+    "INTERPRETED_DESCRIPTION",
+    "BROAD_MAPPING",
+    "HISTORICAL_DIRECTORY_LABEL",
+)

@@ -17,6 +17,8 @@ Règles de traduction (validées par Arthur le 2026-11-25, détail dans app/docs
 
 from __future__ import annotations
 
+from pydantic import BaseModel
+
 from app.data.investors import InvestorData, tokens
 from app.logic.investor_scoring import buyer_longlist
 from app.logic.reference import (
@@ -32,11 +34,23 @@ from app.logic.reference import (
     DATA_VAGUE_DEAL_TAGS,
     DEAL_TYPES,
     GENERALIST_SECTOR,
+    GEO_FRANCE,
+    GEO_FRENCH_REGIONS,
+    GEO_OTHER,
+    GEO_WIDE_INCLUDING_FRANCE,
     NON_PE_DEAL_TYPE,
 )
 
 from .engine import score_operation
-from .models import Fund, FundResult, Operation, ScoringConfig, ScoringResult
+from .models import (
+    Confidence,
+    CriterionResult,
+    Fund,
+    FundResult,
+    Operation,
+    ScoringConfig,
+    ScoringResult,
+)
 
 
 def deal_types_from_tags(tags: tuple[str, ...]) -> list[str] | None:
@@ -88,9 +102,17 @@ def fund_from_strategy(data: InvestorData, strategy_id: str) -> Fund:
             "stake": stake_from_tags(tokens(row["stake"])),
             "deal_types": deal_types_from_tags(tokens(row["deal_types"])),
             "sectors": sectors_for(data, strategy_id),
-            # Absents de la base actuelle (153 / 153) : donnée manquante, 50 % des points.
+            # Absents de la base actuelle (153 / 153) : donnée manquante (G3, G4, désactivés
+            # en v2).
             "last_fund_size_eur_m": None,
             "last_fund_year": None,
+            # Critères v2 : colonnes reprises telles quelles (valeurs vérifiées par le modèle Fund).
+            "primary_bucket": row["primary_bucket"],
+            "secondary_buckets": list(tokens(row["secondary_buckets"])) or None,
+            "buyer_role": row["buyer_role"],
+            "geography_tags": list(tokens(row["geography_tags"])) or None,
+            "transaction_modifiers": list(tokens(row["transaction_modifiers"])) or None,
+            "classification_basis": row["classification_basis"],
         }
     )
 
@@ -121,6 +143,14 @@ def unclassified_sector_metadata(data: InvestorData) -> dict[str, set[str]]:
     return found
 
 
+def unclassified_geography(data: InvestorData) -> set[str]:
+    """Libellés de `geography_tags` absents des listes de reference.py (doit rester vide)."""
+    known = {GEO_FRANCE} | GEO_FRENCH_REGIONS | GEO_WIDE_INCLUDING_FRANCE | GEO_OTHER
+    return {
+        tag for row in data.strategies.values() for tag in tokens(row["geography_tags"])
+    } - known
+
+
 def score_operation_on_base(
     operation: Operation,
     data: InvestorData,
@@ -139,3 +169,78 @@ def best_strategy_per_management_company(
     seule société de gestion (et inversement).
     """
     return buyer_longlist(data, result.ranked)
+
+
+# --- Classement par société de gestion (démo, interface d'Antoine) ----------------------------
+
+
+class OtherStrategy(BaseModel):
+    """Une autre stratégie de la même société de gestion (classée plus bas, ou exclue)."""
+
+    strategy_id: str
+    strategy_name: str | None
+    rank: int | None  # rang dans le classement des stratégies ; None si exclue
+    score: float
+    excluded: bool
+    exclusion_reasons: list[str]
+
+
+class CompanyResult(BaseModel):
+    """Une ligne du classement par société de gestion."""
+
+    rank: int  # 1 = meilleure société
+    fund_id: str
+    management_company: str | None
+    best_strategy_id: str
+    best_strategy_name: str | None
+    score: float
+    criteria: list[CriterionResult]
+    confidence: Confidence
+    missing_data: list[str]
+    warnings: list[str]
+    other_strategies: list[OtherStrategy]
+
+
+def rank_management_companies(data: InvestorData, result: ScoringResult) -> list[CompanyResult]:
+    """Classement par société de gestion : pour chaque société, sa meilleure stratégie classée
+    (même ordre que le classement des stratégies, départage compris), son score, son détail par
+    critère, son indice de confiance et la liste de ses autres stratégies.
+
+    Une société dont toutes les stratégies sont exclues n'apparaît pas.
+    """
+    fund_of = {sid: row["fund_id"] for sid, row in data.strategies.items()}
+    by_company: dict[str, list[FundResult]] = {}
+    for strategy in [*result.ranked, *result.excluded]:
+        by_company.setdefault(fund_of[strategy.strategy_id], []).append(strategy)
+
+    companies = []
+    for best in best_strategy_per_management_company(data, result):
+        fund_id = fund_of[best.strategy_id]
+        others = [
+            OtherStrategy(
+                strategy_id=s.strategy_id,
+                strategy_name=s.strategy_name,
+                rank=s.rank,
+                score=s.score,
+                excluded=s.excluded,
+                exclusion_reasons=s.exclusion_reasons,
+            )
+            for s in by_company[fund_id]
+            if s.strategy_id != best.strategy_id
+        ]
+        companies.append(
+            CompanyResult(
+                rank=len(companies) + 1,
+                fund_id=fund_id,
+                management_company=best.management_company,
+                best_strategy_id=best.strategy_id,
+                best_strategy_name=best.strategy_name,
+                score=best.score,
+                criteria=best.criteria,
+                confidence=best.confidence,
+                missing_data=best.missing_data,
+                warnings=best.warnings,
+                other_strategies=others,
+            )
+        )
+    return companies

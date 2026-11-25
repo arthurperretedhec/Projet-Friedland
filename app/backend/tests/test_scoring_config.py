@@ -7,8 +7,12 @@ import copy
 import pytest
 
 from app.logic.scoring import ConfigError, load_config, score_operation
-from app.logic.scoring.config import SCORING_CONFIG
+from app.logic.scoring.config import SCORING_CONFIG_V1 as SCORING_CONFIG
 from tests.fixtures.synthetic_scoring_data import fund, operation
+
+# Critères v1 (2026-11-20) : ces tests vérifient les règles v1, toujours présentes dans le code.
+# Depuis le 2026-11-25, la configuration par défaut est la v2 : on remet la v1 (tests/conftest.py).
+pytestmark = pytest.mark.usefixtures("scoring_v1")
 
 
 def changed(edit) -> dict:
@@ -21,8 +25,8 @@ def graded(raw, criterion_id):
     return next(c for c in raw["graded"] if c["id"] == criterion_id)
 
 
-def test_default_config_is_valid_and_weights_are_the_agreed_ones():
-    config = load_config()
+def test_v1_config_is_valid_and_weights_are_the_agreed_ones():
+    config = load_config(SCORING_CONFIG)  # SCORING_CONFIG = critères v1 dans ce fichier
     weights = {c.id: c.weight for c in config.graded if c.enabled}
     assert weights == {"G1": 35, "G2": 35, "G3": 20, "G4": 10}
     assert sum(weights.values()) == 100

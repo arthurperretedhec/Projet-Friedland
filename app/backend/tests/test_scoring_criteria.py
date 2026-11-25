@@ -13,6 +13,10 @@ import pytest
 from app.logic.scoring import FundResult, score_operation
 from tests.fixtures.synthetic_scoring_data import compatible_fund, operation
 
+# Critères v1 (2026-11-20) : ces tests vérifient les règles v1, toujours présentes dans le code.
+# Depuis le 2026-11-25, la configuration par défaut est la v2 : on remet la v1 (tests/conftest.py).
+pytestmark = pytest.mark.usefixtures("scoring_v1")
+
 
 def score_one(fund_changes: dict | None = None, **op_changes) -> FundResult:
     result = score_operation(operation(**op_changes), [compatible_fund(**(fund_changes or {}))])

@@ -5,6 +5,136 @@ Règles, poids et seuils validés par Arthur le 2026-11-20 ; **à soumettre au g
 définitive des critères n'est pas encore validée par l'équipe). Branché sur la vraie base de Simon le
 2026-11-25 (branche `arthur/connect-real-data`, voir « Branchement sur la vraie base »).
 
+## Critères v2 : configuration par défaut depuis le 2026-11-25
+
+Codés sur la branche `arthur/criteria-v2` (proposition D), **à valider par le groupe**. Les critères
+v1 (35 / 35 / 20 / 10, décrits plus bas dans « Règles ») restent dans le code et dans
+`SCORING_CONFIG_V1` (config.py), pour comparer et pour leurs tests.
+
+**Pourquoi** : sur la vraie base, la VE n'est publiée que pour 22 stratégies sur 153, et la taille et
+l'année du dernier fonds ne le sont jamais. G2, G3 et G4 donnaient donc presque le même nombre de points
+à tout le monde (42 stratégies ex æquo à 67,5 pour le LBO d'exemple, 41 avant la traduction de
+`family_succession`). La v2 n'utilise que des
+colonnes remplies.
+
+### Critères éliminatoires : inchangés (E1 à E4)
+
+### Critères notés (total 100)
+
+| | Critère | Colonne | Remplie | Poids | 100 % | 50 % | 0 |
+|---|---|---|---|---|---|---|---|
+| G1 | Secteur | codes + `sector_scope` | 148 / 153 | **40** | secteur ciblé | fonds généraliste | autre secteur |
+| G5 | Type de fonds | `primary_bucket`, `secondary_buckets` | 153 / 153 | **25** | bucket principal attendu | bucket attendu en secondaire | sinon |
+| G6 | Capacité à mener | `buyer_role` | 153 / 153 | **15** | voir ci-dessous | voir ci-dessous | autres rôles |
+| G7 | Géographie | `geography_tags` | 151 / 153 | **10** | France citée | région française ; zone large incluant la France | autres zones |
+| G8 | Spécialité de transaction | `transaction_modifiers` | 134 / 153 | **10** | spécialité de l'opération affichée | growth (aucune spécialité définie) | spécialité absente |
+
+G2 (VE), G3 (taille du fonds) et G4 (période d'investissement) sont **désactivés** (`"enabled": False`),
+leur code est gardé. Une donnée manquante sur un critère noté donne toujours 50 % des points, sans
+exclusion.
+
+- **Type de fonds (G5)** : bucket attendu = `BUYOUT` pour un LBO primaire ou secondaire, un build-up ou
+  un carve-out ; `GROWTH_EQUITY` pour un growth. Il ne compte pas deux fois la même information
+  que E1 : E1 (`deal_types`) est une porte sans points (« accepte-t-il ce type ? »), G5 donne des points
+  pour le **métier principal** du fonds.
+- **Capacité à mener (G6)** : opération **majoritaire** : `CONTROL_POSSIBLE` 100 %,
+  `CONTROL_NOT_VERIFIED` 50 %, autres rôles 0. Opération **minoritaire** (règle proposée) :
+  `MINORITY_CAPITAL_PARTNER` 100 % (c'est son métier) ; `CONTROL_POSSIBLE` et `CONTROL_NOT_VERIFIED` 50 %
+  (peuvent prendre une minorité, mais ce n'est pas leur métier principal) ; autres rôles 0 (co-investisseur
+  non chef de file, prêteur, venture, actifs réels...). E4 (`stake`) reste la porte, G6 donne les points.
+- **Géographie (G7)** : régions françaises (50 %) : Bretagne, France_Southeast, Grand Est, Grand Ouest,
+  Hauts_de_France, Ile_de_France, Normandie, Nouvelle Aquitaine (les deux orthographes de la base,
+  avec espace ou `_`), Occitanie, Pays_de_la_Loire,
+  Provence_Alpes_Cote_d_Azur (la région de l'entreprise n'est pas connue). Zones larges incluant la
+  France (50 %) : Europe, Continental_Europe, Eurozone, Global, International, OECD. Autres zones (0) :
+  pays étrangers cités seuls (Italy, Spain, Germany, Benelux, DACH, UK, Switzerland, Belgium...) et
+  autres continents (`North America` et `North_America` : les deux orthographes sont reconnues). Cas
+  discutable : `Neighboring_countries` est classé « autre zone ».
+- **Spécialité (G8)** : `transmission` pour un LBO primaire ou secondaire, `buy_and_build` pour un
+  build-up, `carve_out` pour un carve-out ; pour un growth, aucune spécialité définie : 50 % pour
+  tous (part neutre, `no_speciality_ratio`), **sans regarder la donnée du fonds** : un fonds sans
+  `transaction_modifiers` n'est donc pas compté en donnée manquante pour un growth (correction de la
+  relecture du 2026-11-25). Limite : un fonds qui pratique la spécialité sans
+  l'afficher a 0.
+
+### Traduction des types d'opération (changement v2)
+
+- `family_succession` couvre désormais le LBO primaire (comme `transmission`). Effet :
+  `str-aldebaran-transform` devient éligible aux LBO primaires (77,5 pour le LBO d'exemple, SC8).
+  Cette traduction vaut **pour les deux configurations** (elle est dans `reference.py`, partagé) :
+  `SCORING_CONFIG_V1` signifie donc « poids et critères v1 avec les traductions actuelles » ; en
+  v1, Aldebaran vaut désormais 67,5 au lieu d'être exclu.
+- `acquisition` **reste un libellé vague, volontairement** : il peut désigner un rachat par le fonds,
+  mais aussi une acquisition faite par une société du portefeuille ou un financement d'acquisition ; il
+  ne prouve pas que le fonds mène un LBO. (Le traduire en LBO ferait entrer `str-ext-caravelle-holding`
+  et `str-ext-samfi-holding`.)
+
+### Départage des ex æquo (v2)
+
+1. le score le plus haut ;
+2. le moins de données manquantes (critères actifs, éliminatoires compris) ;
+3. la meilleure **qualité de source** (`classification_basis`) : `SOURCE_DESCRIPTION` >
+   `INTERPRETED_DESCRIPTION` > `BROAD_MAPPING` > `HISTORICAL_DIRECTORY_LABEL` > non renseigné ;
+4. `strategy_id` par ordre alphabétique.
+
+Les points en secteur ne départagent plus (règle v1 abandonnée).
+
+### Indice de confiance (v2)
+
+Pour chaque stratégie classée : `criteria_known / criteria_total` = critères actifs dont la donnée
+est publiée, sur les **9 critères actifs**, éliminatoires compris (E1 à E4, G1, G5 à G8 ; un ticket
+minimum ou maximum non publié compte) ; `level` ; `missing_data` = la même liste que
+`FundResult.missing_data` (le niveau se calcule sur sa longueur ; en v1, une borne de VE absente y
+compte aussi), recopiée volontairement pour que l'indice se lise seul dans l'interface.
+
+| Niveau | Règle (config.py) | LBO d'exemple (95 stratégies) | Build-up d'exemple (41) |
+|---|---|---|---|
+| élevé | 0 ou 1 donnée manquante (`confidence_high_max_missing` = 1) | 13 | 10 |
+| moyen | 2 ou 3 (`confidence_medium_max_missing` = 3) | 77 | 28 |
+| faible | 4 ou plus | 5 | 3 |
+
+Décision d'Arthur (2026-11-25) : compter aussi les critères éliminatoires. Effet : un fonds dont les
+deux tickets ne sont pas publiés est au mieux « moyen » (par exemple Argos Mid-Market : 100 points,
+7 / 9, moyen ; il était « élevé » quand seuls les critères notés comptaient). Le départage comptait
+déjà ces données manquantes (`missing_data` inclut les critères éliminatoires).
+
+### Classement par société de gestion (démo)
+
+`rank_management_companies(data, result)` (dans `real_data.py`) renvoie une ligne par société de
+gestion, dans l'ordre de sa meilleure stratégie (départage compris). Une société dont toutes les
+stratégies sont exclues n'apparaît pas. Format d'une ligne, pour l'interface (Antoine) :
+
+```json
+{
+  "rank": 7,
+  "fund_id": "fund-001",
+  "management_company": "Abenex Capital SAS",
+  "best_strategy_id": "str-abenex-industries-90",
+  "best_strategy_name": "Abenex Industries 9.0",
+  "score": 90.0,
+  "criteria": [
+    {"id": "E1", "label": "Type d'opération", "kind": "eliminatory", "status": "pass",
+     "status_label": "Critère rempli", "points": null, "max_points": null,
+     "explanation": "Le fonds accepte les opérations primary_lbo."},
+    {"id": "G1", "label": "Secteur", "kind": "graded", "status": "full",
+     "status_label": "Correspondance complète", "points": 40.0, "max_points": 40.0,
+     "explanation": "Secteur industrials ciblé par le fonds."}
+  ],
+  "confidence": {"criteria_known": 9, "criteria_total": 9, "level": "élevé", "missing_data": []},
+  "missing_data": [],
+  "warnings": [],
+  "other_strategies": [
+    {"strategy_id": "str-abenex-smallcap-ii", "strategy_name": "Abenex Small Cap II", "rank": 49,
+     "score": 70.0, "excluded": false, "exclusion_reasons": []}
+  ]
+}
+```
+
+(Ligne réelle d'Abenex Capital pour le LBO d'exemple, abrégée : `criteria` contient tous les
+critères actifs, E1 à E4 puis G1, G5 à G8.) `status` : `pass` / `fail` (éliminatoire), `full` /
+`partial` / `none` (noté), `missing`. `other_strategies.rank` est `null` pour une stratégie exclue.
+Le classement complet par stratégie reste disponible (`score_operation_on_base`).
+
 ## À quoi il sert
 
 Pour une opération (l'entreprise décrite par le banquier) et la liste des fonds de la base, le moteur
@@ -21,7 +151,7 @@ d'exclusion**. Il renvoie les fonds classés du meilleur au moins bon.
 
 | Fichier | Rôle |
 |---|---|
-| `app/backend/app/logic/scoring/config.py` | **le seul fichier à modifier** : critères, poids, seuils |
+| `app/backend/app/logic/scoring/config.py` | **le seul fichier à modifier** : critères, poids, seuils (v2 par défaut, v1 gardée) |
 | `app/backend/app/logic/scoring/models.py` | formats d'entrée (fiche fonds, fiche opération) et du résultat |
 | `app/backend/app/logic/scoring/engine.py` | les règles de calcul et le classement |
 | `app/backend/app/logic/reference.py` | **source unique** des listes de valeurs (secteurs, types d'opération, positions) et des traductions depuis la base |
@@ -71,7 +201,7 @@ une fiche incomplète ou invalide est refusée avec un message.
 | `stake_sought` | `majority` ou `minority` |
 | `analysis_date` | date de l'analyse (AAAA-MM-JJ) ; sert à l'âge du dernier fonds, pour que le calcul ne dépende jamais de la date du jour |
 
-## Règles
+## Règles (critères v1, `SCORING_CONFIG_V1`)
 
 ### Critères éliminatoires (sans poids)
 
@@ -237,7 +367,8 @@ Toutes les colonnes de montants sont en **M€** (de 0,15 à 800 M€ dans la ba
 - libellés **hors PE** (venture, mezzanine, dette senior, quasi-fonds propres, infrastructure,
   financement de projet, immobilier hôtelier, création d'entreprise...) : connus, ne couvrent rien ;
   un fonds qui n'a que ceux-là reçoit `non_pe` et est exclu de toute opération de PE ;
-- libellés **vagues** (`impact`, `long_term`, `turnaround`, `family_succession`,
+- `family_succession` → LBO primaire (depuis les critères v2, 2026-11-25) ;
+- libellés **vagues** (`impact`, `long_term`, `turnaround`, `acquisition`,
   `market_consolidation`, `public_to_private`...) : ignorés ; un fonds qui n'a que ceux-là a une
   liste « donnée manquante ».
 
@@ -246,10 +377,10 @@ Listes complètes (recopiées dans les tests, `test_scoring_real_data_guards.py`
   `hybrid_capital`, `convertible_financing`, `acquisition_financing`, `sponsorless_financing`,
   `infrastructure`, `infrastructure_equity`, `infrastructure_growth`, `growth_infrastructure`,
   `project_finance`, `greenfield`, `brownfield`, `hospitality_real_estate`, `company_creation` ;
-- **vagues (20)** : `impact`, `long_term`, `evergreen`, `long_term_direct_investment`, `technology`,
+- **vagues (19)** : `impact`, `long_term`, `evergreen`, `long_term_direct_investment`, `technology`,
   `transformation`, `special_situations`, `turnaround`, `restructuring`, `co_investment`,
   `minority_co_investment`, `flexible_capital`, `international_expansion`, `acquisition`,
-  `change_of_ownership`, `family_succession`, `shareholder_reorganisation`, `public_to_private`,
+  `change_of_ownership`, `shareholder_reorganisation`, `public_to_private`,
   `market_consolidation`, `sponsorless`.
 - `sector_scope` connus : `GENERALIST_OPEN`, `GENERALIST_PLUS_PREFERENCES`, `SECTOR_THEMES`,
   `UNKNOWN_SECTOR` (3 stratégies, secteur → donnée manquante) ; `polarity` : `INCLUDED`,
@@ -281,16 +412,16 @@ un secteur (2 fonds) → donnée manquante, car le moteur ne sait pas exprimer u
   (20 × 0,5 + 10 × 0,5). Ils ne départagent aucun fonds ; le classement repose sur le secteur (G1)
   et la VE (G2). Une proposition pour les remplacer est à soumettre au groupe.
 - La VE manquant pour 131 fonds, la plupart reçoivent 17,5 points sur G2 : beaucoup d'ex æquo
-  (par exemple 41 fonds à 67,5 pour un LBO small cap), départagés par le nombre de données
+  (par exemple 42 stratégies à 67,5 pour un LBO small cap, 41 avant la traduction de
+  `family_succession`), départagés par le nombre de données
   manquantes, puis les points en secteur, puis **l'ordre alphabétique** de `strategy_id`.
 - E1 est strict : un fonds qui publie `buyout` sans `build_up` est **exclu d'un build-up**. Pour
   le build-up mid cap d'exemple, **112 stratégies sont exclues au total, dont 107 au moins en
   partie par E1** (84 par E1 seul). Règle à rediscuter avec le groupe.
-- Libellés « vagues » à rediscuter : `public_to_private`, `change_of_ownership`,
-  `family_succession`, `shareholder_reorganisation` et `acquisition` décrivent des LBO et
-  pourraient couvrir le LBO comme `transmission`. **Effet si on le faisait** : 3 stratégies
-  (`str-aldebaran-transform`, `str-ext-caravelle-holding`, `str-ext-samfi-holding`), aujourd'hui
-  exclues d'un LBO par E1 seul, deviendraient éligibles. À décider avec le groupe.
+- Libellés « vagues » proches du LBO : `family_succession` couvre le LBO primaire depuis les critères
+  v2 (Aldebaran Transform devient éligible). Restent à rediscuter : `acquisition` (ferait entrer
+  `str-ext-caravelle-holding` et `str-ext-samfi-holding`), `public_to_private`,
+  `change_of_ownership` et `shareholder_reorganisation` (sans effet sur un fonds aujourd'hui exclu).
 
 ## Limites connues
 

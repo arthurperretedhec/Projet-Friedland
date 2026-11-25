@@ -12,7 +12,16 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from .config import DEAL_TYPES, FUND_DEAL_TYPES, GENERALIST_SECTOR, SECTORS, STAKES
+from .config import (
+    BUCKETS,
+    BUYER_ROLES,
+    DEAL_TYPES,
+    FUND_DEAL_TYPES,
+    GENERALIST_SECTOR,
+    SECTORS,
+    SOURCE_QUALITY_ORDER,
+    STAKES,
+)
 
 # --- Entrées -------------------------------------------------------------------------------------
 
@@ -55,8 +64,23 @@ class Fund(BaseModel):
     # Année plausible : une faute de frappe (3000, 20201) est refusée au lieu de compter comme
     # « fonds récent ».
     last_fund_year: int | None = Field(default=None, ge=1980, le=2100)
+    # Critères v2 (colonnes de strategies.csv ; None = non publié).
+    primary_bucket: str | None = None
+    secondary_buckets: list[str] | None = None
+    buyer_role: str | None = None
+    geography_tags: list[str] | None = None
+    transaction_modifiers: list[str] | None = None
+    # Qualité de la source de la fiche : sert au départage des ex æquo (critères v2).
+    classification_basis: str | None = None
 
-    @field_validator("deal_types", "sectors", mode="before")
+    @field_validator(
+        "deal_types",
+        "sectors",
+        "secondary_buckets",
+        "geography_tags",
+        "transaction_modifiers",
+        mode="before",
+    )
     @classmethod
     def _multi_values(cls, value: object) -> object:
         return _split_multi(value)
@@ -71,6 +95,9 @@ class Fund(BaseModel):
         "ev_max_eur_m",
         "last_fund_size_eur_m",
         "last_fund_year",
+        "primary_bucket",
+        "buyer_role",
+        "classification_basis",
         mode="before",
     )
     @classmethod
@@ -87,6 +114,15 @@ class Fund(BaseModel):
         _check_allowed(self.sectors, SECTORS, "sectors")
         if self.stake is not None:
             _check_allowed([self.stake], STAKES, "stake")
+        if self.primary_bucket is not None:
+            _check_allowed([self.primary_bucket], BUCKETS, "primary_bucket")
+        _check_allowed(self.secondary_buckets, BUCKETS, "secondary_buckets")
+        if self.buyer_role is not None:
+            _check_allowed([self.buyer_role], BUYER_ROLES, "buyer_role")
+        if self.classification_basis is not None:
+            _check_allowed(
+                [self.classification_basis], SOURCE_QUALITY_ORDER, "classification_basis"
+            )
         for low, high, name in (
             (self.ticket_min_eur_m, self.ticket_max_eur_m, "ticket"),
             (self.ev_min_eur_m, self.ev_max_eur_m, "ev"),
@@ -145,6 +181,13 @@ class ScoringConfig(BaseModel):
     active_criteria_min: int = Field(ge=0)
     active_criteria_max: int = Field(ge=0)
     tie_break_criterion: str | None = None
+    # Critères v2 : départager les ex æquo par la qualité de la source (classification_basis)
+    # au lieu des points d'un critère.
+    tie_break_source_quality: bool = False
+    # Indice de confiance : nombre de données manquantes (critères éliminatoires ET notés actifs)
+    # autorisé pour le niveau « élevé », puis « moyen » ; au-delà : « faible ».
+    confidence_high_max_missing: int = Field(default=1, ge=0)
+    confidence_medium_max_missing: int = Field(default=3, ge=0)
     eliminatory: list[CriterionConfig]
     graded: list[CriterionConfig]
 
@@ -179,6 +222,20 @@ class CriterionResult(BaseModel):
     explanation: str
 
 
+ConfidenceLevel = Literal["élevé", "moyen", "faible"]
+
+
+class Confidence(BaseModel):
+    # Critères actifs (éliminatoires et notés) dont la donnée est publiée, sur le total des
+    # critères actifs (9 en v2 : E1 à E4, puis G1, G5 à G8).
+    criteria_known: int
+    criteria_total: int
+    level: ConfidenceLevel
+    # Champs non publiés : la MÊME liste que FundResult.missing_data, recopiée volontairement pour
+    # que l'indice de confiance se lise seul dans l'interface.
+    missing_data: list[str]
+
+
 class FundResult(BaseModel):
     rank: int | None
     strategy_id: str
@@ -191,6 +248,8 @@ class FundResult(BaseModel):
     # Champs de la fiche fonds non publiés et utilisés par un critère.
     missing_data: list[str]
     warnings: list[str]
+    # Indice de confiance (fonds classés seulement ; None pour un fonds exclu).
+    confidence: Confidence | None = None
 
 
 class ScoringResult(BaseModel):

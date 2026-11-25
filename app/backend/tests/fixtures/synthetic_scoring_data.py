@@ -1,5 +1,8 @@
 """DONNÉES SYNTHÉTIQUES (FICTIVES) pour les tests du moteur de score uniquement.
 
+Les colonnes des critères v2 (type de fonds, rôle, géographie, spécialité, qualité de source)
+ont été ajoutées le 2026-11-25 ; elles ne changent aucun résultat des critères v1.
+
 Aucun de ces fonds ni aucune de ces opérations n'existe : noms, montants et années sont inventés
 pour tester les règles (cas limites, données manquantes, exclusions). Ne jamais les utiliser comme
 données réelles ni les copier dans app/backend/data/.
@@ -62,6 +65,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["software_it", "business_services"],
         "last_fund_size_eur_m": 200,
         "last_fund_year": 2023,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "BUYOUT",
+        "secondary_buckets": ["GROWTH_EQUITY"],
+        "buyer_role": "CONTROL_POSSIBLE",
+        "geography_tags": ["France"],
+        "transaction_modifiers": ["transmission"],
+        "classification_basis": "SOURCE_DESCRIPTION",
     },
     {  # cas calculé à la main n° 1 (opération A) : 67,5 / 100
         "strategy_id": "syn-bravo",
@@ -76,6 +86,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["generalist"],
         "last_fund_size_eur_m": 100,
         "last_fund_year": 2021,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "GROWTH_EQUITY",
+        "secondary_buckets": ["BUYOUT"],
+        "buyer_role": "CONTROL_NOT_VERIFIED",
+        "geography_tags": ["Europe"],
+        "transaction_modifiers": ["thematic_sector_focus"],
+        "classification_basis": "INTERPRETED_DESCRIPTION",
     },
     {  # exclu de l'opération A pour trois raisons ; 100 / 100 pour l'opération B
         "strategy_id": "syn-charlie",
@@ -90,6 +107,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["healthcare"],
         "last_fund_size_eur_m": 500,
         "last_fund_year": 2024,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "GROWTH_EQUITY",
+        "secondary_buckets": None,
+        "buyer_role": "MINORITY_CAPITAL_PARTNER",
+        "geography_tags": ["France"],
+        "transaction_modifiers": ["buy_and_build"],
+        "classification_basis": "SOURCE_DESCRIPTION",
     },
     {  # données manquantes : ticket minimum, fourchette de VE et taille du fonds non publiés
         "strategy_id": "syn-delta",
@@ -104,6 +128,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["software_it"],
         "last_fund_size_eur_m": None,
         "last_fund_year": 2020,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "BUYOUT",
+        "secondary_buckets": None,
+        "buyer_role": "CONTROL_POSSIBLE",
+        "geography_tags": None,
+        "transaction_modifiers": None,
+        "classification_basis": "BROAD_MAPPING",
     },
     {  # n'accepte que le LBO secondaire : exclu de l'opération A
         "strategy_id": "syn-echo",
@@ -118,6 +149,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["software_it"],
         "last_fund_size_eur_m": 200,
         "last_fund_year": 2023,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "BUYOUT",
+        "secondary_buckets": None,
+        "buyer_role": "CONTROL_POSSIBLE",
+        "geography_tags": ["France"],
+        "transaction_modifiers": ["transmission"],
+        "classification_basis": "SOURCE_DESCRIPTION",
     },
     {  # cas calculé à la main n° 2 (opération A) : 27,5 / 100 ; ticket = maximum, part = 20 %
         "strategy_id": "syn-foxtrot",
@@ -132,6 +170,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["industrials"],
         "last_fund_size_eur_m": 75,
         "last_fund_year": 2019,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "SPECIAL_SITUATIONS",
+        "secondary_buckets": None,
+        "buyer_role": "CONTROL_NOT_VERIFIED",
+        "geography_tags": ["Nouvelle_Aquitaine"],
+        "transaction_modifiers": ["carve_out"],
+        "classification_basis": "INTERPRETED_DESCRIPTION",
     },
     {  # ticket = minimum, part = 10 %, fonds de 4 ans, VE trop loin : 65 / 100 pour l'opération A
         "strategy_id": "syn-golf",
@@ -146,6 +191,13 @@ FUNDS: list[dict[str, Any]] = [
         "sectors": ["software_it"],
         "last_fund_size_eur_m": 150,
         "last_fund_year": 2022,
+        # Colonnes des critères v2 (2026-11-25), ignorées par les critères v1.
+        "primary_bucket": "BUYOUT",
+        "secondary_buckets": None,
+        "buyer_role": "CONTROL_POSSIBLE",
+        "geography_tags": ["Sub_Saharan_Africa"],
+        "transaction_modifiers": ["transmission", "buy_and_build"],
+        "classification_basis": "HISTORICAL_DIRECTORY_LABEL",
     },
 ]
 

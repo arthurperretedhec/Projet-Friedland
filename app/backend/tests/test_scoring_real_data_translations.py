@@ -19,7 +19,8 @@ from app.logic.reference import (
     DATA_SECTORS,
     DATA_VAGUE_DEAL_TAGS,
 )
-from app.logic.scoring import Operation
+from app.logic.scoring import Operation, load_config
+from app.logic.scoring.config import SCORING_CONFIG_V1
 from app.logic.scoring.real_data import (
     best_strategy_per_management_company,
     deal_types_from_tags,
@@ -29,6 +30,10 @@ from app.logic.scoring.real_data import (
     stake_from_tags,
     unclassified_sector_metadata,
 )
+
+# Critères v1 (2026-11-20) pour les tests écrits avant les critères v2 : leurs valeurs attendues
+# ne changent pas. Les valeurs v2 sont dans test_scoring_v2_*.py.
+CONFIG_V1 = load_config(SCORING_CONFIG_V1)
 
 DATA_CHANGED = "strategies.csv a changé : refaire le diagnostic et les calculs à la main"
 
@@ -64,6 +69,8 @@ def test_deal_type_coverage_table_is_the_validated_one():
         "mbi": ("primary_lbo",),
         "obo": ("primary_lbo",),
         "management_buyout": ("primary_lbo",),
+        # Critères v2 (2026-11-25) : la succession familiale est une transmission.
+        "family_succession": ("primary_lbo",),
         "primary_buyout": ("primary_lbo",),
         "growth": ("growth",),
         "growth_capital": ("growth",),
@@ -151,7 +158,7 @@ def test_generalist_open_fund_is_generalist_not_missing(data):
     # deal_types transmission;growth_capital (transmission couvre le LBO primaire), stake
     # majority;minority -> both, tickets non publiés : conservé pour le LBO small cap.
     assert sectors_for(data, "str-adaxtra-pme") == ["generalist"]
-    result = score_operation_on_base(LBO_SMALL, data)
+    result = score_operation_on_base(LBO_SMALL, data, CONFIG_V1)
     fund = next(r for r in result.ranked if r.strategy_id == "str-adaxtra-pme")
     g1 = next(c for c in fund.criteria if c.id == "G1")
     assert (g1.status, g1.points) == ("partial", 17.5)  # généraliste : 35 x 0,5

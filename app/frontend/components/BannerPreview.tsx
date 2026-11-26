@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import { type Investment, SECTOR_SHORT } from "@/lib/score";
 import { type BannerRow, investmentText, ticketForSlide } from "@/lib/selection";
 
@@ -12,9 +16,21 @@ const MAX_PER_COLUMN = 3;
 const INK = "#12416b"; // bleu marine des slides
 const HEAD_BG = "#d4edff";
 
-/** Nom du fonds en guise de logo, en attendant la collecte des logos (sans « SAS », « SA »…). */
-function Wordmark({ name }: { name: string }) {
+/** Logo du fonds (collecte du 2026-11-26) ; à défaut, ou si l'image ne charge pas, son nom. */
+function Logo({ name, url, white }: { name: string; url?: string | null; white?: boolean }) {
+  const [failed, setFailed] = useState(false);
   const short = name.replace(/\b(SAS|SA|SCA|S\.A\.)\b/g, "").replace(/\s+/g, " ").trim();
+  if (url && !failed)
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={url}
+        alt={short}
+        onError={() => setFailed(true)}
+        className="max-h-[56px] max-w-[150px] object-contain"
+        style={white ? { filter: "brightness(0)" } : undefined}
+      />
+    );
   return <span className="text-[15px] leading-tight font-bold text-[#222]">{short}</span>;
 }
 
@@ -86,7 +102,7 @@ export function BannerPreview({ row, sector }: { row: BannerRow; sector: string 
         <div className={`${OUTER} mt-[10px]`}>
           <div className={`slide-r ${LEFT} min-h-[118px] items-center border bg-white`} style={{ borderColor: INK }}>
             <div className="relative flex items-center justify-center px-2 text-center">
-              <Wordmark name={row.fundName} />
+              <Logo key={p.logo_url ?? row.fundId} name={row.fundName} url={p.logo_url} white={p.logo_white} />
               {row.starred && (
                 <span aria-label="Intérêt exprimé" className="absolute -top-5 left-1/2 -translate-x-1/2 text-lg text-[#7b2d6e]">
                   ★

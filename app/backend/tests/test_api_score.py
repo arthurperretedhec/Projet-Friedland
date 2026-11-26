@@ -204,6 +204,8 @@ def test_each_company_carries_the_published_profile_of_its_best_strategy(client)
     profile = dict(abenex["profile"])
     latest = profile.pop("latest_investments_france")
     in_sector = profile.pop("sector_investments")
+    for logo_field in ("logo_url", "logo_white", "logo_verified"):  # testés à part
+        profile.pop(logo_field)
     assert profile.pop("holdings_collected") is True
     assert profile == {
         "website": "https://www.abenex.com/en",
@@ -270,3 +272,11 @@ def test_food_deal_shows_demea_food_holdings_with_their_descriptions(client):
     assert all(i["description_short"] for i in demea["profile"]["sector_investments"])
     france = [i["company_name"] for i in demea["profile"]["latest_investments_france"]]
     assert france == ["Sophie Lebreuilly", "Marbour", "Isnard"]  # suivantes, sans doublon
+
+
+def test_profile_carries_the_logo_when_collected(client):
+    body = client.post("/api/score", json=LBO_SMALL).json()
+    abenex = next(c for c in body["companies"] if c["fund_id"] == "fund-001")
+    # data/fund_logos.csv : Abenex vient de l'annuaire France Invest (vérifié).
+    assert abenex["profile"]["logo_url"].startswith("https://france-invest.")
+    assert abenex["profile"]["logo_verified"] is True

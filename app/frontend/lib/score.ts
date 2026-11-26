@@ -223,6 +223,9 @@ export type FundProfile = {
   latest_investments_france: Investment[];
   sector_investments: Investment[];
   holdings_collected: boolean;
+  logo_url?: string | null;
+  logo_white?: boolean; // logo blanc : affiché en noir
+  logo_verified?: boolean; // annuaire France Invest (sinon site du fonds, non vérifié)
 };
 
 export type RankedCompany = {

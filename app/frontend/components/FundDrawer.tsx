@@ -71,6 +71,9 @@ export function FundDrawer({ row, sector, company, excluded, choice, onToggle, o
               Aperçu du bandeau PowerPoint
             </h3>
             <BannerPreview row={{ ...row, starred: choice.starred }} sector={sector} />
+            {p.logo_url && !p.logo_verified && (
+              <p className="mt-2 text-xs text-[var(--muted)]">Logo repris du site du fonds, à vérifier.</p>
+            )}
             {[...p.sector_investments, ...p.latest_investments_france].some((i) => i.description_short_by_ai || i.sector_by_ai) && (
               <p className="mt-2 text-xs text-[var(--muted)]">Descriptions et secteurs des participations résumés ou classés par l&apos;IA, à relire avant envoi.</p>
             )}

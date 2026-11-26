@@ -9,15 +9,17 @@ Documentation pour l'interface : app/docs/scoring.md, « Route d'API POST /api/s
 
 from __future__ import annotations
 
+import csv
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import date
+from pathlib import Path
 from types import MappingProxyType
 
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.data.investors import InvestorData
+from app.data.investors import DATA_DIR, InvestorData
 from app.data.portfolio_extended import (
     Holding,
     latest_in_france,
@@ -45,6 +47,8 @@ class ScoringBase:
     holdings: Mapping[str, tuple[Holding, ...]] = field(
         default_factory=lambda: MappingProxyType({})
     )
+    # Logos par fund_id (data/fund_logos.csv) : (url, logo blanc ?, source).
+    logos: Mapping[str, tuple[str, bool, str]] = field(default_factory=lambda: MappingProxyType({}))
 
 
 def build_scoring_base(
@@ -54,7 +58,24 @@ def build_scoring_base(
         data=data,
         funds=funds_from_base(data),
         holdings=load_portfolio_extended() if holdings is None else holdings,
+        logos=load_logos(),
     )
+
+
+def load_logos(path: Path | None = None) -> Mapping[str, tuple[str, bool, str]]:
+    """Logos collectés le 2026-11-26 (annuaire France Invest, ou site du fonds non vérifié).
+    Fichier absent = pas de logo (le bandeau affiche le nom)."""
+    path = path or DATA_DIR / "fund_logos.csv"
+    if not path.exists():
+        return MappingProxyType({})
+    with path.open(encoding="utf-8", newline="") as f:
+        return MappingProxyType(
+            {
+                r["fund_id"]: (r["logo_url"], r["white_logo"] == "yes", r["source"])
+                for r in csv.DictReader(f)
+                if r["logo_url"].startswith("https://")
+            }
+        )
 
 
 def _allowed(value: str, allowed: tuple[str, ...], what: str) -> str:
@@ -137,6 +158,9 @@ class FundProfile(BaseModel):
     # Participations dans le secteur de la cible (codes de la base correspondant au secteur saisi).
     sector_investments: list[Investment] = []
     holdings_collected: bool = False
+    logo_url: str | None = None
+    logo_white: bool = False  # logo blanc : à afficher en noir sur fond blanc
+    logo_verified: bool = False  # True = annuaire France Invest ; False = site, non vérifié
 
 
 class RankedCompany(CompanyResult):
@@ -182,8 +206,10 @@ def fund_profile(
     strategy_id: str,
     holdings: Mapping[str, tuple[Holding, ...]] | None = None,
     operation_sector: str | None = None,
+    logos: Mapping[str, tuple[str, bool, str]] | None = None,
 ) -> FundProfile:
     row = data.strategies[strategy_id]
+    logo = (logos or {}).get(str(row["fund_id"]))
     held = (holdings or {}).get(str(row["fund_id"]), ())
     in_sector = latest_in_sector(held, data_sector_codes(operation_sector))
     # Pas de doublon d'une colonne à l'autre du bandeau : la colonne France prend les suivantes.
@@ -192,6 +218,9 @@ def fund_profile(
         latest_investments_france=[_investment(h) for h in in_france],
         sector_investments=[_investment(h) for h in in_sector],
         holdings_collected=bool(held),
+        logo_url=logo[0] if logo else None,
+        logo_white=logo[1] if logo else False,
+        logo_verified=bool(logo and logo[2] == "france_invest"),
         website=_text(row.get("website")),
         source_url=_text(row.get("source_url")),
         last_fund_name=_text(row.get("last_fund_name")),
@@ -275,7 +304,7 @@ def score(payload: ScoreRequest, request: Request) -> ScoreResponse:
             RankedCompany(
                 **company.model_dump(),
                 profile=fund_profile(
-                    base.data, company.best_strategy_id, base.holdings, operation.sector
+                    base.data, company.best_strategy_id, base.holdings, operation.sector, base.logos
                 ),
             )
             for company in companies
@@ -304,7 +333,7 @@ def _excluded_companies(
             management_company=strategies[0].management_company,
             strategies=strategies,
             profile=fund_profile(
-                base.data, strategies[0].strategy_id, base.holdings, operation_sector
+                base.data, strategies[0].strategy_id, base.holdings, operation_sector, base.logos
             ),
         )
         for fund_id, strategies in grouped.items()

@@ -84,6 +84,51 @@ class ExcludedStrategy(BaseModel):
     exclusion_reasons: list[str]
 
 
+class FundProfile(BaseModel):
+    """Fiche de la meilleure stratégie, telle que publiée dans la base (aucun calcul).
+
+    Ajoutée pour l'écran de classement (Alexandre, 2026-11-26) : le banquier doit voir le ticket et
+    la VE publiés, le site du fonds et la source sans quitter le classement. None = non publié.
+    """
+
+    website: str | None
+    source_url: str | None
+    last_fund_name: str | None
+    equity_ticket_min_eur_m: float | None
+    equity_ticket_max_eur_m: float | None
+    target_ev_min_eur_m: float | None
+    target_ev_max_eur_m: float | None
+
+
+class RankedCompany(CompanyResult):
+    """Ligne du classement (CompanyResult du moteur) + fiche publiée de sa meilleure stratégie."""
+
+    profile: FundProfile
+
+
+def _text(value: object) -> str | None:
+    if not isinstance(value, str):
+        return None
+    return value.strip() or None
+
+
+def _number(value: object) -> float | None:
+    return None if value is None else float(value)  # Decimal de la base -> nombre JSON
+
+
+def fund_profile(data: InvestorData, strategy_id: str) -> FundProfile:
+    row = data.strategies[strategy_id]
+    return FundProfile(
+        website=_text(row.get("website")),
+        source_url=_text(row.get("source_url")),
+        last_fund_name=_text(row.get("last_fund_name")),
+        equity_ticket_min_eur_m=_number(row.get("equity_ticket_min_eur_m")),
+        equity_ticket_max_eur_m=_number(row.get("equity_ticket_max_eur_m")),
+        target_ev_min_eur_m=_number(row.get("target_ev_min_eur_m")),
+        target_ev_max_eur_m=_number(row.get("target_ev_max_eur_m")),
+    )
+
+
 class ScoreCounts(BaseModel):
     strategies_total: int
     strategies_ranked: int
@@ -99,7 +144,7 @@ class ScoreResponse(BaseModel):
     # Message à afficher quand aucun fonds n'est compatible ; None sinon.
     message: str | None
     counts: ScoreCounts
-    companies: list[CompanyResult]
+    companies: list[RankedCompany]
     excluded: list[ExcludedStrategy]
 
 
@@ -132,7 +177,12 @@ def score(payload: ScoreRequest, request: Request) -> ScoreResponse:
             strategies_excluded=len(result.excluded),
             companies_ranked=len(companies),
         ),
-        companies=companies,
+        companies=[
+            RankedCompany(
+                **company.model_dump(), profile=fund_profile(base.data, company.best_strategy_id)
+            )
+            for company in companies
+        ],
         excluded=[
             ExcludedStrategy(
                 strategy_id=r.strategy_id,

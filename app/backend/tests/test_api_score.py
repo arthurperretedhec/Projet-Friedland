@@ -191,3 +191,31 @@ def test_base_is_translated_once_at_startup_not_per_call(client, monkeypatch):
         assert client.post("/api/score", json=LBO_SMALL).status_code == 200
     assert app.state.scoring_base is base
     assert len(base.funds) == 153
+
+
+# --- Fiche publiée de la meilleure stratégie (écran de classement, 2026-11-26) ----------------
+
+
+def test_each_company_carries_the_published_profile_of_its_best_strategy(client):
+    # Valeurs lues à la main dans data/strategies.csv, ligne 2 (Abenex Industries 9.0) :
+    # ticket 5-20 M€, VE min non publiée, VE max 60 M€, site et source renseignés.
+    body = client.post("/api/score", json=LBO_SMALL).json()
+    abenex = next(c for c in body["companies"] if c["management_company"] == "Abenex Capital SAS")
+    assert abenex["profile"] == {
+        "website": "https://www.abenex.com/en",
+        "source_url": "https://www.abenex.com/en/publications/abenex-industries-9-fund-first-closing",
+        "last_fund_name": "Abenex Industries 9.0",
+        "equity_ticket_min_eur_m": 5,
+        "equity_ticket_max_eur_m": 20,
+        "target_ev_min_eur_m": None,
+        "target_ev_max_eur_m": 60,
+    }
+    assert all("profile" in c for c in body["companies"])
+
+
+def test_profile_turns_blank_text_into_none():
+    from app.api.score import _text
+
+    assert _text("  ") is None
+    assert _text(None) is None
+    assert _text(" https://x.fr ") == "https://x.fr"

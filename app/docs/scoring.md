@@ -174,7 +174,10 @@ POST /api/score
 
 - `companies` : le classement par société de gestion (format « Classement par société de
   gestion » ci-dessus : rang, société, meilleure stratégie, score, détail par critère, indice de
-  confiance, données manquantes, alertes, autres stratégies) ;
+  confiance, données manquantes, alertes, autres stratégies), plus `profile` (ajout du 2026-11-26) :
+  `website`, `source_url`, `last_fund_name`, `equity_ticket_min_eur_m`, `equity_ticket_max_eur_m`,
+  `target_ev_min_eur_m`, `target_ev_max_eur_m` de la meilleure stratégie, tels que publiés (`null` =
+  non publié) ;
 - `excluded` : les **stratégies** exclues, chacune avec ses raisons ;
 - `counts` : nombre de stratégies (total, classées, exclues) et de sociétés classées ;
 - `message` : « Aucun fonds de la base n'est compatible avec cette opération. » quand

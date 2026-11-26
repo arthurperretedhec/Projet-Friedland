@@ -49,6 +49,8 @@
 | V1 | strategies list, 1366 px | cards on one line, table readable | – | Playwright smoke | pending |
 | V2 | strategies list, 390 px | cards stack, table scrolls inside its box, no sideways page scroll | – | Playwright smoke | pending |
 | V3 | strategy detail, 1366 px and 390 px | blocks stack, source links visible | – | Playwright | pending |
+| V4 | screening form and ranking, 1366 px | form left, results right; Abenex Capital found at 90 (SC5) with its criteria detail and ticket 5–20 M€ | `lib/score.test.ts` | `e2e/screening.spec.ts` | assistant 2026-11-26; owner pending |
+| V5 | screening form and ranking, 390 px | form then results stacked; ticket column hidden, detail still shows the ticket; no sideways page scroll | – | `e2e/screening.spec.ts` | assistant 2026-11-26; owner pending |
 
 ## Calculations (known answers)
 
@@ -115,4 +117,6 @@ then `strategy_id`. Confidence: missing data over the 9 active criteria (elimina
 | E1 | backend not running | list page shows "Could not load data. Is the backend running?" and a "Try again" button | open |
 | E2 | a value is not published | shown as "not published", never 0 or a guess | open |
 | E3 | a CSV file is missing or has a wrong header | backend refuses to start with a message naming the file and the column; `npm run verify` fails | open |
+| E5 | screening form sent empty, with text, 0, a value in euros instead of M€ or a ticket above the EV | nothing is sent; a French message appears under each wrong field and disappears when the field is edited | passing (`validateForm` tests, screening journey) |
+| E6 | backend not running when the banker asks for the ranking | "Le serveur ne répond pas…" with the command to start it | passing (`interpretScore` tests) |
 | E4 | a strategy has no deals or no portfolio rows | the block shows "No deal recorded in the base" / "No portfolio company recorded" | open |

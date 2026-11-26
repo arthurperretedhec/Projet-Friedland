@@ -50,6 +50,7 @@
 | V2 | strategies list, 390 px | cards stack, table scrolls inside its box, no sideways page scroll | – | Playwright smoke | pending |
 | V3 | strategy detail, 1366 px and 390 px | blocks stack, source links visible | – | Playwright | pending |
 | V4 | screening form and ranking, 1366 px | form left, results right; Abenex Capital found at 90 (SC5) with its criteria detail and ticket 5–20 M€ | `lib/score.test.ts` | `e2e/screening.spec.ts` | assistant 2026-11-26; owner pending |
+| V6 | fund side panel with banner preview, 1440 px and 390 px | the banner shows the columns of the discussion materials; Abenex: ticket €[5-20]m, Tethys (2026) first in latest investments in France; on a phone the banner scrolls sideways inside its box | `lib/selection.test.ts` | `e2e/screening.spec.ts` | assistant 2026-11-26; owner pending |
 | V5 | screening form and ranking, 390 px | form then results stacked; ticket column hidden, detail still shows the ticket; no sideways page scroll | – | `e2e/screening.spec.ts` | assistant 2026-11-26; owner pending |
 
 ## Calculations (known answers)
@@ -119,4 +120,5 @@ then `strategy_id`. Confidence: missing data over the 9 active criteria (elimina
 | E3 | a CSV file is missing or has a wrong header | backend refuses to start with a message naming the file and the column; `npm run verify` fails | open |
 | E5 | screening form sent empty, with text, 0, a value in euros instead of M€ or a ticket above the EV | nothing is sent; a French message appears under each wrong field and disappears when the field is edited | passing (`validateForm` tests, screening journey) |
 | E6 | backend not running when the banker asks for the ranking | "Le serveur ne répond pas…" with the command to start it | passing (`interpretScore` tests) |
+| E7 | a fund has no collected holdings, or a value of the banner is not in the base | the banner shows "n.d." or "Portefeuille pas encore collecté pour ce fonds", never an invented value; an AI-written description is labelled as such | passing (`selection.test.ts`, `test_portfolio_extended.py`) |
 | E4 | a strategy has no deals or no portfolio rows | the block shows "No deal recorded in the base" / "No portfolio company recorded" | open |

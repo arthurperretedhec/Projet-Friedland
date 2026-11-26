@@ -1,48 +1,58 @@
 @import "tailwindcss";
 
-/* Colours live in CSS variables. Dark is the default; a light theme follows the system setting.
-   Contrast of text on background is at least 4.5:1 in both themes. */
+/* Terminal de données, sombre (choix du 2026-11-26) : fonds anthracite, accent prune / violet.
+   Couleurs dans des variables. Contraste du texte sur le fond ≥ 4.5:1. */
 :root {
   color-scheme: dark;
-  --background: #0f1115;
-  --surface: #171a21;
-  --foreground: #e8eaed;
-  --muted: #a8adb7;
-  --border: #2e333d;
+  --background: #0a0b10;
+  --surface: #11131b;
+  --surface-2: #181b25;
+  --header: #1c1027;
+  --header-2: #2a1739;
+  --foreground: #e7e8ee;
+  --muted: #9aa0ae;
+  --border: #272b38;
+  --border-strong: #3a3f50;
+  --accent: #9b6bc4;
+  --accent-text: #c3a1e3;
+  --accent-soft: rgba(155, 107, 196, 0.16);
+  --on-accent: #ffffff;
+  --gold: #e0b453;
   --ok: #4ade80;
+  --warn: #f5b942;
   --error: #f87171;
-  --focus: #93c5fd;
-  --warn: #fbbf24;
-  --accent: #60a5fa;
-  --accent-soft: rgba(96, 165, 250, 0.15);
-  --on-accent: #0f1115;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --background: #ffffff;
-    --surface: #f6f7f9;
-    --foreground: #16181d;
-    --muted: #4b5260;
-    --border: #d5d9e0;
-    --ok: #166534;
-    --error: #b91c1c;
-    --focus: #1d4ed8;
-    --warn: #92400e;
-    --accent: #1d4ed8;
-    --accent-soft: rgba(29, 78, 216, 0.1);
-    --on-accent: #ffffff;
-  }
+  --focus: #c9a8ec;
+  /* Aperçu du bandeau : couleurs d'une slide (fond clair) */
+  --slide-bg: #ffffff;
+  --slide-ink: #1f2a44;
+  --slide-head: #dbe5f1;
+  --slide-link: #1f3c88;
+  --slide-muted: #5b6475;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: "tnum" 1;
 }
 
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.95em;
+}
+
+/* Petits titres façon terminal */
+.label-caps {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Barre de défilement discrète dans les panneaux */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
 }

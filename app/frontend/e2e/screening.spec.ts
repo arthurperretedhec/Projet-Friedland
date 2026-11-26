@@ -1,14 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-// Parcours principal sur la vraie base : décrire la cible, lancer le classement, ouvrir le détail.
-// Abenex Capital (SC5 d'acceptance.md, 90 calculé à la main) doit apparaître dans le classement.
+// Parcours principal sur la vraie base : décrire la cible, lancer le classement, choisir les fonds
+// pour le PowerPoint, ouvrir l'aperçu du bandeau. Abenex Capital (SC5 d'acceptance.md, 90 calculé à
+// la main) doit apparaître ; son bandeau montre Tethys (2026), lu sur le site d'Abenex.
 const sizes = [
-  { name: "desktop", width: 1366, height: 900 },
+  { name: "desktop", width: 1440, height: 900 },
   { name: "mobile", width: 390, height: 844 },
 ];
 
 for (const size of sizes) {
-  test(`screening: form, ranking and detail (${size.width}x${size.height})`, async ({ page }) => {
+  test(`screening: form, selection and banner preview (${size.width}x${size.height})`, async ({ page }) => {
     await page.setViewportSize({ width: size.width, height: size.height });
     await page.goto("/");
 
@@ -27,16 +28,33 @@ for (const size of sizes) {
     const results = page.getByTestId("results");
     await expect(results).toBeVisible({ timeout: 15_000 });
     await expect(results.getByRole("heading", { level: 2 })).toContainText("PME industrielle (exemple)");
-    await expect(page.getByTestId("ranking-row").first()).toBeVisible();
+    const count = page.getByTestId("selection-bar").locator("span.text-lg");
+    const before = Number((await count.textContent()) ?? "0");
+    expect(before).toBeGreaterThan(0);
 
     await page.getByLabel("Nombre de fonds affichés").selectOption("all");
     await page.getByLabel("Rechercher une société de gestion").fill("Abenex");
     const abenex = page.getByTestId("ranking-row").filter({ hasText: "Abenex Capital SAS" });
     await expect(abenex).toContainText("90");
-    await abenex.getByRole("button", { name: "Détail" }).click();
-    await expect(page.getByText("Pourquoi ce score")).toBeVisible();
-    await expect(page.locator("#detail-fund-001")).toContainText("5–20 M€");
 
-    await page.screenshot({ path: `test-results/screening-${size.name}-${size.width}x${size.height}.png`, fullPage: true });
+    // Décocher Abenex (Tier 1, coché par défaut) retire un fonds de la sélection.
+    await page.getByLabel("Inclure Abenex Capital SAS dans le PowerPoint").uncheck();
+    await expect(count).toHaveText(String(before - 1));
+    // Étoile « intérêt exprimé » : le fonds revient dans la sélection.
+    await page.getByLabel("Intérêt exprimé par Abenex Capital SAS").click();
+    await expect(count).toHaveText(String(before));
+
+    // Aperçu du bandeau dans le panneau latéral.
+    await abenex.getByRole("button", { name: /^Abenex Capital SAS/ }).click();
+    const drawer = page.getByTestId("fund-drawer");
+    await expect(drawer).toBeVisible();
+    const banner = drawer.getByRole("figure", { name: "Aperçu du bandeau PowerPoint" });
+    await expect(banner).toContainText("€[5-20]m");
+    await expect(banner).toContainText("Tethys");
+    await expect(banner).toContainText("(2026)");
+    await expect(drawer.getByText("Pourquoi ce score")).toBeVisible();
+    await page.screenshot({ path: `test-results/screening-${size.name}-${size.width}x${size.height}.png` });
+    await page.keyboard.press("Escape");
+    await expect(drawer).toBeHidden();
   });
 }

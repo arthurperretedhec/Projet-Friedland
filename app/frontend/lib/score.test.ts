@@ -12,7 +12,6 @@ import {
   type RankedCompany,
   ticketShareOfEv,
   tierOf,
-  toCsv,
   UNREACHABLE,
   validateForm,
 } from "./score";
@@ -46,6 +45,8 @@ function company(rank: number, score: number, name: string, level = "moyen"): Ra
       equity_ticket_max_eur_m: 20,
       target_ev_min_eur_m: null,
       target_ev_max_eur_m: null,
+      latest_investments_france: [],
+      holdings_collected: false,
     },
   };
 }
@@ -143,26 +144,14 @@ describe("filterCompanies", () => {
 describe("exclusionSummary", () => {
   it("counts the first reason by criterion, most frequent first", () => {
     const excluded = [
-      { strategy_id: "a", strategy_name: null, management_company: null, exclusion_reasons: ["Position recherchée : x"] },
-      { strategy_id: "b", strategy_name: null, management_company: null, exclusion_reasons: ["Type d'opération : y"] },
-      { strategy_id: "c", strategy_name: null, management_company: null, exclusion_reasons: ["Type d'opération : z"] },
+      { strategy_id: "a", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Position recherchée : x"] },
+      { strategy_id: "b", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Type d'opération : y"] },
+      { strategy_id: "c", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Type d'opération : z"] },
     ];
     expect(exclusionSummary(excluded)).toEqual([
       { criterion: "Type d'opération", count: 2 },
       { criterion: "Position recherchée", count: 1 },
     ]);
-  });
-});
-
-describe("toCsv", () => {
-  it("writes an Excel-friendly file: BOM, semicolons, decimal comma, quoted cells", () => {
-    const c = company(1, 67.5, "Alpha; Partners");
-    const lines = toCsv([c]).split("\r\n");
-    expect(lines[0].startsWith("﻿Rang;Tier;Société de gestion")).toBe(true);
-    expect(lines[1]).toBe('1;2;"Alpha; Partners";Alpha; Partners Fund I;67,5;Moyenne;5–20 M€;non publié;;;'.replace(
-      "Alpha; Partners Fund I",
-      '"Alpha; Partners Fund I"',
-    ));
   });
 });
 

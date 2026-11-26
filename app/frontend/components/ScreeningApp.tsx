@@ -82,12 +82,12 @@ export function ScreeningApp() {
   };
 
   return (
-    <div className="grid items-start gap-6 xl:grid-cols-[380px_1fr]">
+    <div className="grid items-start gap-6 lg:grid-cols-[340px_minmax(0,1fr)]">
       <ScreeningForm values={values} errors={errors} busy={state.kind === "loading"} onChange={change} onSubmit={() => void run()} />
       <div aria-live="polite">
         {state.kind === "idle" && (
-          <div className="rounded-lg border border-dashed border-[var(--border)] p-6 text-sm text-[var(--muted)]">
-            <p className="font-medium text-[var(--foreground)]">Comment ça marche</p>
+          <div className="rounded border border-dashed border-[var(--border-strong)] p-6 text-sm text-[var(--muted)]">
+            <p className="label-caps !text-[var(--accent-text)]">Comment ça marche</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5">
               <li>Décrivez la cible et l&apos;opération à gauche.</li>
               <li>
@@ -95,17 +95,18 @@ export function ScreeningApp() {
                 raison.
               </li>
               <li>Les autres sont notés sur 100, regroupés par société de gestion et classés en tiers.</li>
-              <li>Ouvrez « Détail » pour le calcul du score, la fiche du fonds et ses sources, puis exportez la liste.</li>
+              <li>Cochez ou décochez les fonds à mettre dans le PowerPoint ; ajoutez au besoin un fonds écarté, et marquez d&apos;une étoile ceux qui ont exprimé un intérêt.</li>
+              <li>Cliquez sur un fonds pour voir l&apos;aperçu de son bandeau, le détail du score et les sources.</li>
             </ol>
           </div>
         )}
         {state.kind === "loading" && (
-          <p role="status" className="rounded-lg border border-[var(--border)] p-6 text-sm text-[var(--muted)]">
+          <p role="status" className="rounded border border-[var(--border)] p-6 text-sm text-[var(--muted)]">
             Classement des fonds en cours…
           </p>
         )}
         {state.kind === "error" && (
-          <p role="alert" data-testid="score-error" className="rounded-md border-l-4 border-[var(--error)] bg-[var(--surface)] px-3 py-2 text-sm">
+          <p role="alert" data-testid="score-error" className="rounded border-l-4 border-[var(--error)] bg-[var(--surface)] px-3 py-2 text-sm">
             <span className="font-semibold text-[var(--error)]">Erreur</span> : {state.message}
           </p>
         )}

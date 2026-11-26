@@ -166,6 +166,16 @@ export type Criterion = {
   explanation: string;
 };
 
+export type Investment = {
+  company_name: string;
+  entry_year: number | null;
+  country: string | null; // null = pays non publié par le fonds
+  description_short: string | null; // résumé IA au format des slides
+  description_short_by_ai: boolean;
+  description: string | null; // texte publié par le fonds
+  source_url: string;
+};
+
 export type FundProfile = {
   website: string | null;
   source_url: string | null;
@@ -174,6 +184,8 @@ export type FundProfile = {
   equity_ticket_max_eur_m: number | null;
   target_ev_min_eur_m: number | null;
   target_ev_max_eur_m: number | null;
+  latest_investments_france: Investment[];
+  holdings_collected: boolean;
 };
 
 export type RankedCompany = {
@@ -200,6 +212,7 @@ export type RankedCompany = {
 
 export type ExcludedStrategy = {
   strategy_id: string;
+  fund_id: string;
   strategy_name: string | null;
   management_company: string | null;
   exclusion_reasons: string[];
@@ -218,6 +231,14 @@ export type ScoreResponse = {
   };
   companies: RankedCompany[];
   excluded: ExcludedStrategy[];
+  excluded_companies: ExcludedCompany[];
+};
+
+export type ExcludedCompany = {
+  fund_id: string;
+  management_company: string | null;
+  strategies: ExcludedStrategy[];
+  profile: FundProfile;
 };
 
 export const UNREACHABLE = "Le serveur ne répond pas. Est-il lancé ? Démarrer l'application avec `npm run dev`.";
@@ -302,41 +323,4 @@ export function exclusionSummary(excluded: ExcludedStrategy[]): { criterion: str
     counts.set(criterion, (counts.get(criterion) ?? 0) + 1);
   }
   return [...counts.entries()].map(([criterion, count]) => ({ criterion, count })).sort((a, b) => b.count - a.count);
-}
-
-// --- Export CSV (s'ouvre dans Excel en français : séparateur « ; », BOM UTF-8) ----------------
-
-function csvCell(value: string | number | null): string {
-  const text = value === null ? "" : typeof value === "number" ? String(value).replace(".", ",") : value;
-  return /[";\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
-}
-
-export function toCsv(companies: RankedCompany[]): string {
-  const header = [
-    "Rang",
-    "Tier",
-    "Société de gestion",
-    "Meilleure stratégie",
-    "Score /100",
-    "Confiance",
-    "Ticket equity publié",
-    "VE cible publiée",
-    "Site",
-    "Source",
-    "À vérifier",
-  ];
-  const rows = companies.map((c) => [
-    c.rank,
-    tierOf(c.score),
-    c.management_company,
-    c.best_strategy_name,
-    c.score,
-    CONFIDENCE_LABELS[c.confidence.level] ?? c.confidence.level,
-    formatRange(c.profile.equity_ticket_min_eur_m, c.profile.equity_ticket_max_eur_m),
-    formatRange(c.profile.target_ev_min_eur_m, c.profile.target_ev_max_eur_m),
-    c.profile.website,
-    c.profile.source_url,
-    c.warnings.map(humanize).join(" | "),
-  ]);
-  return "﻿" + [header, ...rows].map((row) => row.map(csvCell).join(";")).join("\r\n") + "\r\n";
 }

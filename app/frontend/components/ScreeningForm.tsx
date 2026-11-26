@@ -20,7 +20,7 @@ type Props = {
 };
 
 const input =
-  "w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-[var(--error)]";
+  "w-full rounded border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-[var(--error)]";
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
@@ -51,12 +51,12 @@ function Segmented({
   const selected = options.find((o) => o.value === value);
   return (
     <fieldset aria-describedby={error ? errorId : undefined}>
-      <legend className="mb-1.5 text-sm font-medium">{legend}</legend>
+      <legend className="label-caps mb-1.5">{legend}</legend>
       <div className="flex flex-wrap gap-1.5">
         {options.map((option) => (
           <label
             key={option.value}
-            className="cursor-pointer rounded-md border border-[var(--border)] px-3 py-1.5 text-sm has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent-soft)] has-[:checked]:font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[var(--focus)]"
+            className="cursor-pointer rounded border border-[var(--border)] px-2.5 py-1.5 text-[13px] hover:border-[var(--border-strong)] has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent-soft)] has-[:checked]:font-semibold has-[:checked]:text-[var(--accent-text)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[var(--focus)]"
           >
             <input
               type="radio"
@@ -90,15 +90,15 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
       onSubmit={submit}
       noValidate
       aria-labelledby="form-heading"
-      className="flex flex-col gap-5 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5"
+      className="flex flex-col gap-5 rounded border border-[var(--border)] bg-[var(--surface)] p-5"
     >
-      <h2 id="form-heading" className="text-lg font-semibold">
-        Décrire la cible
+      <h2 id="form-heading" className="label-caps !text-[var(--accent-text)]">
+        1 · La cible
       </h2>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4">
         <div>
-          <label htmlFor="company-name" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="company-name" className="label-caps mb-1.5 block">
             Nom de la société
           </label>
           <input
@@ -114,8 +114,8 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
           <FieldError id="company-name-error" message={errors.companyName} />
         </div>
         <div>
-          <label htmlFor="website" className="mb-1.5 block text-sm font-medium">
-            Site internet <span className="font-normal text-[var(--muted)]">(facultatif)</span>
+          <label htmlFor="website" className="label-caps mb-1.5 block">
+            Site internet <span className="font-normal normal-case tracking-normal">(facultatif)</span>
           </label>
           <input
             id="website"
@@ -127,8 +127,8 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
             autoComplete="off"
           />
         </div>
-        <div className="sm:col-span-2">
-          <label htmlFor="sector" className="mb-1.5 block text-sm font-medium">
+        <div>
+          <label htmlFor="sector" className="label-caps mb-1.5 block">
             Secteur
           </label>
           <select
@@ -150,7 +150,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
         </div>
       </div>
 
-      <h2 className="border-t border-[var(--border)] pt-4 text-lg font-semibold">L&apos;opération</h2>
+      <h2 className="label-caps border-t border-[var(--border)] pt-4 !text-[var(--accent-text)]">2 · L&apos;opération</h2>
 
       <Segmented
         legend="Type d'opération"
@@ -171,7 +171,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="ev" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="ev" className="label-caps mb-1.5 block">
             Valeur d&apos;entreprise (M€)
           </label>
           <input
@@ -187,7 +187,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
           <FieldError id="ev-error" message={errors.enterpriseValue} />
         </div>
         <div>
-          <label htmlFor="ticket" className="mb-1.5 block text-sm font-medium">
+          <label htmlFor="ticket" className="label-caps mb-1.5 block">
             Ticket equity recherché (M€)
           </label>
           <input
@@ -212,7 +212,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
       <button
         type="submit"
         disabled={busy}
-        className="rounded-md bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--on-accent)] hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)] disabled:opacity-60"
+        className="rounded bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold tracking-wide uppercase text-[var(--on-accent)] hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)] disabled:opacity-60"
       >
         {busy ? "Classement en cours…" : "Trouver les acquéreurs"}
       </button>

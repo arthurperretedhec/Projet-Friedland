@@ -201,7 +201,10 @@ def test_each_company_carries_the_published_profile_of_its_best_strategy(client)
     # ticket 5-20 M€, VE min non publiée, VE max 60 M€, site et source renseignés.
     body = client.post("/api/score", json=LBO_SMALL).json()
     abenex = next(c for c in body["companies"] if c["management_company"] == "Abenex Capital SAS")
-    assert abenex["profile"] == {
+    profile = dict(abenex["profile"])
+    latest = profile.pop("latest_investments_france")
+    assert profile.pop("holdings_collected") is True
+    assert profile == {
         "website": "https://www.abenex.com/en",
         "source_url": "https://www.abenex.com/en/publications/abenex-industries-9-fund-first-closing",
         "last_fund_name": "Abenex Industries 9.0",
@@ -210,7 +213,32 @@ def test_each_company_carries_the_published_profile_of_its_best_strategy(client)
         "target_ev_min_eur_m": None,
         "target_ev_max_eur_m": 60,
     }
+    # portfolio_extended.csv (site Abenex, 2026-11-26) : equity, pays France ou non publié, plus
+    # récentes d'abord ; Zato (2025) est exclue car sa description publiée la dit italienne.
+    assert [(i["company_name"], i["entry_year"]) for i in latest] == [
+        ("Tethys", 2026),
+        ("Santis LAB", 2024),
+        ("Only", 2024),
+    ]
+    assert latest[0]["description_short_by_ai"] is True
     assert all("profile" in c for c in body["companies"])
+
+
+def test_excluded_companies_are_funds_absent_from_the_ranking(client):
+    body = client.post("/api/score", json=LBO_SMALL).json()
+    ranked = {c["fund_id"] for c in body["companies"]}
+    excluded = body["excluded_companies"]
+    assert excluded, "LBO small exclut au moins une société de gestion entière"
+    for company in excluded:
+        assert company["fund_id"] not in ranked
+        assert company["strategies"] and all(
+            s["fund_id"] == company["fund_id"] and s["exclusion_reasons"]
+            for s in company["strategies"]
+        )
+    # Toute stratégie exclue d'une société absente du classement figure dans excluded_companies.
+    listed = {s["strategy_id"] for c in excluded for s in c["strategies"]}
+    expected = {s["strategy_id"] for s in body["excluded"] if s["fund_id"] not in ranked}
+    assert listed == expected
 
 
 def test_profile_turns_blank_text_into_none():

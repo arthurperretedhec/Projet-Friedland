@@ -20,7 +20,7 @@ type Props = {
 };
 
 const input =
-  "w-full rounded border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-[var(--error)]";
+  "w-full border-0 border-b border-[var(--border-strong)] bg-[var(--border-light)] px-3 py-2.5 text-sm text-[var(--foreground)] focus:border-[var(--accent)] focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--focus)] aria-[invalid=true]:border-[var(--error)]";
 
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
@@ -56,7 +56,7 @@ function Segmented({
         {options.map((option) => (
           <label
             key={option.value}
-            className="cursor-pointer rounded border border-[var(--border)] px-2.5 py-1.5 text-[13px] hover:border-[var(--border-strong)] has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent-soft)] has-[:checked]:font-semibold has-[:checked]:text-[var(--accent-text)] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[var(--focus)]"
+            className="cursor-pointer border border-[var(--border-strong)] px-2.5 py-1.5 text-[13px] hover:border-[var(--accent)] has-[:checked]:border-[var(--accent)] has-[:checked]:bg-[var(--accent)] has-[:checked]:font-semibold has-[:checked]:text-white has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[var(--focus)]"
           >
             <input
               type="radio"
@@ -90,7 +90,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
       onSubmit={submit}
       noValidate
       aria-labelledby="form-heading"
-      className="flex flex-col gap-5 rounded border border-[var(--border)] bg-[var(--surface)] p-5"
+      className="flex flex-col gap-5 border-l border-[var(--accent)] bg-[var(--surface-2)] p-6"
     >
       <h2 id="form-heading" className="label-caps !text-[var(--accent-text)]">
         1 · La cible
@@ -212,7 +212,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
       <button
         type="submit"
         disabled={busy}
-        className="rounded bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold tracking-wide uppercase text-[var(--on-accent)] hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus)] disabled:opacity-60"
+        className="btn-primary bracket w-full"
       >
         {busy ? "Classement en cours…" : "Trouver les acquéreurs"}
       </button>

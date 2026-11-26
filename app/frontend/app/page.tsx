@@ -5,34 +5,50 @@ import { APP_NAME } from "@/lib/site";
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="border-b border-[var(--header-2)] bg-[var(--header)]">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center gap-x-6 gap-y-1 px-4 py-3 sm:px-6">
-          <h1 className="flex items-baseline gap-2 text-base font-semibold tracking-tight">
-            <span className="rounded-sm bg-[var(--accent)] px-1.5 py-0.5 text-xs font-bold tracking-widest text-white">FBS</span>
-            {APP_NAME}
+      <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-white">
+        <div className="mx-auto flex max-w-[1440px] items-center gap-x-8 px-6 py-5 sm:px-10">
+          <h1 className="flex items-center gap-3 text-[var(--heading)]">
+            <span className="text-xl font-medium tracking-[0.18em] uppercase">Friedland</span>
+            <span aria-hidden="true" className="h-6 w-px bg-[var(--accent)]" />
+            <span className="text-sm font-light tracking-[0.12em] uppercase">Buyer Screening</span>
+            <span className="sr-only"> · {APP_NAME}</span>
           </h1>
-          <nav aria-label="Sections" className="flex gap-4 text-sm">
-            <span aria-current="page" className="border-b-2 border-[var(--accent)] pb-0.5 font-medium">
-              Screening acquéreurs
+          <nav aria-label="Sections" className="hidden gap-6 sm:flex">
+            <span aria-current="page" className="label-caps border-b-2 border-[var(--accent)] pb-1 !text-[var(--heading)]">
+              Nouveau screening
             </span>
           </nav>
-          <p className="ml-auto text-xs text-[var(--muted)]">Base : 112 sociétés de gestion · 153 stratégies · France</p>
+          <p className="label-caps ml-auto hidden !font-normal normal-case !tracking-normal text-[var(--muted)] md:block">
+            112 sociétés de gestion · 153 stratégies · France
+          </p>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-6 sm:px-6">
-        <p className="mb-5 max-w-3xl text-sm text-[var(--muted)]">
-          Identifier les fonds de private equity susceptibles d&apos;investir dans une société, les classer, choisir ceux qui iront
-          dans les discussion materials et prévisualiser leur bandeau.
-        </p>
+
+      <main className="mx-auto w-full max-w-[1440px] flex-1 px-6 py-10 sm:px-10">
+        <section className="mb-10 max-w-4xl">
+          <p className="label-caps">Sell-side · acquéreurs financiers</p>
+          <h2 className="display-light rule-blue mt-3 text-[clamp(2.25rem,5vw,4rem)]">Trouver les bons partenaires financiers</h2>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed">
+            Décrivez la cible : les fonds sont filtrés, notés et classés. Choisissez ceux qui iront dans les discussion
+            materials et prévisualisez leur bandeau.
+          </p>
+        </section>
         <ScreeningApp />
       </main>
-      <footer className="mx-auto w-full max-w-[1600px] px-4 pb-6 sm:px-6">
-        <details className="text-xs text-[var(--muted)]">
-          <summary className="cursor-pointer">Diagnostic technique</summary>
-          <div className="mt-2 max-w-md">
-            <HealthStatus />
+
+      <footer className="bg-[var(--navy)] text-white">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap items-start justify-between gap-6 px-6 py-8 text-sm sm:px-10">
+          <div>
+            <p className="tracking-[0.18em] uppercase">Friedland</p>
+            <p className="mt-1 text-white/70">Projet de cours EDHEC · données publiques, sources sur chaque ligne</p>
           </div>
-        </details>
+          <details className="text-xs text-white/70">
+            <summary className="cursor-pointer">Diagnostic technique</summary>
+            <div className="mt-2 max-w-md bg-white text-[var(--foreground)]">
+              <HealthStatus />
+            </div>
+          </details>
+        </div>
       </footer>
     </div>
   );

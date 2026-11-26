@@ -9,6 +9,7 @@ import {
   type FieldErrors,
   type FormValues,
   interpretScore,
+  SECTOR_EN,
   type ScoreResponse,
   validateForm,
 } from "@/lib/score";
@@ -16,7 +17,7 @@ import {
 type State =
   | { kind: "idle" }
   | { kind: "loading" }
-  | { kind: "ok"; data: ScoreResponse; website: string }
+  | { kind: "ok"; data: ScoreResponse; website: string; sector: string }
   | { kind: "error"; message: string };
 
 // Champs de l'API -> champs du formulaire, pour afficher une erreur du serveur sous le bon champ.
@@ -65,7 +66,7 @@ export function ScreeningApp() {
       const body: unknown = await res.json().catch(() => null);
       const result = interpretScore(res.status, body);
       if (result.kind === "ok") {
-        setState({ kind: "ok", data: result.data, website });
+        setState({ kind: "ok", data: result.data, website, sector: checked.request.sector });
         return;
       }
       const fieldErrors: FieldErrors = {};
@@ -86,7 +87,7 @@ export function ScreeningApp() {
       <ScreeningForm values={values} errors={errors} busy={state.kind === "loading"} onChange={change} onSubmit={() => void run()} />
       <div aria-live="polite">
         {state.kind === "idle" && (
-          <div className="rounded border border-dashed border-[var(--border-strong)] p-6 text-sm text-[var(--muted)]">
+          <div className="border-l border-[var(--accent)] p-6 text-sm text-[var(--foreground)]">
             <p className="label-caps !text-[var(--accent-text)]">Comment ça marche</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5">
               <li>Décrivez la cible et l&apos;opération à gauche.</li>
@@ -101,16 +102,16 @@ export function ScreeningApp() {
           </div>
         )}
         {state.kind === "loading" && (
-          <p role="status" className="rounded border border-[var(--border)] p-6 text-sm text-[var(--muted)]">
+          <p role="status" className="border border-[var(--border)] p-6 text-sm text-[var(--muted)]">
             Classement des fonds en cours…
           </p>
         )}
         {state.kind === "error" && (
-          <p role="alert" data-testid="score-error" className="rounded border-l-4 border-[var(--error)] bg-[var(--surface)] px-3 py-2 text-sm">
+          <p role="alert" data-testid="score-error" className=" border-l-4 border-[var(--error)] bg-[var(--surface)] px-3 py-2 text-sm">
             <span className="font-semibold text-[var(--error)]">Erreur</span> : {state.message}
           </p>
         )}
-        {state.kind === "ok" && <RankingResults data={state.data} website={state.website} />}
+        {state.kind === "ok" && <RankingResults data={state.data} website={state.website} sectorLabel={SECTOR_EN[state.sector] ?? state.sector} />}
       </div>
     </div>
   );

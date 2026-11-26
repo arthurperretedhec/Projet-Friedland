@@ -29,8 +29,11 @@ REQUIRED_COLUMNS = (
     "collected_on",
     "description_short",
     "description_short_by",
+    "sector",
+    "sector_by",
 )
 ALLOWED_SHORT_BY = ("", "ai_summary")
+ALLOWED_SECTOR_BY = ("", "published", "ai_classified")
 
 
 @dataclass(frozen=True)
@@ -45,6 +48,8 @@ class Holding:
     description_short_by_ai: bool
     source_url: str
     order: int  # position dans le fichier = ordre de la page source
+    sector: str | None = None  # code de sectors.csv (ex. FOOD_AGRI)
+    sector_by_ai: bool = False  # True = classé par l'IA d'après la description, pas publié
 
 
 def _year(value: str, line: int) -> int | None:
@@ -75,6 +80,10 @@ def load_portfolio_extended(
                 )
             if row["description_short_by"] not in ALLOWED_SHORT_BY:
                 raise ValueError(f"{FILE_NAME}, ligne {line} : description_short_by inconnu")
+            if row["sector_by"] not in ALLOWED_SECTOR_BY or bool(row["sector"]) != bool(
+                row["sector_by"]
+            ):
+                raise ValueError(f"{FILE_NAME}, ligne {line} : sector et sector_by incohérents")
             if row["status"] != "held" and not row["status"].startswith("held"):
                 continue  # le pilote ne garde que les participations actuelles
             by_fund.setdefault(row["fund_id"], []).append(
@@ -89,6 +98,8 @@ def load_portfolio_extended(
                     description_short_by_ai=row["description_short_by"] == "ai_summary",
                     source_url=row["source_url"].strip(),
                     order=line,
+                    sector=row["sector"].strip() or None,
+                    sector_by_ai=row["sector_by"] == "ai_classified",
                 )
             )
     return MappingProxyType({k: tuple(v) for k, v in by_fund.items()})
@@ -102,5 +113,15 @@ def latest_in_france(holdings: tuple[Holding, ...], limit: int = 3) -> list[Hold
     source (les sites listent les plus récentes en premier). Un pays étranger publié est exclu.
     """
     candidates = [h for h in holdings if h.instrument == "equity" and h.country in (None, "France")]
+    candidates.sort(key=lambda h: (-(h.entry_year or 0), h.order))
+    return candidates[:limit]
+
+
+def latest_in_sector(
+    holdings: tuple[Holding, ...], sector_codes: frozenset[str], limit: int = 3
+) -> list[Holding]:
+    """Colonne « Investments in <secteur> sector » : participations en equity dont le secteur
+    (publié ou classé par l'IA) est celui de la cible, tous pays, les plus récentes d'abord."""
+    candidates = [h for h in holdings if h.instrument == "equity" and h.sector in sector_codes]
     candidates.sort(key=lambda h: (-(h.entry_year or 0), h.order))
     return candidates[:limit]

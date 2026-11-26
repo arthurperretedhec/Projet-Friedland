@@ -29,11 +29,11 @@ import {
 } from "@/lib/selection";
 
 const control =
-  "rounded border border-[var(--border)] bg-[var(--background)] px-2.5 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-[var(--focus)]";
+  "border-0 border-b border-[var(--border-strong)] bg-[var(--border-light)] px-2.5 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-[var(--focus)]";
 
 const TIER_TONE: Record<Tier, string> = {
   1: "bg-[var(--accent)] text-white",
-  2: "bg-[var(--accent-soft)] text-[var(--accent-text)] ring-1 ring-[var(--accent)]/40",
+  2: "border border-[var(--accent)] text-[var(--accent)]",
   3: "bg-[var(--surface-2)] text-[var(--muted)]",
 };
 
@@ -84,7 +84,7 @@ function download(filename: string, content: string) {
   URL.revokeObjectURL(url);
 }
 
-export function RankingResults({ data, website = "" }: { data: ScoreResponse; website?: string }) {
+export function RankingResults({ data, website = "", sectorLabel }: { data: ScoreResponse; website?: string; sectorLabel: string }) {
   const [view, setView] = useState<ViewOptions>(DEFAULT_VIEW);
   const [selection, setSelection] = useState<Selection>(() => initialSelection(data));
   const [open, setOpen] = useState<string | null>(null);
@@ -106,13 +106,13 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="label-caps">Acquéreurs financiers potentiels</p>
-          <h2 id="results-heading" className="text-xl font-semibold">
+          <h2 id="results-heading" className="display-light rule-blue mt-1 text-4xl">
             {data.company_name}
           </h2>
-          <p className="text-xs text-[var(--muted)]">
+          <p className="mt-3 text-xs text-[var(--muted)]">
             {website && (
               <>
-                <a href={/^https?:\/\//i.test(website) ? website : `https://${website}`} target="_blank" rel="noreferrer noopener" className="text-[var(--accent-text)] underline">
+                <a href={/^https?:\/\//i.test(website) ? website : `https://${website}`} target="_blank" rel="noreferrer noopener" className="link-cta normal-case">
                   {website}
                 </a>
                 {" · "}
@@ -123,16 +123,16 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
         </div>
       </header>
 
-      <dl className="grid grid-cols-2 gap-px overflow-hidden rounded border border-[var(--border)] bg-[var(--border)] sm:grid-cols-4">
+      <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
           ["Sociétés compatibles", data.counts.companies_ranked],
           ["Tier 1", tierCounts[0]],
           ["Tier 2", tierCounts[1]],
           ["Stratégies écartées", `${data.counts.strategies_excluded} / ${data.counts.strategies_total}`],
         ].map(([label, value]) => (
-          <div key={label} className="bg-[var(--surface)] px-4 py-3">
-            <dt className="label-caps">{label}</dt>
-            <dd className="mt-1 text-2xl font-semibold tabular-nums">{value}</dd>
+          <div key={label} className="bracket flex flex-col-reverse px-5 py-4">
+            <dt className="label-caps mt-1">{label}</dt>
+            <dd className="text-[40px] leading-none font-normal text-[var(--heading)] tabular-nums">{value}</dd>
           </div>
         ))}
       </dl>
@@ -140,22 +140,22 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
       {/* Barre de sélection pour le PowerPoint */}
       <div
         data-testid="selection-bar"
-        className="sticky top-0 z-20 flex flex-wrap items-center gap-3 rounded border border-[var(--accent)]/50 bg-[var(--header)] px-4 py-2.5 text-sm shadow-lg"
+        className="on-dark sticky top-0 z-20 flex flex-wrap items-center gap-3 bg-[var(--navy)] px-5 py-3 text-sm text-white"
       >
         <span aria-live="polite">
           <span className="text-lg font-semibold tabular-nums">{chosen.length}</span> fonds sélectionnés pour le PowerPoint
-          {added > 0 && <span className="text-[var(--muted)]"> · dont {added} ajouté{added > 1 ? "s" : ""} manuellement</span>}
-          {starred > 0 && <span className="text-[var(--gold)]"> · ★ {starred}</span>}
+          {added > 0 && <span className="text-white/75"> · dont {added} ajouté{added > 1 ? "s" : ""} manuellement</span>}
+          {starred > 0 && <span className="text-white/90"> · ★ {starred} intérêt{starred > 1 ? "s" : ""} exprimé{starred > 1 ? "s" : ""}</span>}
         </span>
-        <div className="ml-auto flex flex-wrap gap-2">
-          <button type="button" onClick={() => setSelection(initialSelection(data))} className={`${control} hover:bg-[var(--surface-2)]`}>
+        <div className="ml-auto flex flex-wrap items-center gap-5">
+          <button type="button" onClick={() => setSelection(initialSelection(data))} className="link-cta !text-white">
             Réinitialiser (Tier 1)
           </button>
           <button
             type="button"
             disabled={chosen.length === 0}
             onClick={() => download(`selection-${data.company_name.replace(/[^\p{L}\p{N}]+/gu, "-")}.csv`, selectionCsv(chosen))}
-            className="rounded bg-[var(--accent)] px-3 py-1.5 font-semibold text-[var(--on-accent)] hover:opacity-90 focus-visible:outline-2 focus-visible:outline-[var(--focus)] disabled:opacity-50"
+            className="btn-primary bracket !py-2.5"
           >
             Exporter la sélection (CSV)
           </button>
@@ -163,7 +163,7 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
       </div>
 
       {data.message && (
-        <p role="status" className="rounded border-l-4 border-[var(--warn)] bg-[var(--surface)] px-3 py-2">
+        <p role="status" className="border-l-4 border-[var(--warn)] bg-[var(--surface-2)] px-3 py-2">
           {data.message}
         </p>
       )}
@@ -204,9 +204,9 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
             </span>
           </div>
 
-          <div className="scroll-thin overflow-x-auto rounded border border-[var(--border)]">
+          <div className="scroll-thin overflow-x-auto border-t-2 border-[var(--accent)]">
             <table className="w-full text-left text-sm">
-              <thead className="bg-[var(--surface-2)]">
+              <thead className="bg-[var(--surface-2)] text-[var(--foreground)]">
                 <tr className="label-caps">
                   <th scope="col" className="w-9 px-3 py-2">
                     <input
@@ -236,7 +236,7 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
                       key={c.fund_id}
                       data-testid="ranking-row"
                       onClick={() => setOpen(c.fund_id)}
-                      className={`cursor-pointer border-t border-[var(--border)] align-middle hover:bg-[var(--accent-soft)] ${i % 2 ? "bg-[var(--surface)]" : "bg-[var(--background)]"} ${choice.included ? "" : "opacity-55"}`}
+                      className={`cursor-pointer border-t border-[var(--border)] align-middle hover:bg-[var(--accent-soft)] ${i % 2 ? "bg-[#fafbfd]" : "bg-white"} ${choice.included ? "" : "opacity-55"}`}
                     >
                       <td className="px-3 py-2" onClick={(e) => e.stopPropagation()}>
                         <input
@@ -256,7 +256,7 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
                       </td>
                       <td className="px-2 py-2">
                         <button type="button" className="text-left focus-visible:outline-2 focus-visible:outline-[var(--focus)]" onClick={() => setOpen(c.fund_id)}>
-                          <span className="font-medium">{c.management_company ?? c.fund_id}</span>
+                          <span className="font-medium text-[var(--heading)]">{c.management_company ?? c.fund_id}</span>
                           <span className="block text-xs text-[var(--muted)]">
                             {c.best_strategy_name}
                             {c.other_strategies.length > 0 && ` · +${c.other_strategies.length}`}
@@ -294,7 +294,7 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
       )}
 
       {data.excluded_companies.length > 0 && (
-        <details className="rounded border border-[var(--border)] bg-[var(--surface)] text-sm" data-testid="excluded-companies">
+        <details className="bg-[var(--surface-2)] text-sm" data-testid="excluded-companies">
           <summary className="cursor-pointer px-4 py-3">
             <span className="font-medium">{data.excluded_companies.length} sociétés de gestion écartées par les filtres</span>
             <span className="text-[var(--muted)]"> · vous pouvez en ajouter une à la sélection</span>
@@ -316,7 +316,7 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
                   />
                   <Star on={choice.starred} label={`Intérêt exprimé par ${e.management_company ?? e.fund_id}`} onClick={() => setSelection(toggle(selection, e.fund_id, "starred"))} />
                   <button type="button" onClick={() => setOpen(e.fund_id)} className="text-left focus-visible:outline-2 focus-visible:outline-[var(--focus)]">
-                    <span className="font-medium">{e.management_company ?? e.fund_id}</span>
+                    <span className="font-medium text-[var(--heading)]">{e.management_company ?? e.fund_id}</span>
                     <span className="block text-xs text-[var(--muted)]">{humanize(e.strategies[0]?.exclusion_reasons[0] ?? "")}</span>
                   </button>
                 </li>
@@ -329,6 +329,7 @@ export function RankingResults({ data, website = "" }: { data: ScoreResponse; we
       {openRow && (
         <FundDrawer
           row={openRow}
+          sectorLabel={sectorLabel}
           company={openCompany}
           excluded={openExcluded}
           choice={selection[openRow.fundId] ?? { included: false, starred: false }}

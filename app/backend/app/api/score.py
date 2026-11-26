@@ -18,8 +18,13 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.data.investors import InvestorData
-from app.data.portfolio_extended import Holding, latest_in_france, load_portfolio_extended
-from app.logic.reference import DEAL_TYPES, GENERALIST_SECTOR, SECTORS
+from app.data.portfolio_extended import (
+    Holding,
+    latest_in_france,
+    latest_in_sector,
+    load_portfolio_extended,
+)
+from app.logic.reference import DATA_SECTORS, DEAL_TYPES, GENERALIST_SECTOR, SECTORS
 from app.logic.scoring import Fund, Operation, score_operation
 from app.logic.scoring.real_data import CompanyResult, funds_from_base, rank_management_companies
 
@@ -107,8 +112,10 @@ class Investment(BaseModel):
     country: str | None  # None = pays non publié par le fonds
     description_short: str | None  # résumé IA au format des slides
     description_short_by_ai: bool
-    description: str | None  # texte publié par le fonds
+    description: str | None  # texte publié par le fonds (ou par la société pour DEMEA)
     source_url: str
+    sector: str | None  # code de sectors.csv
+    sector_by_ai: bool  # True = secteur classé par l'IA, pas publié
 
 
 class FundProfile(BaseModel):
@@ -127,6 +134,8 @@ class FundProfile(BaseModel):
     target_ev_max_eur_m: float | None
     # Collecte du 2026-11-26 (5 fonds) ; liste vide = pas encore collecté.
     latest_investments_france: list[Investment] = []
+    # Participations dans le secteur de la cible (codes de la base correspondant au secteur saisi).
+    sector_investments: list[Investment] = []
     holdings_collected: bool = False
 
 
@@ -155,18 +164,33 @@ def _investment(h: Holding) -> Investment:
         description_short_by_ai=h.description_short_by_ai,
         description=h.description,
         source_url=h.source_url,
+        sector=h.sector,
+        sector_by_ai=h.sector_by_ai,
     )
+
+
+def data_sector_codes(operation_sector: str | None) -> frozenset[str]:
+    """Codes secteur de la base (sectors.csv) qui couvrent le secteur saisi (ex. food_beverage ->
+    FOOD_AGRI), d'après la table de traduction partagée reference.DATA_SECTORS."""
+    if not operation_sector:
+        return frozenset()
+    return frozenset(code for code, covers in DATA_SECTORS.items() if operation_sector in covers)
 
 
 def fund_profile(
     data: InvestorData,
     strategy_id: str,
     holdings: Mapping[str, tuple[Holding, ...]] | None = None,
+    operation_sector: str | None = None,
 ) -> FundProfile:
     row = data.strategies[strategy_id]
     held = (holdings or {}).get(str(row["fund_id"]), ())
+    in_sector = latest_in_sector(held, data_sector_codes(operation_sector))
+    # Pas de doublon d'une colonne à l'autre du bandeau : la colonne France prend les suivantes.
+    in_france = latest_in_france(tuple(h for h in held if h not in in_sector))
     return FundProfile(
-        latest_investments_france=[_investment(h) for h in latest_in_france(held)],
+        latest_investments_france=[_investment(h) for h in in_france],
+        sector_investments=[_investment(h) for h in in_sector],
         holdings_collected=bool(held),
         website=_text(row.get("website")),
         source_url=_text(row.get("source_url")),
@@ -250,17 +274,24 @@ def score(payload: ScoreRequest, request: Request) -> ScoreResponse:
         companies=[
             RankedCompany(
                 **company.model_dump(),
-                profile=fund_profile(base.data, company.best_strategy_id, base.holdings),
+                profile=fund_profile(
+                    base.data, company.best_strategy_id, base.holdings, operation.sector
+                ),
             )
             for company in companies
         ],
         excluded=excluded,
-        excluded_companies=_excluded_companies(base, excluded, {c.fund_id for c in companies}),
+        excluded_companies=_excluded_companies(
+            base, excluded, {c.fund_id for c in companies}, operation.sector
+        ),
     )
 
 
 def _excluded_companies(
-    base: ScoringBase, excluded: list[ExcludedStrategy], ranked_funds: set[str]
+    base: ScoringBase,
+    excluded: list[ExcludedStrategy],
+    ranked_funds: set[str],
+    operation_sector: str,
 ) -> list[ExcludedCompany]:
     """Sociétés de gestion absentes du classement (toutes leurs stratégies exclues), par nom."""
     grouped: dict[str, list[ExcludedStrategy]] = {}
@@ -272,7 +303,9 @@ def _excluded_companies(
             fund_id=fund_id,
             management_company=strategies[0].management_company,
             strategies=strategies,
-            profile=fund_profile(base.data, strategies[0].strategy_id, base.holdings),
+            profile=fund_profile(
+                base.data, strategies[0].strategy_id, base.holdings, operation_sector
+            ),
         )
         for fund_id, strategies in grouped.items()
     ]

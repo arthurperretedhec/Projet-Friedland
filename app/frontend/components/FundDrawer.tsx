@@ -8,6 +8,7 @@ import type { BannerRow, FundChoice } from "@/lib/selection";
 
 type Props = {
   row: BannerRow;
+  sectorLabel: string;
   company?: RankedCompany;
   excluded?: ExcludedCompany;
   choice: FundChoice;
@@ -20,7 +21,7 @@ function externalUrl(url: string): string {
 }
 
 /** Panneau latéral d'un fonds : sélection, aperçu du bandeau, détail du score et sources. */
-export function FundDrawer({ row, company, excluded, choice, onToggle, onClose }: Props) {
+export function FundDrawer({ row, sectorLabel, company, excluded, choice, onToggle, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     closeRef.current?.focus();
@@ -32,24 +33,24 @@ export function FundDrawer({ row, company, excluded, choice, onToggle, onClose }
 
   return (
     <>
-      <div className="fixed inset-0 z-30 bg-black/50" onClick={onClose} aria-hidden="true" />
+      <div className="fixed inset-0 z-30 bg-[#072535]/40" onClick={onClose} aria-hidden="true" />
       <aside
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-title"
         data-testid="fund-drawer"
-        className="scroll-thin fixed inset-y-0 right-0 z-40 flex w-full max-w-[760px] flex-col overflow-y-auto border-l border-[var(--border-strong)] bg-[var(--surface)] shadow-2xl"
+        className="scroll-thin fade-up fixed inset-y-0 right-0 z-40 flex w-full max-w-[900px] flex-col overflow-y-auto border-l border-[var(--border-strong)] bg-[var(--surface)]"
       >
-        <header className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-[var(--border)] bg-[var(--header)] px-5 py-4">
+        <header className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-[var(--border)] bg-[var(--surface-2)] px-6 py-5">
           <div>
             <p className="label-caps">{row.origin === "ranked" ? `Rang ${row.rank} · score ${row.score?.toLocaleString("fr-FR")} / 100` : "Écarté par les filtres"}</p>
-            <h2 id="drawer-title" className="text-lg font-semibold">
+            <h2 id="drawer-title" className="display-light mt-1 text-3xl">
               {row.fundName}
             </h2>
             <p className="text-sm text-[var(--muted)]">{row.strategyName}</p>
           </div>
-          <button ref={closeRef} type="button" onClick={onClose} className="rounded px-2 py-1 text-sm text-[var(--muted)] hover:bg-[var(--header-2)] focus-visible:outline-2 focus-visible:outline-[var(--focus)]">
-            Fermer ✕
+          <button ref={closeRef} type="button" onClick={onClose} className="link-cta">
+            Fermer
           </button>
         </header>
 
@@ -69,7 +70,7 @@ export function FundDrawer({ row, company, excluded, choice, onToggle, onClose }
             <h3 id="banner-heading" className="label-caps mb-2">
               Aperçu du bandeau PowerPoint
             </h3>
-            <BannerPreview row={{ ...row, starred: choice.starred }} />
+            <BannerPreview row={{ ...row, starred: choice.starred }} sectorLabel={sectorLabel} />
           </section>
 
           {company && (
@@ -136,12 +137,12 @@ export function FundDrawer({ row, company, excluded, choice, onToggle, onClose }
               </dl>
               <div className="mt-2 flex flex-wrap gap-3 text-sm">
                 {p.website && (
-                  <a href={externalUrl(p.website)} target="_blank" rel="noreferrer noopener" className="text-[var(--accent-text)] underline">
+                  <a href={externalUrl(p.website)} target="_blank" rel="noreferrer noopener" className="link-cta">
                     Site du fonds
                   </a>
                 )}
                 {p.source_url && (
-                  <a href={externalUrl(p.source_url)} target="_blank" rel="noreferrer noopener" className="text-[var(--accent-text)] underline">
+                  <a href={externalUrl(p.source_url)} target="_blank" rel="noreferrer noopener" className="link-cta">
                     Source des critères
                   </a>
                 )}

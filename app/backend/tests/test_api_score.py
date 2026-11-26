@@ -203,6 +203,7 @@ def test_each_company_carries_the_published_profile_of_its_best_strategy(client)
     abenex = next(c for c in body["companies"] if c["management_company"] == "Abenex Capital SAS")
     profile = dict(abenex["profile"])
     latest = profile.pop("latest_investments_france")
+    in_sector = profile.pop("sector_investments")
     assert profile.pop("holdings_collected") is True
     assert profile == {
         "website": "https://www.abenex.com/en",
@@ -214,13 +215,22 @@ def test_each_company_carries_the_published_profile_of_its_best_strategy(client)
         "target_ev_max_eur_m": 60,
     }
     # portfolio_extended.csv (site Abenex, 2026-11-26) : equity, pays France ou non publié, plus
-    # récentes d'abord ; Zato (2025) est exclue car sa description publiée la dit italienne.
+    # récentes d'abord ; Zato (2025) n'y est pas car sa description publiée la dit italienne.
+    # Colonne France sans les sociétés déjà citées dans la colonne secteur (Tethys).
     assert [(i["company_name"], i["entry_year"]) for i in latest] == [
-        ("Tethys", 2026),
         ("Santis LAB", 2024),
         ("Only", 2024),
+        ("Phenomen", 2023),
     ]
     assert latest[0]["description_short_by_ai"] is True
+    # Colonne secteur (industrie, tous pays, plus récentes d'abord) : secteurs classés par l'IA chez
+    # Abenex, qui n'en publie pas ; Zato (Italie) y figure, Tethys (2026) en tête.
+    assert [(i["company_name"], i["entry_year"]) for i in in_sector] == [
+        ("Tethys", 2026),
+        ("Zato", 2025),
+        ("Origin Group", 2022),
+    ]
+    assert all(i["sector"] == "INDUSTRIALS" and i["sector_by_ai"] for i in in_sector)
     assert all("profile" in c for c in body["companies"])
 
 
@@ -247,3 +257,16 @@ def test_profile_turns_blank_text_into_none():
     assert _text("  ") is None
     assert _text(None) is None
     assert _text(" https://x.fr ") == "https://x.fr"
+
+
+def test_food_deal_shows_demea_food_holdings_with_their_descriptions(client):
+    food = {**LBO_SMALL, "sector": "food_beverage"}
+    body = client.post("/api/score", json=food).json()
+    demea = next(c for c in body["companies"] if c["fund_id"] == "fund-038")
+    # Participations equity de DEMEA classées FOOD_AGRI, plus récentes d'abord (site DEMEA :
+    # Polaris et L2PI 2026, Vincent Guerlais 2025) ; descriptions lues sur leurs sites.
+    names = [(i["company_name"], i["entry_year"]) for i in demea["profile"]["sector_investments"]]
+    assert names == [("Polaris", 2026), ("L2PI", 2026), ("Vincent Guerlais", 2025)]
+    assert all(i["description_short"] for i in demea["profile"]["sector_investments"])
+    france = [i["company_name"] for i in demea["profile"]["latest_investments_france"]]
+    assert france == ["Sophie Lebreuilly", "Marbour", "Isnard"]  # suivantes, sans doublon

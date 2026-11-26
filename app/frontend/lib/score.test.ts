@@ -46,6 +46,7 @@ function company(rank: number, score: number, name: string, level = "moyen"): Ra
       target_ev_min_eur_m: null,
       target_ev_max_eur_m: null,
       latest_investments_france: [],
+      sector_investments: [],
       holdings_collected: false,
     },
   };

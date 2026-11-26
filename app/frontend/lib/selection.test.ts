@@ -21,6 +21,7 @@ const profile = (extra: Partial<RankedCompany["profile"]> = {}): RankedCompany["
   target_ev_min_eur_m: null,
   target_ev_max_eur_m: null,
   latest_investments_france: [],
+  sector_investments: [],
   holdings_collected: false,
   ...extra,
 });
@@ -103,6 +104,8 @@ const inv = (extra: Partial<Investment>): Investment => ({
   description_short_by_ai: false,
   description: null,
   source_url: "https://x",
+  sector: null,
+  sector_by_ai: false,
   ...extra,
 });
 
@@ -125,7 +128,7 @@ describe("selectionCsv", () => {
     const s = toggle(initialSelection(data), "fund-x", "starred");
     const lines = selectionCsv(selectedRows(data, s)).split("\r\n");
     expect(lines[0].startsWith("﻿Fonds;Stratégie;Origine;Intérêt exprimé")).toBe(true);
-    expect(lines[1]).toBe("Fund a;Strategy a;Classement;;1;90;Élevée;;;;;");
-    expect(lines[2]).toBe("Excluded Partners;X Fund;Ajout manuel;Oui;;;;;;;;");
+    expect(lines[1]).toBe("Fund a;Strategy a;Classement;;1;90;Élevée;;;;;;");
+    expect(lines[2]).toBe("Excluded Partners;X Fund;Ajout manuel;Oui;;;;;;;;;");
   });
 });

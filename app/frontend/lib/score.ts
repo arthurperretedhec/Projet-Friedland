@@ -27,6 +27,23 @@ export const SECTORS = [
   { value: "agriculture", label: "Agriculture" },
 ] as const;
 
+/** Libellé anglais du secteur pour l'en-tête du bandeau (« Investments in Food & beverage sector »). */
+export const SECTOR_EN: Record<string, string> = {
+  software_it: "Software & IT",
+  healthcare: "Healthcare",
+  business_services: "Business services",
+  industrials: "Industrials",
+  consumer_retail: "Consumer & retail",
+  food_beverage: "Food & beverage",
+  financial_services: "Financial services",
+  education: "Education",
+  energy_environment: "Energy & environment",
+  construction_real_estate: "Construction & real estate",
+  transport_logistics: "Transport & logistics",
+  media_telecom: "Media & telecom",
+  agriculture: "Agriculture",
+};
+
 export const STAKES = [
   { value: "majority", label: "Majoritaire", hint: "Le fonds prend le contrôle" },
   { value: "minority", label: "Minoritaire", hint: "Le dirigeant garde le contrôle" },
@@ -172,8 +189,10 @@ export type Investment = {
   country: string | null; // null = pays non publié par le fonds
   description_short: string | null; // résumé IA au format des slides
   description_short_by_ai: boolean;
-  description: string | null; // texte publié par le fonds
+  description: string | null; // texte publié par le fonds (ou par la société)
   source_url: string;
+  sector: string | null; // code de la base (FOOD_AGRI…)
+  sector_by_ai: boolean; // secteur classé par l'IA, pas publié
 };
 
 export type FundProfile = {
@@ -185,6 +204,7 @@ export type FundProfile = {
   target_ev_min_eur_m: number | null;
   target_ev_max_eur_m: number | null;
   latest_investments_france: Investment[];
+  sector_investments: Investment[];
   holdings_collected: boolean;
 };
 

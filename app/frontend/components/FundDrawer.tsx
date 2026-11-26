@@ -8,7 +8,7 @@ import type { BannerRow, FundChoice } from "@/lib/selection";
 
 type Props = {
   row: BannerRow;
-  sectorLabel: string;
+  sector: string;
   company?: RankedCompany;
   excluded?: ExcludedCompany;
   choice: FundChoice;
@@ -21,7 +21,7 @@ function externalUrl(url: string): string {
 }
 
 /** Panneau latéral d'un fonds : sélection, aperçu du bandeau, détail du score et sources. */
-export function FundDrawer({ row, sectorLabel, company, excluded, choice, onToggle, onClose }: Props) {
+export function FundDrawer({ row, sector, company, excluded, choice, onToggle, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     closeRef.current?.focus();
@@ -70,7 +70,10 @@ export function FundDrawer({ row, sectorLabel, company, excluded, choice, onTogg
             <h3 id="banner-heading" className="label-caps mb-2">
               Aperçu du bandeau PowerPoint
             </h3>
-            <BannerPreview row={{ ...row, starred: choice.starred }} sectorLabel={sectorLabel} />
+            <BannerPreview row={{ ...row, starred: choice.starred }} sector={sector} />
+            {[...p.sector_investments, ...p.latest_investments_france].some((i) => i.description_short_by_ai || i.sector_by_ai) && (
+              <p className="mt-2 text-xs text-[var(--muted)]">Descriptions et secteurs des participations résumés ou classés par l&apos;IA, à relire avant envoi.</p>
+            )}
           </section>
 
           {company && (

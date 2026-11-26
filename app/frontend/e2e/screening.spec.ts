@@ -69,9 +69,29 @@ test("food deal: DEMEA banner shows its food holdings with descriptions", async 
   await page.getByRole("button", { name: "Trouver les acquéreurs" }).click();
   await page.getByTestId("ranking-row").filter({ hasText: "DEMEA Agro SAS" }).getByRole("button", { name: /^DEMEA Agro SAS/ }).click();
   const banner = page.getByTestId("fund-drawer").getByRole("figure", { name: "Aperçu du bandeau PowerPoint" });
-  await expect(banner).toContainText("Investments in Food & beverage sector");
+  await expect(banner).toContainText("Investments in F&B");
   // Site DEMEA (participations 2026) et sites des sociétés (descriptions), résumés par l'IA.
   await expect(banner.getByTestId("banner-sector")).toContainText("Polaris (2026) - Producer of omega-3 oils");
   await expect(banner.getByTestId("banner-sector")).toContainText("L2PI (2026)");
   await page.screenshot({ path: "test-results/screening-food-demea-1440x900.png" });
+});
+
+test("bulk selection by tier, all and none", async ({ page }) => {
+  await page.goto("/");
+  await page.getByLabel("Nom de la société").fill("Cible");
+  await page.getByLabel("Secteur").selectOption("food_beverage");
+  await page.getByLabel("Valeur d'entreprise (M€)").fill("65");
+  await page.getByLabel("Ticket equity recherché (M€)").fill("30");
+  await page.getByRole("button", { name: "Trouver les acquéreurs" }).click();
+  const count = page.getByTestId("selection-bar").locator("span.text-lg");
+  const quick = page.getByRole("group", { name: "Sélection rapide" });
+  const tier1 = Number((await count.textContent()) ?? "0"); // Tier 1 coché par défaut
+  const tier2Label = (await quick.getByRole("button", { name: /^Tier 2/ }).textContent()) ?? "";
+  const tier2 = Number(tier2Label.match(/\((\d+)\)/)?.[1]);
+  await quick.getByRole("button", { name: /^Tier 2/ }).click();
+  await expect(count).toHaveText(String(tier1 + tier2));
+  await quick.getByRole("button", { name: "Rien" }).click();
+  await expect(count).toHaveText("0");
+  await quick.getByRole("button", { name: "Tout" }).click();
+  await expect(count).not.toHaveText("0");
 });

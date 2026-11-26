@@ -9,7 +9,6 @@ import {
   type FieldErrors,
   type FormValues,
   interpretScore,
-  SECTOR_EN,
   type ScoreResponse,
   validateForm,
 } from "@/lib/score";
@@ -111,7 +110,7 @@ export function ScreeningApp() {
             <span className="font-semibold text-[var(--error)]">Erreur</span> : {state.message}
           </p>
         )}
-        {state.kind === "ok" && <RankingResults data={state.data} website={state.website} sectorLabel={SECTOR_EN[state.sector] ?? state.sector} />}
+        {state.kind === "ok" && <RankingResults data={state.data} website={state.website} sector={state.sector} />}
       </div>
     </div>
   );

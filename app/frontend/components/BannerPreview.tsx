@@ -1,44 +1,55 @@
-import type { Investment } from "@/lib/score";
+import { type Investment, SECTOR_SHORT } from "@/lib/score";
 import { type BannerRow, investmentText, ticketForSlide } from "@/lib/selection";
 
-const COLUMNS = "grid-cols-[minmax(96px,1fr)_0.8fr_0.6fr_0.75fr_2fr_2fr]";
+// Mise en page des slides « Financial partners » des discussion materials (Difagri, slides 75-79) :
+// en-têtes bleu clair arrondis de même hauteur, cadre navy arrondi pour le fonds, cadre gris clair
+// pour les investissements, puces carrées. Pas de source ni de lien sur la slide.
+const LEFT = "grid grid-cols-[178fr_108fr_102fr_137fr] gap-[10px]";
+const RIGHT = "grid grid-cols-2 gap-[10px]";
+const OUTER = "grid grid-cols-[525fr_898fr] gap-[10px]";
 const MAX_PER_COLUMN = 3;
 
-/** Monogramme en attendant les logos (collecte à faire) : deux lettres du nom de la société de gestion. */
-function Monogram({ name }: { name: string }) {
-  const words = name
-    .replace(/\b(SAS|SA|SCA|Gestion|Partners|Capital|Group|Groupe)\b/gi, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2);
-  const letters = (words.length > 1 ? words.map((w) => w[0]) : (words[0] ?? "").slice(0, 2).split("")).join("").toUpperCase();
+const INK = "#12416b"; // bleu marine des slides
+const HEAD_BG = "#d4edff";
+
+/** Nom du fonds en guise de logo, en attendant la collecte des logos (sans « SAS », « SA »…). */
+function Wordmark({ name }: { name: string }) {
+  const short = name.replace(/\b(SAS|SA|SCA|S\.A\.)\b/g, "").replace(/\s+/g, " ").trim();
+  return <span className="text-[15px] leading-tight font-bold text-[#222]">{short}</span>;
+}
+
+function Head({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-12 w-12 items-center justify-center border border-[#c9d3e3] bg-white text-sm font-bold tracking-wide text-[var(--slide-ink)]">
-      {letters || "?"}
+    <div className="slide-r flex h-[34px] items-center justify-center px-2 text-center text-[12.5px] font-bold whitespace-nowrap" style={{ background: HEAD_BG, color: INK }}>
+      {children}
     </div>
   );
 }
 
-function Head({ children }: { children: React.ReactNode }) {
-  return <div className="bg-[var(--slide-head)] px-2 py-1.5 text-center text-[11px] font-semibold text-[var(--slide-ink)]">{children}</div>;
-}
-
-const ND = <span className="text-[var(--slide-muted)] italic">n.d.</span>;
-
-function InvestmentList({ items, empty }: { items: Investment[]; empty: string }) {
-  if (items.length === 0) return <p className="text-[var(--slide-muted)]">• {empty}</p>;
+function Bullets({ items, empty }: { items: Investment[]; empty: string }) {
+  if (items.length === 0)
+    return (
+      <ul className="text-[11.5px] leading-[1.3]">
+        <li className="flex gap-1.5">
+          <span style={{ color: INK }}>▪</span>
+          <span>{empty}</span>
+        </li>
+      </ul>
+    );
   return (
-    <ul className="space-y-1">
+    <ul className="space-y-1 text-[11.5px] leading-[1.3] text-[#222]">
       {items.slice(0, MAX_PER_COLUMN).map((inv) => {
         const { text } = investmentText(inv);
         return (
-          <li key={inv.company_name} className="leading-snug">
-            •{" "}
-            <a href={inv.source_url} target="_blank" rel="noreferrer noopener" className="font-semibold text-[var(--slide-link)] underline">
-              {inv.company_name}
-            </a>
-            {inv.entry_year ? ` (${inv.entry_year})` : ""}
-            {text ? ` - ${text}` : ""}
+          <li key={inv.company_name} className="flex gap-1.5">
+            <span style={{ color: INK }}>▪</span>
+            <span>
+              <span className="font-bold underline" style={{ color: INK }}>
+                {inv.company_name}
+              </span>
+              {inv.entry_year ? <span style={{ color: INK }}> ({inv.entry_year})</span> : null}
+              {text ? ` - ${text}` : ""}
+            </span>
           </li>
         );
       })}
@@ -46,67 +57,67 @@ function InvestmentList({ items, empty }: { items: Investment[]; empty: string }
   );
 }
 
-/** Une ligne du bandeau « Financial partners » des discussion materials, telle qu'elle sortira. */
-export function BannerPreview({ row, sectorLabel }: { row: BannerRow; sectorLabel: string }) {
+/** Une ligne du bandeau, telle qu'elle sortira dans le PowerPoint. */
+export function BannerPreview({ row, sector }: { row: BannerRow; sector: string }) {
   const p = row.profile;
   const ticket = ticketForSlide(p.equity_ticket_min_eur_m, p.equity_ticket_max_eur_m);
-  const shown = [...p.sector_investments.slice(0, MAX_PER_COLUMN), ...p.latest_investments_france.slice(0, MAX_PER_COLUMN)];
-  const anyAiText = shown.some((i) => investmentText(i).byAi);
-  const anyAiSector = p.sector_investments.some((i) => i.sector_by_ai);
-  const noData = p.holdings_collected ? "No investment identified" : "Portefeuille pas encore collecté";
+  const empty = p.holdings_collected ? "No investment identified" : "Portefeuille pas encore collecté";
+  const sectorShort = SECTOR_SHORT[sector] ?? sector;
   return (
-    <figure aria-label="Aperçu du bandeau PowerPoint" className="scroll-thin overflow-x-auto border border-[var(--border)] bg-[var(--slide-bg)] p-3 text-[var(--slide-ink)]">
-      <div className="min-w-[760px]">
-        <div className={`grid ${COLUMNS} gap-1.5`}>
-          <Head>Fund name</Head>
-          <Head>Amount</Head>
-          <Head>Vintage</Head>
-          <Head>Ticket size</Head>
-          <Head>
-            Investments in <u>{sectorLabel}</u> sector
-          </Head>
-          <Head>
-            Latest investments in <u>France</u>
-          </Head>
+    <figure aria-label="Aperçu du bandeau PowerPoint" className="slide scroll-thin overflow-x-auto bg-white p-4" style={{ fontFamily: "Arial, Helvetica, sans-serif" }}>
+      <div className="min-w-[820px]">
+        <div className={OUTER}>
+          <div className={LEFT}>
+            <Head>Fund name</Head>
+            <Head>Amount</Head>
+            <Head>Vintage</Head>
+            <Head>Ticket size</Head>
+          </div>
+          <div className={RIGHT}>
+            <Head>
+              Investments in{" "}<u>{sectorShort}</u>
+            </Head>
+            <Head>
+              Latest investments in{" "}<u>France</u>
+            </Head>
+          </div>
         </div>
-        <div className={`mt-1.5 grid ${COLUMNS} items-center gap-1.5 border border-[#d6dde8] bg-[#f7f9fc] py-2 text-[11px]`}>
-          <div className="flex flex-col items-center gap-1 px-1 text-center">
-            <div className="relative">
-              <Monogram name={row.fundName} />
+
+        <div className={`${OUTER} mt-[10px]`}>
+          <div className={`slide-r ${LEFT} min-h-[118px] items-center border bg-white`} style={{ borderColor: INK }}>
+            <div className="relative flex items-center justify-center px-2 text-center">
+              <Wordmark name={row.fundName} />
               {row.starred && (
-                <span aria-label="Intérêt exprimé" className="absolute -top-2 -right-2 text-base text-[#7b2d6e]">
+                <span aria-label="Intérêt exprimé" className="absolute -top-5 left-1/2 -translate-x-1/2 text-lg text-[#7b2d6e]">
                   ★
                 </span>
               )}
             </div>
-            <span className="text-[10px] leading-tight font-semibold">{row.fundName}</span>
-          </div>
-          <div className="text-center font-semibold text-[var(--slide-link)]">
-            {p.last_fund_name ? (
-              <span className="font-normal text-[var(--slide-ink)]">
-                <span className="text-[var(--slide-muted)] italic">montant n.d.</span>
-                <br />
-                {p.last_fund_name}
+            <div className="text-center text-[12px] text-[#222]">
+              <span className="font-bold underline" style={{ color: INK }}>
+                n.d.
               </span>
-            ) : (
-              ND
-            )}
+              {p.last_fund_name && (
+                <>
+                  <br />
+                  {p.last_fund_name}
+                </>
+              )}
+            </div>
+            <div className="text-center text-[12px] text-[#222]">n.d.</div>
+            <div className="text-center text-[12px] font-bold" style={{ color: INK }}>
+              {ticket ?? "n.d."}
+            </div>
           </div>
-          <div className="text-center">{ND}</div>
-          <div className="text-center font-semibold text-[var(--slide-link)]">{ticket ?? ND}</div>
-          <div className="pr-2" data-testid="banner-sector">
-            <InvestmentList items={p.sector_investments} empty={noData} />
-          </div>
-          <div className="pr-2" data-testid="banner-france">
-            <InvestmentList items={p.latest_investments_france} empty={noData} />
+          <div className={`slide-r ${RIGHT} min-h-[118px] items-center border bg-[#f7f7f7] px-3 py-2`} style={{ borderColor: INK }}>
+            <div data-testid="banner-sector">
+              <Bullets items={p.sector_investments} empty={empty} />
+            </div>
+            <div data-testid="banner-france">
+              <Bullets items={p.latest_investments_france} empty={empty} />
+            </div>
           </div>
         </div>
-        <figcaption className="mt-2 flex flex-wrap gap-x-3 text-[10px] text-[var(--slide-muted)]">
-          <span>Source : public information (sites des fonds et des sociétés)</span>
-          {anyAiText && <span>Descriptions résumées par l&apos;IA</span>}
-          {anyAiSector && <span>Secteur de certaines participations classé par l&apos;IA</span>}
-          <span>n.d. = non disponible dans la base · logo à collecter</span>
-        </figcaption>
       </div>
     </figure>
   );

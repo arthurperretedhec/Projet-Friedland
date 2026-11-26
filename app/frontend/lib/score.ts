@@ -44,6 +44,23 @@ export const SECTOR_EN: Record<string, string> = {
   agriculture: "Agriculture",
 };
 
+/** Libellé court du secteur pour l'en-tête du bandeau (« Investments in F&B »). */
+export const SECTOR_SHORT: Record<string, string> = {
+  software_it: "Software & IT",
+  healthcare: "Healthcare",
+  business_services: "Business services",
+  industrials: "Industrials",
+  consumer_retail: "Consumer",
+  food_beverage: "F&B",
+  financial_services: "Financial services",
+  education: "Education",
+  energy_environment: "Energy",
+  construction_real_estate: "Construction",
+  transport_logistics: "Transport",
+  media_telecom: "Media & telecom",
+  agriculture: "Agriculture",
+};
+
 export const STAKES = [
   { value: "majority", label: "Majoritaire", hint: "Le fonds prend le contrôle" },
   { value: "minority", label: "Minoritaire", hint: "Le dirigeant garde le contrôle" },

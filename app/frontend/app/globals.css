@@ -36,8 +36,13 @@
 }
 
 * {
-  border-radius: 0 !important; /* coins carrés partout */
+  border-radius: 0 !important; /* coins carrés partout… */
   box-shadow: none !important;
+}
+
+/* …sauf dans l'aperçu du bandeau PowerPoint, arrondi comme les slides */
+.slide .slide-r {
+  border-radius: 6px !important;
 }
 
 body {

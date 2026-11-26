@@ -84,7 +84,7 @@ function download(filename: string, content: string) {
   URL.revokeObjectURL(url);
 }
 
-export function RankingResults({ data, website = "", sectorLabel }: { data: ScoreResponse; website?: string; sectorLabel: string }) {
+export function RankingResults({ data, website = "", sector }: { data: ScoreResponse; website?: string; sector: string }) {
   const [view, setView] = useState<ViewOptions>(DEFAULT_VIEW);
   const [selection, setSelection] = useState<Selection>(() => initialSelection(data));
   const [open, setOpen] = useState<string | null>(null);
@@ -147,6 +147,36 @@ export function RankingResults({ data, website = "", sectorLabel }: { data: Scor
           {added > 0 && <span className="text-white/75"> · dont {added} ajouté{added > 1 ? "s" : ""} manuellement</span>}
           {starred > 0 && <span className="text-white/90"> · ★ {starred} intérêt{starred > 1 ? "s" : ""} exprimé{starred > 1 ? "s" : ""}</span>}
         </span>
+        <div role="group" aria-label="Sélection rapide" className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+          <span className="text-white/70">Cocher :</span>
+          {([1, 2, 3] as Tier[]).map((t) => {
+            const ids = data.companies.filter((c) => tierOf(c.score) === t).map((c) => c.fund_id);
+            const all = ids.length > 0 && ids.every((id) => selection[id]?.included);
+            return (
+              <button
+                key={t}
+                type="button"
+                aria-pressed={all}
+                disabled={ids.length === 0}
+                onClick={() => setSelection(setIncluded(selection, ids, !all))}
+                className={`link-cta !text-white disabled:opacity-40 ${all ? "" : "opacity-70"}`}
+                title={all ? `Décocher les ${ids.length} fonds Tier ${t}` : `Cocher les ${ids.length} fonds Tier ${t}`}
+              >
+                {all ? "✓ " : ""}Tier {t} ({ids.length})
+              </button>
+            );
+          })}
+          <button type="button" onClick={() => setSelection(setIncluded(selection, data.companies.map((c) => c.fund_id), true))} className="link-cta !text-white">
+            Tout
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelection(setIncluded(selection, [...data.companies, ...data.excluded_companies].map((c) => c.fund_id), false))}
+            className="link-cta !text-white"
+          >
+            Rien
+          </button>
+        </div>
         <div className="ml-auto flex flex-wrap items-center gap-5">
           <button type="button" onClick={() => setSelection(initialSelection(data))} className="link-cta !text-white">
             Réinitialiser (Tier 1)
@@ -329,7 +359,7 @@ export function RankingResults({ data, website = "", sectorLabel }: { data: Scor
       {openRow && (
         <FundDrawer
           row={openRow}
-          sectorLabel={sectorLabel}
+          sector={sector}
           company={openCompany}
           excluded={openExcluded}
           choice={selection[openRow.fundId] ?? { included: false, starred: false }}

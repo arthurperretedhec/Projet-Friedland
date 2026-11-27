@@ -141,7 +141,8 @@ def test_loader_refuses_a_file_without_a_required_column(tmp_path):
 
 def test_shipped_file_loads_and_every_ai_summary_is_flagged():
     data = load_portfolio_extended()
-    assert set(data) == {"fund-001", "fund-015", "fund-027", "fund-038", "fund-099"}
+    collected = "001 003 004 007 008 009 010 011 012 014 015 018 027 038 099"
+    assert set(data) == {f"fund-{n}" for n in collected.split()}
     summaries = [h for rows in data.values() for h in rows if h.description_short]
     assert summaries and all(h.description_short_by_ai for h in summaries)
     # Capelia et Abenex ne publient pas de secteur : tous leurs secteurs sont signalés « IA ».

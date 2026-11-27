@@ -1,40 +1,186 @@
 @import "tailwindcss";
 
-/* Colours live in CSS variables. Dark is the default; a light theme follows the system setting.
-   Contrast of text on background is at least 4.5:1 in both themes. */
+/* Charte (brief du 2026-11-26, inspirée d'un site institutionnel de private equity, sans en reprendre
+   logo, nom ni police) : fond blanc, aubergine comme seule couleur de marque, navy pour les bandes de
+   contraste, bleu pour le focus. Coins carrés, ni dégradé ni ombre. Contraste du texte ≥ 4.5:1. */
 :root {
-  color-scheme: dark;
-  --background: #0f1115;
-  --surface: #171a21;
-  --foreground: #e8eaed;
-  --muted: #a8adb7;
-  --border: #2e333d;
-  --ok: #4ade80;
-  --error: #f87171;
-  --focus: #93c5fd;
+  color-scheme: light;
+  --background: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eef3f9; /* surface-alt */
+  --header: #ffffff;
+  --header-2: #eef3f9;
+  --navy: #072535;
+  --foreground: #444444; /* texte courant */
+  --heading: #49004b;
+  --muted: #666b73;
+  --border: #e3e7ed;
+  --border-light: #efefef;
+  --border-strong: #c9d0da;
+  --accent: #49004b; /* primary, aubergine */
+  --accent-text: #49004b;
+  --accent-soft: rgba(73, 0, 75, 0.06);
+  --on-accent: #ffffff;
+  --accent-blue: #0229b1;
+  --gold: #49004b; /* étoile « intérêt exprimé », comme sur les slides */
+  --ok: #1e7b4a;
+  --warn: #8a5300;
+  --error: #b42318;
+  --focus: #0229b1;
+  /* Aperçu du bandeau : couleurs d'une slide */
+  --slide-bg: #ffffff;
+  --slide-ink: #1f2a44;
+  --slide-head: #dbe5f1;
+  --slide-link: #1f3c88;
+  --slide-muted: #5b6475;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color-scheme: light;
-    --background: #ffffff;
-    --surface: #f6f7f9;
-    --foreground: #16181d;
-    --muted: #4b5260;
-    --border: #d5d9e0;
-    --ok: #166534;
-    --error: #b91c1c;
-    --focus: #1d4ed8;
-  }
+* {
+  border-radius: 0 !important; /* coins carrés partout… */
+  box-shadow: none !important;
+}
+
+/* …sauf dans l'aperçu du bandeau PowerPoint, arrondi comme les slides */
+.slide .slide-r {
+  border-radius: 6px !important;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Jost", Calibri, "Segoe UI", system-ui, sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  font-feature-settings: "tnum" 1;
+}
+
+h1,
+h2 {
+  color: var(--heading);
 }
 
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 0.95em;
+}
+
+/* Petits libellés : 12 px, gras, majuscules */
+.label-caps {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+
+/* Titres légers, grands, légèrement espacés */
+.display-light {
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  color: var(--heading);
+  line-height: 1.1;
+}
+
+/* Filet bleu sous un titre (60 × 2 px) */
+.rule-blue::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 2px;
+  margin-top: 14px;
+  background: var(--accent-blue);
+}
+
+/* Motif « crochet » : bordure fine aux coins haut-gauche et bas-droit seulement */
+.bracket {
+  position: relative;
+  border: 0 !important;
+}
+.bracket::before,
+.bracket::after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  pointer-events: none;
+}
+.bracket::before {
+  top: 0;
+  left: 0;
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+}
+.bracket::after {
+  right: 0;
+  bottom: 0;
+  border-right: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+/* Bouton principal : contour aubergine en crochet, rempli au survol */
+.btn-primary {
+  position: relative;
+  padding: 0.85rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: transparent;
+  transition: background-color 200ms ease-out, color 200ms ease-out;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+.on-dark .btn-primary {
+  color: #ffffff;
+}
+.on-dark .btn-primary::before,
+.on-dark .btn-primary::after {
+  border-color: #ffffff;
+}
+.on-dark .btn-primary:hover:not(:disabled) {
+  background: #ffffff;
+  color: var(--navy);
+}
+
+/* Lien d'action : majuscules, souligné décalé */
+.link-cta {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-up {
+    animation: fade-up 250ms ease-out both;
+  }
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }

@@ -250,14 +250,14 @@ def test_sector_points_no_longer_break_ties():
 @pytest.mark.parametrize(
     ("changes", "known", "level"),
     [
-        ({}, 9, "élevé"),  # Alpha : tout est publié, 0 manquante
-        ({"geography_tags": None}, 8, "élevé"),  # 1 manquante
-        ({"geography_tags": None, "transaction_modifiers": None}, 7, "moyen"),  # 2
-        ({"ticket_min_eur_m": None, "ticket_max_eur_m": None}, 7, "moyen"),  # 2 (éliminatoires)
+        ({}, 9, "high"),  # Alpha : tout est publié, 0 manquante
+        ({"geography_tags": None}, 8, "high"),  # 1 manquante
+        ({"geography_tags": None, "transaction_modifiers": None}, 7, "medium"),  # 2
+        ({"ticket_min_eur_m": None, "ticket_max_eur_m": None}, 7, "medium"),  # 2 (éliminatoires)
         (
             {"geography_tags": None, "transaction_modifiers": None, "buyer_role": None},
             6,
-            "moyen",
+            "medium",
         ),  # 3
         (
             {
@@ -267,7 +267,7 @@ def test_sector_points_no_longer_break_ties():
                 "stake": None,
             },
             5,
-            "faible",
+            "low",
         ),  # 4, dont la position (éliminatoire)
     ],
 )
@@ -282,7 +282,7 @@ def test_confidence_counts_eliminatory_missing_data():
     result = score_one({"ticket_min_eur_m": None, "geography_tags": None})
     assert result.confidence.missing_data == ["ticket_min_eur_m", "geography_tags"]
     assert result.confidence.missing_data == result.missing_data  # même liste, volontairement
-    assert (result.confidence.criteria_known, result.confidence.level) == (7, "moyen")
+    assert (result.confidence.criteria_known, result.confidence.level) == (7, "medium")
 
 
 def test_confidence_thresholds_must_be_ordered():

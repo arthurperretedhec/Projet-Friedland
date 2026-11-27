@@ -1,0 +1,118 @@
+fund_id,management_company,order,label,min_eur_m,max_eur_m,source_type,source_url,to_confirm
+fund-001,Abenex Capital SAS,0,Abenex Industries 9.0,5,20,base,https://www.abenex.com/en/publications/abenex-industries-9-fund-first-closing,no
+fund-003,Activa Capital,0,,10,40,base,https://activa.fr/vision,no
+fund-004,Adagia Partners SAS,0,,70,300,internal,,no
+fund-005,Adaxtra Capital SAS,0,,2,8,base,https://new.adaxtra.com/adaxtra-pme/,no
+fund-006,Alba Infra Partners Holdco SAS,0,,25,75,web,https://infrastructureinvestor.com/3i-infras-smaller-projects-team-spins-out,no
+fund-007,Albarest Partners SAS,0,,5,15,base,https://albarest-partners.com/transmission-et-developpement/,no
+fund-008,Aldebaran Capital Partners SAS,0,,10,50,base,https://www.aldebaran.fr/en/manifest,no
+fund-010,Amethis,0,Amethis Small Caps Europe,10,,base,https://amethis.com/en/investment-strategies/,no
+fund-010,Amethis,1,Amethis Small & Mid Caps Africa,25,,base,https://amethis.com/en/investment-strategies/,no
+fund-010,Amethis,2,Amethis Small Caps North Africa & Middle East,5,15,base,https://amethis.com/en/investment-strategies/,no
+fund-011,Andera Partners SCA,0,andera Life Sciences,15,60,base,https://www.anderapartners.com/en/expertise/,no
+fund-011,Andera Partners SCA,1,andera Infra,10,40,base,https://www.anderapartners.com/en/expertise/,no
+fund-011,Andera Partners SCA,2,andera Expansion,15,40,base,https://www.anderapartners.com/en/expertise/,no
+fund-011,Andera Partners SCA,3,andera MidCap,40,120,base,https://www.anderapartners.com/en/expertise/,no
+fund-011,Andera Partners SCA,4,andera Co-Invest,10,20,base,https://www.anderapartners.com/en/expertise/,no
+fund-011,Andera Partners SCA,5,andera Acto (Mezzanine),10,150,base,https://www.anderapartners.com/en/expertise/,no
+fund-012,Antin Infrastructure Partners SAS,0,Antin Flagship,400,,base,https://www.antin-ip.com/who-we-are/strategies/flagship,no
+fund-012,Antin Infrastructure Partners SAS,1,Antin Mid Cap,50,300,base,https://www.antin-ip.com/who-we-are/strategies/mid-cap,no
+fund-012,Antin Infrastructure Partners SAS,2,Antin NextGen,50,200,base,https://www.antin-ip.com/who-we-are/strategies/nextgen,no
+fund-013,Aquiti Gestion,0,,,10,base,https://www.aquiti.fr/metiers/capital-developpement,no
+fund-014,ArchiMed SAS,0,ArchiMed MED (small cap),5,50,web,https://www.unquote.com/france/official-record/3006612/archimed-hits-eur315m-hard-cap-for-med-ii-fund,no
+fund-015,Ardian,0,Ardian Expansion,50,300,base,https://www.ardian.com/fr/expertise/private-equity/expansion,no
+fund-017,Argos France SAS,0,Argos Mid-Market,30,100,base,https://argos.fund/fr/argos-mid-market/,no
+fund-018,ARLANE,0,,5,20,base,https://www.arlane.com/fr/strategie,no
+fund-020,Astorg Partners SA,0,Astorg MidCap,50,250,internal,,no
+fund-021,Azulis Capital SA,0,,7,30,base,https://www.azuliscapital.fr/en/homepage/,no
+fund-023,BlackFin Capital Partners SAS,0,BlackFin Tech Venture,3,30,base,https://blackfin.com/tech-venture/,no
+fund-024,Bpifrance Investissement SAS,0,,5,50,internal,,no
+fund-024,Bpifrance Investissement SAS,1,Bpifrance FIEE 2,2,20,internal,,no
+fund-025,BTP Capital Investissement SA,0,,0.5,8,internal,,no
+fund-026,Butler Capital Partners SA,0,,10,50,web,https://mergr.com/investor/butler-capital-partners,yes
+fund-028,Capital Croissance,0,Club des Pépites de croissance françaises,3,15,base,https://capitalcroissance.fr/notre-metier/,no
+fund-028,Capital Croissance,1,Club des PME de croissance françaises,15,30,base,https://capitalcroissance.fr/notre-metier/,no
+fund-028,Capital Croissance,2,K2 / Club des ETI de croissance,25,,base,https://capitalcroissance.fr/notre-metier/,no
+fund-029,Capital Export SAS,0,,5,15,web,https://mesaidespubliques.infogreffe.fr/aides/intervention-fonds-propres-capital-export,no
+fund-030,Capital Grand Est SAS,0,,0.15,4,base,https://www.capitalgrandest.eu/politique-dinvestissement/,no
+fund-031,CAPZA,0,CAPZA MidCap,70,200,internal,,no
+fund-031,CAPZA,1,CAPZA MidMarket,70,150,internal,,no
+fund-032,Caravelle SA,0,,50,150,internal,,no
+fund-033,Cathay Capital Private Equity SAS,0,Cathay Small Cap,15,25,web,https://www.cathaycapital.com/private-equity/,no
+fund-033,Cathay Capital Private Equity SAS,1,Cathay Mid Cap,50,100,web,https://www.cathaycapital.com/private-equity/,no
+fund-034,Chequers Capital,0,,,150,base,https://www.chequerscapital.com/presentation/,no
+fund-035,Chevrillon & Associes SCA,0,,30,100,internal,,no
+fund-036,Ciclad,0,,1,30,internal,,no
+fund-037,Credit Mutuel Equity,0,,2,70,internal,,no
+fund-040,Dentressangle Initiatives SAS,0,,50,300,internal,,no
+fund-041,Ekkio Capital SAS,0,,5,50,base,https://ekkio.com/investissements,no
+fund-042,Elaia,0,Elaia Digital Venture 5 (DV5),1,15,base,https://elaia.com/news/elaias-fifth-digital-venture-fund-dv5-announces-first-close-at-120m,no
+fund-042,Elaia,1,Elaia Deep Tech Seed 3,1,13,base,https://elaia.com/news/elaia-announces-final-close-of-dts3-at-134m,no
+fund-043,Elais Capital SAS,0,,8,50,web,https://mergr.com/investor/ela%C3%AFs-capital,yes
+fund-044,EMZ Partners SAS,0,,10,150,internal,,no
+fund-045,EPF Partners SA,0,,3,15,web,https://pipeseed.com/investor/epf-partners-765151,yes
+fund-046,Equistone Partners France SAS,0,,25,200,base,https://www.equistonepe.com/home,no
+fund-047,Eurazeo SE,0,,50,150,internal,,no
+fund-047,Eurazeo SE,1,Eurazeo SMBO,75,150,internal,,no
+fund-047,Eurazeo SE,2,Eurazeo Growth,70,150,internal,,no
+fund-048,Evolem SA,0,Evolem - SME to Midcap Platform,,40,base,https://evolem.com/activites/plateforme/,no
+fund-051,FrenchFood Capital SAS,0,FrenchFood Agro Invest,3,10,base,https://frenchfoodcapital.com/frenchfood-agroinvest/,no
+fund-052,Galia Gestion SAS,0,,1,10,internal,,no
+fund-053,Galiena Capital SAS,0,,10,30,base,https://www.galiena-capital.com/nos-metiers/,no
+fund-054,Groupe IDI,0,,25,70,base,https://www.idi.fr/,no
+fund-055,Groupe Siparex,0,Siparex Midcap,5,30,base,https://www.siparex.com/plateforme/midcap/,no
+fund-055,Groupe Siparex,1,Siparex ETI,20,50,base,https://www.siparex.com/plateforme/eti/,no
+fund-056,Hivest Capital Partners SAS,0,,10,80,internal,,no
+fund-057,HLD Associes SAS,0,,25,500,internal,,no
+fund-058,IDIA Capital Investissement,0,IDIA - Small & Midcap,1,35,base,https://www.ca-idia.com/small-amp-midcap/,no
+fund-059,InfraVia Capital Partners SAS,0,InfraVia Growth Equity,10,50,base,https://infraviacapital.com/growth/,no
+fund-060,Initiative & Finance Investissement SA,0,Initiative & Finance - PME,3,20,base,https://www.initiative-finance.com/strategies/fonds-pme/,no
+fund-060,Initiative & Finance Investissement SA,1,Initiative & Finance - Tomorrow,20,80,base,https://www.initiative-finance.com/strategies/,no
+fund-061,InnovaFonds,0,,2,30,internal,,no
+fund-062,IRDI SORIDEC SA,0,,0.5,10,base,https://www.irdi.fr/developpement-transmission/irdi-soridec-capital-investissement/,no
+fund-063,Isatis Capital SAS,0,,4,10,base,https://isatis-capital.fr/actualites/isatis-capital-annonce-de-nouvelles-promotions-internes,no
+fund-064,IXO Private Equity,0,,2,30,base,https://www.ixope.fr/fpci/,no
+fund-065,Keensight Capital SAS,0,,10,800,base,https://keensight.com/about-us/,no
+fund-066,Latour Capital Management SAS,0,,20,250,internal,,no
+fund-067,LBO France Gestion SAS,0,,5,15,internal,,no
+fund-068,LFPI,0,LFPI Midcap,20,100,internal,,no
+fund-071,MBO & Co,0,MBO+ - Buyout,10,45,base,https://mbo.plus/funds/buyout/,no
+fund-072,Meanings Capital Partners,0,,5,15,internal,,no
+fund-073,Meridiam,0,,5,30,internal,,no
+fund-074,Merieux Equity Partners SAS,0,Mérieux Equity Partners - Buyout,20,80,base,https://merieux-partners.com/about-us/,no
+fund-076,Momentum Invest SAS,0,,4,20,base,https://momentuminvest.fr/strategie/,no
+fund-077,Montefiore Investment SAS,0,,40,200,base,https://montefiore.eu/en/strategy/,no
+fund-080,Naxicap,0,,10,150,base,https://naxicap.com/,no
+fund-081,NCI SAS,0,,3,15,base,https://www.n-ci.com/nos-expertises/pme-eti/notre-strategie/,no
+fund-082,NextStage AM SAS,0,,1,50,internal,,no
+fund-083,Nord Croissance SAS,0,,0.3,1,base,https://mesaidespubliques.infogreffe.fr/aides/intervention-fonds-propres-nord-croissance,no
+fund-086,PAI Partners SAS,0,PAI Mid-Market,50,150,internal,,no
+fund-086,PAI Partners SAS,1,PAI Midcap,70,250,internal,,no
+fund-087,Paluel Marmont Capital SA,0,,5,15,base,https://paluel-marmont-capital.fr/nos-criteres-dinvestissement/,no
+fund-088,Parquest,0,,10,100,internal,,no
+fund-091,Picardie Investissement SA,0,,0.3,10,base,https://www.picardie-investissement.fr/fr/pages/nos-fonds,no
+fund-092,Pleiade Investissement,0,,8,25,base,https://www.pleiadeinvestissement.com/fr/criteres/,no
+fund-093,Qualium Investissement SAS,0,,20,80,internal,,no
+fund-094,RAISE Investissement SAS,0,RAISE Invest,10,60,internal,,no
+fund-094,RAISE Investissement SAS,1,RAISE Impact,5,30,internal,,no
+fund-095,Sagard SAS,0,Sagard NewGen - Technology & Healthcare,10,50,base,https://www.sagard.com/fr/newgen/,no
+fund-097,Seven2 SAS,0,Seven2 MidMarket,50,250,base,https://www.seven2.eu/en/firm/strategie-dinvestissement/,no
+fund-097,Seven2 SAS,1,Seven2 Development,15,50,base,https://www.seven2.eu/en/firm/strategie-dinvestissement/,no
+fund-098,Societe de Capital-Developpement d'Ile de France - SOCADIF,0,,,10,base,https://www.socadif.fr/politique-investissement/,no
+fund-099,Sodero Participations SAS,0,Sodero - Capital Développement,0.5,10,base,https://www.sodero.fr/capital-developpement/,no
+fund-100,Sofipaca,0,,1,7,base,https://www.sofipaca.fr/capital-investissement/,no
+fund-101,Sparring Capital SAS,0,Sparring - Transmission,15,30,base,https://sparringcapital.com/transmission/,no
+fund-101,Sparring Capital SAS,1,Sparring - Responsible Growth,3,8,base,https://sparringcapital.com/en/,no
+fund-102,Tethys SAS,0,,,300,internal,,no
+fund-103,Tikehau Capital SCA,0,,20,150,internal,,no
+fund-103,Tikehau Capital SCA,1,Tikehau Décarbonation,70,300,internal,,no
+fund-105,Truffle Capital,0,Truffle BioMedTech,1,30,web,https://truffle.com/news/article-d-actualite-5e00ad7007e96,no
+fund-105,Truffle Capital,1,Truffle Medeor,30,80,web,https://truffle.com/news/article-d-actualite-5e00ad7007e96,no
+fund-106,Turenne Capital Partenaires SASU,0,Turenne - Emergence,4,15,base,https://www.turennecapital.com/expertises/emergence/presentation/,no
+fund-106,Turenne Capital Partenaires SASU,1,Turenne - Industrie,5,,base,https://www.turennecapital.com/expertises/industrie/presentation/,no
+fund-107,UI Investissement SAS,0,,1,50,internal,,no
+fund-107,UI Investissement SAS,1,UI Cap Autrement,10,50,internal,,no
+fund-110,Weinberg Capital Partners,0,WCP Co-Invest,6,25,base,https://www.weinbergcapital.com/expertise/wp-co-invest/,no
+fund-110,Weinberg Capital Partners,1,WCP Eiréné Développement,5,15,base,https://www.weinbergcapital.com/actualites/dossier-defense-securite/,no
+fund-111,Wendel SE,0,,150,500,web,https://www.wendelgroup.com/brochure2021/pdfs/Wendel_BrochureCorporate_2021_FR_OrientationsStrategiques.pdf,no
+fund-112,Yotta Capital Partners SAS,0,,5,15,web,https://www.hopohopo.io/investors/yotta-capital-partners,yes

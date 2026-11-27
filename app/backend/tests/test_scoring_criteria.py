@@ -48,16 +48,16 @@ def test_e1_deal_type_not_accepted_excludes_the_fund():
     assert result.rank is None
     assert criterion(result, "E1").status == "fail"
     assert len(result.exclusion_reasons) == 1
-    assert result.exclusion_reasons[0].startswith("Type d'opération")
+    assert result.exclusion_reasons[0].startswith("Deal type")
 
 
 def test_e1_missing_deal_types_keeps_the_fund_with_a_warning():
     result = score_one({"deal_types": None})
     assert result.excluded is False
     assert criterion(result, "E1").status == "missing"
-    assert criterion(result, "E1").status_label == "Donnée manquante"
+    assert criterion(result, "E1").status_label == "Missing data"
     assert "deal_types" in result.missing_data
-    assert any("à vérifier avant contact" in w for w in result.warnings)
+    assert any("to check before contact" in w for w in result.warnings)
     # Les critères graduels ne changent pas : toujours 100.
     assert result.score == 100
 
@@ -75,7 +75,7 @@ def test_e2_ticket_below_minimum_excludes_the_fund():
     result = score_one({"ticket_min_eur_m": 15.5})
     assert result.excluded is True
     assert criterion(result, "E2").status == "fail"
-    assert "inférieur au minimum" in result.exclusion_reasons[0]
+    assert "below the fund minimum" in result.exclusion_reasons[0]
 
 
 def test_e2_missing_minimum_keeps_the_fund():
@@ -98,7 +98,7 @@ def test_e3_ticket_above_maximum_excludes_the_fund():
     result = score_one({"ticket_max_eur_m": 14.9})
     assert result.excluded is True
     assert criterion(result, "E3").status == "fail"
-    assert "supérieur au maximum" in result.exclusion_reasons[0]
+    assert "above the fund maximum" in result.exclusion_reasons[0]
 
 
 def test_e3_missing_maximum_keeps_the_fund():
@@ -153,8 +153,8 @@ def test_g1_missing_sectors_gets_half_and_says_so():
     result = score_one({"sectors": None})
     c = criterion(result, "G1")
     assert (c.status, c.points) == ("missing", 17.5)
-    assert c.status_label == "Donnée manquante"
-    assert c.explanation.startswith("Donnée manquante")
+    assert c.status_label == "Missing data"
+    assert c.explanation.startswith("Missing data")
     assert "sectors" in result.missing_data
 
 
@@ -186,7 +186,7 @@ def test_g2_enterprise_value_levels_and_boundaries(ev_min, ev_max, status, point
 def test_g2_only_minimum_published_uses_that_bound():
     c = criterion(score_one({"ev_min_eur_m": 50, "ev_max_eur_m": None}), "G2")
     assert (c.status, c.points) == ("full", 35)
-    assert "une seule borne publiée" in c.explanation
+    assert "only one bound published" in c.explanation
 
 
 def test_g2_no_bound_published_is_missing_data():

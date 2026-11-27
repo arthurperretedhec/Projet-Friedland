@@ -54,35 +54,35 @@ SCORING_CONFIG_V1 = {
         {
             "id": "E1",
             "rule": "deal_type",
-            "label": "Type d'opération",
+            "label": "Deal type",
             "enabled": True,
             "description": "Exclu si le type de l'opération n'est pas dans deal_types du fonds.",
         },
         {
             "id": "E2",
             "rule": "ticket_min",
-            "label": "Ticket minimum",
+            "label": "Minimum ticket",
             "enabled": True,
             "description": "Exclu si ticket < ticket_min_eur_m ; égal au minimum = accepté.",
         },
         {
             "id": "E3",
             "rule": "ticket_max",
-            "label": "Ticket maximum",
+            "label": "Maximum ticket",
             "enabled": True,
             "description": "Exclu si ticket > ticket_max_eur_m ; égal au maximum = accepté.",
         },
         {
             "id": "E4",
             "rule": "stake",
-            "label": "Position recherchée",
+            "label": "Stake sought",
             "enabled": True,
             "description": "majority <-> majoritaire, minority <-> minoritaire, both accepte tout.",
         },
         {
             "id": "E5",
             "rule": "fund_type",
-            "label": "Type de fonds",
+            "label": "Fund type",
             # Désactivé : toute la base est du private equity (périmètre d'architecture.md) et
             # strategies.csv n'a pas de colonne « type de fonds ». Règle non programmée : l'activer
             # demande d'ajouter la colonne et la règle dans engine.py.
@@ -95,7 +95,7 @@ SCORING_CONFIG_V1 = {
         {
             "id": "G1",
             "rule": "sector",
-            "label": "Secteur",
+            "label": "Sector",
             "enabled": True,
             "weight": 35,
             "params": {
@@ -107,7 +107,7 @@ SCORING_CONFIG_V1 = {
         {
             "id": "G2",
             "rule": "enterprise_value",
-            "label": "Adéquation de taille (VE)",
+            "label": "Size fit (EV)",
             "enabled": True,
             "weight": 35,
             "params": {
@@ -138,7 +138,7 @@ SCORING_CONFIG_V1 = {
         {
             "id": "G4",
             "rule": "investment_period",
-            "label": "Période d'investissement",
+            "label": "Investment period",
             "enabled": True,
             "weight": 10,
             "params": {
@@ -176,35 +176,35 @@ SCORING_CONFIG = {
         {
             "id": "E1",
             "rule": "deal_type",
-            "label": "Type d'opération",
+            "label": "Deal type",
             "enabled": True,
             "description": "Exclu si le type de l'opération n'est pas dans deal_types du fonds.",
         },
         {
             "id": "E2",
             "rule": "ticket_min",
-            "label": "Ticket minimum",
+            "label": "Minimum ticket",
             "enabled": True,
             "description": "Exclu si ticket < ticket_min_eur_m ; égal au minimum = accepté.",
         },
         {
             "id": "E3",
             "rule": "ticket_max",
-            "label": "Ticket maximum",
+            "label": "Maximum ticket",
             "enabled": True,
             "description": "Exclu si ticket > ticket_max_eur_m ; égal au maximum = accepté.",
         },
         {
             "id": "E4",
             "rule": "stake",
-            "label": "Position recherchée",
+            "label": "Stake sought",
             "enabled": True,
             "description": "majority <-> majoritaire, minority <-> minoritaire, both accepte tout.",
         },
         {
             "id": "E5",
             "rule": "fund_type",
-            "label": "Type de fonds (éliminatoire)",
+            "label": "Fund type (eliminatory)",
             # Toujours désactivé : le type de fonds est noté en v2 (G5) au lieu d'exclure.
             "enabled": False,
             "description": "Non utilisé (voir G5).",
@@ -215,7 +215,7 @@ SCORING_CONFIG = {
         {
             "id": "G1",
             "rule": "sector",
-            "label": "Secteur",
+            "label": "Sector",
             "enabled": True,
             "weight": 40,
             "params": {"generalist_ratio": 0.5},
@@ -224,7 +224,7 @@ SCORING_CONFIG = {
         {
             "id": "G5",
             "rule": "fund_type",
-            "label": "Type de fonds",
+            "label": "Fund type",
             "enabled": True,
             "weight": 25,
             "params": {
@@ -239,7 +239,7 @@ SCORING_CONFIG = {
         {
             "id": "G6",
             "rule": "lead_capacity",
-            "label": "Capacité à mener",
+            "label": "Lead capacity",
             "enabled": True,
             "weight": 15,
             "params": {"partial_ratio": 0.5},
@@ -252,7 +252,7 @@ SCORING_CONFIG = {
         {
             "id": "G7",
             "rule": "geography",
-            "label": "Géographie",
+            "label": "Geography",
             "enabled": True,
             "weight": 10,
             "params": {"partial_ratio": 0.5},
@@ -264,7 +264,7 @@ SCORING_CONFIG = {
         {
             "id": "G8",
             "rule": "transaction_speciality",
-            "label": "Spécialité de transaction",
+            "label": "Transaction speciality",
             "enabled": True,
             "weight": 10,
             "params": {
@@ -282,7 +282,7 @@ SCORING_CONFIG = {
         {
             "id": "G2",
             "rule": "enterprise_value",
-            "label": "Adéquation de taille (VE)",
+            "label": "Size fit (EV)",
             "enabled": False,
             "weight": 35,
             "params": {"near_tolerance": 0.25, "near_ratio": 0.5},
@@ -300,7 +300,7 @@ SCORING_CONFIG = {
         {
             "id": "G4",
             "rule": "investment_period",
-            "label": "Période d'investissement",
+            "label": "Investment period",
             "enabled": False,
             "weight": 10,
             "params": {"full_max_age": 4, "partial_max_age": 6, "partial_ratio": 0.5},

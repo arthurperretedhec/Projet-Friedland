@@ -174,7 +174,15 @@ POST /api/score
 
 - `companies` : le classement par société de gestion (format « Classement par société de
   gestion » ci-dessus : rang, société, meilleure stratégie, score, détail par critère, indice de
-  confiance, données manquantes, alertes, autres stratégies) ;
+  confiance, données manquantes, alertes, autres stratégies), plus `profile` (ajout du 2026-11-26) :
+  `website`, `source_url`, `last_fund_name`, `equity_ticket_min_eur_m`, `equity_ticket_max_eur_m`,
+  `target_ev_min_eur_m`, `target_ev_max_eur_m` de la meilleure stratégie, tels que publiés (`null` =
+  non publié) ; plus `latest_investments_france` (3 participations au plus, voir architecture.md, avec
+  `description_short` résumée par l'IA et signalée par `description_short_by_ai`), `sector_investments`
+  (3 au plus, secteur de la cible, secteur classé par l'IA signalé par `sector_by_ai`) et `holdings_collected` ;
+- `excluded_companies` : sociétés de gestion dont toutes les stratégies sont exclues, avec leur profil,
+  pour que le banquier puisse en ajouter une à sa sélection ; chaque stratégie de `excluded` porte aussi
+  son `fund_id` ;
 - `excluded` : les **stratégies** exclues, chacune avec ses raisons ;
 - `counts` : nombre de stratégies (total, classées, exclues) et de sociétés classées ;
 - `message` : « Aucun fonds de la base n'est compatible avec cette opération. » quand

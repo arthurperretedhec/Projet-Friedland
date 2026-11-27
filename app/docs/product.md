@@ -74,6 +74,7 @@ Agreed visuals: table only, plus the two count cards (by the owner's choice: opt
 | Strategies (criteria, last fund, partner name) | fund websites, press releases, France Invest directory, AMF GECO | collected Nov 2026, date on every row | the CSV files themselves (the app never calls the web at runtime) | per source, before collecting [to confirm per site] |
 | Deals (last 3 years) | fund websites, press releases, free press articles | collected Nov 2026 | same | same |
 | Portfolio companies | fund websites ("portfolio" pages) | collected Nov 2026 | same | same |
+| Current holdings of 5 funds (DEMEA Agro, Sodero, Capelia, Abenex, Ardian), for the banner preview | the funds' own portfolio pages | collected 2026-11-26, date and source page on every row (`portfolio_extended.csv`) | the CSV file itself | site terms and robots.txt not checked: owner's decision of 2026-11-26 for this non-commercial course project, to be confirmed by the group |
 | NAF codes of deal targets and portfolio companies (optional columns, kept in case the matching uses them) | `recherche-entreprises.api.gouv.fr` (free public API, no key) | collected once, date recorded | stored in the CSV files | [to confirm] |
 
 | Number the app shows | Formula | Units | Source of inputs | Known-answer example |

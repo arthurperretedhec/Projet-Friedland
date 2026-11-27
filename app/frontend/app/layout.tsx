@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <head>
         {/* Police Jost (Google Fonts) ; hors ligne, repli sur Calibri / police système */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

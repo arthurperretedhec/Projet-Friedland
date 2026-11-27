@@ -201,12 +201,12 @@ CriterionKind = Literal["eliminatory", "graded"]
 CriterionStatus = Literal["pass", "fail", "full", "partial", "none", "missing"]
 
 STATUS_LABELS: dict[str, str] = {
-    "pass": "Critère rempli",
-    "fail": "Critère éliminatoire non rempli",
-    "full": "Correspondance complète",
+    "pass": "Criterion met",
+    "fail": "Eliminatory criterion not met",
+    "full": "Full match",
     "partial": "Correspondance partielle",
-    "none": "Pas de correspondance",
-    "missing": "Donnée manquante",
+    "none": "No match",
+    "missing": "Missing data",
 }
 
 
@@ -222,7 +222,7 @@ class CriterionResult(BaseModel):
     explanation: str
 
 
-ConfidenceLevel = Literal["élevé", "moyen", "faible"]
+ConfidenceLevel = Literal["high", "medium", "low"]
 
 
 class Confidence(BaseModel):

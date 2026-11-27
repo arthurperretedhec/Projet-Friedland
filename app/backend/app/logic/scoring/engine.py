@@ -92,21 +92,20 @@ def _round(value: Decimal, places: str) -> float:
 
 
 def _fmt(value: float) -> str:
-    """15.0 -> "15", 7.5 -> "7,5" (format français, sans zéros inutiles)."""
-    text = f"{value:.2f}".rstrip("0").rstrip(".")
-    return text.replace(".", ",")
+    """15.0 -> "15", 7.5 -> "7.5" (sans zéros inutiles)."""
+    return f"{value:.2f}".rstrip("0").rstrip(".")
 
 
 def _pct(share: float) -> str:
-    return f"{_fmt(share * 100)} %"
+    return f"{_fmt(share * 100)}%"
 
 
 _STAKE_FUND = {
-    "majority": "majoritaires",
-    "minority": "minoritaires",
-    "both": "majoritaires ou minoritaires",
+    "majority": "majority",
+    "minority": "minority",
+    "both": "majority or minority",
 }
-_STAKE_OPERATION = {"majority": "majoritaire", "minority": "minoritaire"}
+_STAKE_OPERATION = {"majority": "majority", "minority": "minority"}
 
 # --- Règles éliminatoires : (opération, fonds, paramètres) -> pass / fail / missing -----------
 
@@ -115,16 +114,14 @@ def _rule_deal_type(op: Operation, fund: Fund, params: Mapping[str, float]) -> _
     if not fund.deal_types:
         return _missing("deal_types")
     if op.deal_type in fund.deal_types:
-        return _Outcome("pass", f"Le fonds accepte les opérations {op.deal_type}.")
+        return _Outcome("pass", f"The fund accepts {op.deal_type} deals.")
     accepted = ", ".join(
-        "aucun type de private equity (venture, dette, actifs réels...)"
+        "no private equity deal type (venture, debt, real assets...)"
         if t == NON_PE_DEAL_TYPE
         else t
         for t in fund.deal_types
     )
-    return _Outcome(
-        "fail", f"Le fonds n'accepte pas les opérations {op.deal_type} (accepte : {accepted})."
-    )
+    return _Outcome("fail", f"The fund does not accept {op.deal_type} deals (accepts: {accepted}).")
 
 
 def _rule_ticket_min(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
@@ -132,11 +129,9 @@ def _rule_ticket_min(op: Operation, fund: Fund, params: Mapping[str, float]) -> 
         return _missing("ticket_min_eur_m")
     ticket, minimum = op.equity_ticket_eur_m, fund.ticket_min_eur_m
     if ticket >= minimum:
-        return _Outcome(
-            "pass", f"Ticket de {_fmt(ticket)} M€ ≥ minimum du fonds ({_fmt(minimum)} M€)."
-        )
+        return _Outcome("pass", f"Ticket of €{_fmt(ticket)}m ≥ fund minimum (€{_fmt(minimum)}m).")
     return _Outcome(
-        "fail", f"Ticket de {_fmt(ticket)} M€ inférieur au minimum du fonds ({_fmt(minimum)} M€)."
+        "fail", f"Ticket of €{_fmt(ticket)}m below the fund minimum (€{_fmt(minimum)}m)."
     )
 
 
@@ -145,11 +140,9 @@ def _rule_ticket_max(op: Operation, fund: Fund, params: Mapping[str, float]) -> 
         return _missing("ticket_max_eur_m")
     ticket, maximum = op.equity_ticket_eur_m, fund.ticket_max_eur_m
     if ticket <= maximum:
-        return _Outcome(
-            "pass", f"Ticket de {_fmt(ticket)} M€ ≤ maximum du fonds ({_fmt(maximum)} M€)."
-        )
+        return _Outcome("pass", f"Ticket of €{_fmt(ticket)}m ≤ fund maximum (€{_fmt(maximum)}m).")
     return _Outcome(
-        "fail", f"Ticket de {_fmt(ticket)} M€ supérieur au maximum du fonds ({_fmt(maximum)} M€)."
+        "fail", f"Ticket of €{_fmt(ticket)}m above the fund maximum (€{_fmt(maximum)}m)."
     )
 
 
@@ -160,13 +153,11 @@ def _rule_stake(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outc
     if fund.stake in ("both", op.stake_sought):
         return _Outcome(
             "pass",
-            f"Le fonds prend des participations {_STAKE_FUND[fund.stake]} ; "
-            f"l'opération est {wanted}.",
+            f"The fund takes {_STAKE_FUND[fund.stake]} stakes; the deal is {wanted}.",
         )
     return _Outcome(
         "fail",
-        f"Le fonds ne prend que des participations {_STAKE_FUND[fund.stake]} ; "
-        f"l'opération est {wanted}.",
+        f"The fund only takes {_STAKE_FUND[fund.stake]} stakes; the deal is {wanted}.",
     )
 
 
@@ -177,15 +168,15 @@ def _rule_sector(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Out
     if not fund.sectors:
         return _missing("sectors")
     if op.sector in fund.sectors:
-        return _Outcome("full", f"Secteur {op.sector} ciblé par le fonds.", 1.0)
+        return _Outcome("full", f"Sector {op.sector} targeted by the fund.", 1.0)
     if GENERALIST_SECTOR in fund.sectors:
         return _Outcome(
             "partial",
-            f"Fonds généraliste : accepte {op.sector} sans en faire une spécialité.",
+            f"Generalist fund: accepts {op.sector} without specialising in it.",
             params["generalist_ratio"],
         )
     targets = ", ".join(fund.sectors)
-    return _Outcome("none", f"Secteur {op.sector} non ciblé (le fonds cible : {targets}).", 0.0)
+    return _Outcome("none", f"Sector {op.sector} not targeted (the fund targets: {targets}).", 0.0)
 
 
 def _rule_enterprise_value(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
@@ -198,19 +189,15 @@ def _rule_enterprise_value(op: Operation, fund: Fund, params: Mapping[str, float
     # listée dans missing_data avec une alerte (décision d'Arthur, 2026-11-20).
     incomplete_field = incomplete_warning = None
     if low is not None and high is not None:
-        bounds = f"fourchette du fonds : {_fmt(low)} à {_fmt(high)} M€"
+        bounds = f"fund range: €{_fmt(low)}m to €{_fmt(high)}m"
     elif low is not None:
-        bounds = (
-            f"VE minimum du fonds : {_fmt(low)} M€ ; une seule borne publiée, maximum non publié"
-        )
+        bounds = f"fund minimum EV: €{_fmt(low)}m; only one bound published, maximum not published"
         incomplete_field = "ev_max_eur_m"
-        incomplete_warning = "VE maximum non publiée, calcul sur le minimum ; à vérifier."
+        incomplete_warning = "maximum EV not published, computed on the minimum; to check."
     else:
-        bounds = (
-            f"VE maximum du fonds : {_fmt(high)} M€ ; une seule borne publiée, minimum non publié"
-        )
+        bounds = f"fund maximum EV: €{_fmt(high)}m; only one bound published, minimum not published"
         incomplete_field = "ev_min_eur_m"
-        incomplete_warning = "VE minimum non publiée, calcul sur le maximum ; à vérifier."
+        incomplete_warning = "minimum EV not published, computed on the maximum; to check."
 
     def outcome(status: str, text: str, ratio: float) -> _Outcome:
         return _Outcome(
@@ -224,17 +211,17 @@ def _rule_enterprise_value(op: Operation, fund: Fund, params: Mapping[str, float
     below = low is not None and not _at_least(ev, low)
     above = high is not None and not _at_most(ev, high)
     if not below and not above:
-        return outcome("full", f"VE de {_fmt(ev)} M€ dans la cible ({bounds}).", 1.0)
+        return outcome("full", f"EV of €{_fmt(ev)}m within target ({bounds}).", 1.0)
     near_below = below and _at_least(ev, low * (1 - tolerance))
     near_above = above and _at_most(ev, high * (1 + tolerance))
     if near_below or near_above:
         return outcome(
             "partial",
-            f"VE de {_fmt(ev)} M€ hors cible ({bounds}), mais à {_pct(tolerance)} au plus "
-            "d'une borne.",
+            f"EV of €{_fmt(ev)}m outside target ({bounds}), but within {_pct(tolerance)} "
+            "of a bound.",
             params["near_ratio"],
         )
-    return outcome("none", f"VE de {_fmt(ev)} M€ loin de la cible ({bounds}).", 0.0)
+    return outcome("none", f"EV of €{_fmt(ev)}m far from target ({bounds}).", 0.0)
 
 
 def _rule_fund_size(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
@@ -242,13 +229,13 @@ def _rule_fund_size(op: Operation, fund: Fund, params: Mapping[str, float]) -> _
     if size is None:
         return _missing("last_fund_size_eur_m")
     share = op.equity_ticket_eur_m / size
-    base = f"Ticket = {_pct(share)} du dernier fonds ({_fmt(size)} M€)"
+    base = f"Ticket = {_pct(share)} of the last fund (€{_fmt(size)}m)"
     if _at_most(share, params["full_max_share"]):
         return _Outcome("full", f"{base}, ≤ {_pct(params['full_max_share'])}.", 1.0)
     if _at_most(share, params["partial_max_share"]):
         return _Outcome(
             "partial",
-            f"{base}, entre {_pct(params['full_max_share'])} et "
+            f"{base}, between {_pct(params['full_max_share'])} and "
             f"{_pct(params['partial_max_share'])}.",
             params["partial_ratio"],
         )
@@ -263,30 +250,30 @@ def _rule_investment_period(op: Operation, fund: Fund, params: Mapping[str, floa
     if age < 0:
         return _Outcome(
             "full",
-            f"Dernier fonds daté de {year}, après la date d'analyse : traité comme fonds récent.",
+            f"Last fund dated {year}, after the analysis date: treated as a recent fund.",
             1.0,
             # Probable faute de frappe (2062 pour 2026) ou date d'analyse ancienne : on garde les
             # points mais on prévient le banquier.
             warning=(
-                f"année du dernier fonds ({year}) postérieure à la date d'analyse "
-                f"({op.analysis_date.isoformat()}) ; à vérifier."
+                f"last fund year ({year}) after the analysis date "
+                f"({op.analysis_date.isoformat()}); to check."
             ),
         )
-    base = f"Dernier fonds levé en {year}, il y a {age} an{'s' if age > 1 else ''}"
+    base = f"Last fund raised in {year}, {age} year{'s' if age > 1 else ''} ago"
     full_max, partial_max = int(params["full_max_age"]), int(params["partial_max_age"])
     if age <= full_max:
         return _Outcome(
-            "full", f"{base} (≤ {full_max} ans) : encore en période d'investissement.", 1.0
+            "full", f"{base} (≤ {full_max} years): still in its investment period.", 1.0
         )
     if age <= partial_max:
         return _Outcome(
             "partial",
-            f"{base} : fin probable de période d'investissement.",
+            f"{base}: investment period probably ending.",
             params["partial_ratio"],
         )
     return _Outcome(
         "none",
-        f"{base} (> {partial_max} ans) : période d'investissement probablement finie.",
+        f"{base} (> {partial_max} years): investment period probably over.",
         0.0,
     )
 
@@ -299,16 +286,16 @@ def _rule_fund_type(op: Operation, fund: Fund, params: Mapping[str, float]) -> _
         return _missing("primary_bucket")
     expected = OPERATION_BUCKET[op.deal_type]
     if fund.primary_bucket == expected:
-        return _Outcome("full", f"Type de fonds principal {expected}, celui de l'opération.", 1.0)
+        return _Outcome("full", f"Main fund type {expected}, matching the deal.", 1.0)
     if expected in (fund.secondary_buckets or []):
         return _Outcome(
             "partial",
-            f"Type de fonds principal {fund.primary_bucket} ; {expected} seulement en secondaire.",
+            f"Main fund type {fund.primary_bucket}; {expected} only as secondary.",
             params["secondary_ratio"],
         )
     return _Outcome(
         "none",
-        f"Type de fonds {fund.primary_bucket}, différent de {expected} attendu pour l'opération.",
+        f"Fund type {fund.primary_bucket}, not the {expected} expected for the deal.",
         0.0,
     )
 
@@ -319,19 +306,15 @@ def _rule_lead_capacity(op: Operation, fund: Fund, params: Mapping[str, float]) 
     level = LEAD_CAPACITY[op.stake_sought].get(fund.buyer_role)
     wanted = _STAKE_OPERATION[op.stake_sought]
     if level == "full":
-        return _Outcome(
-            "full", f"Rôle {fund.buyer_role} : adapté pour mener une opération {wanted}.", 1.0
-        )
+        return _Outcome("full", f"Role {fund.buyer_role}: suited to lead a {wanted} deal.", 1.0)
     if level == "partial":
         return _Outcome(
             "partial",
-            f"Rôle {fund.buyer_role} : peut mener une opération {wanted}, sans que ce soit prouvé "
-            "ou que ce soit son métier principal.",
+            f"Role {fund.buyer_role}: can lead a {wanted} deal, though not proven "
+            "or not its core business.",
             params["partial_ratio"],
         )
-    return _Outcome(
-        "none", f"Rôle {fund.buyer_role} : pas en position de mener une opération {wanted}.", 0.0
-    )
+    return _Outcome("none", f"Role {fund.buyer_role}: not positioned to lead a {wanted} deal.", 0.0)
 
 
 def _rule_geography(op: Operation, fund: Fund, params: Mapping[str, float]) -> _Outcome:
@@ -340,20 +323,20 @@ def _rule_geography(op: Operation, fund: Fund, params: Mapping[str, float]) -> _
         return _missing("geography_tags")
     zones = ", ".join(sorted(tags))
     if GEO_FRANCE in tags:
-        return _Outcome("full", f"Zone d'investissement incluant la France ({zones}).", 1.0)
+        return _Outcome("full", f"Investment area includes France ({zones}).", 1.0)
     if tags & GEO_FRENCH_REGIONS:
         return _Outcome(
             "partial",
-            f"Fonds régional ({zones}) : la région de l'entreprise n'est pas connue.",
+            f"Regional fund ({zones}): the company's region is not known.",
             params["partial_ratio"],
         )
     if tags & GEO_WIDE_INCLUDING_FRANCE:
         return _Outcome(
             "partial",
-            f"Zone large ({zones}) : la France est incluse sans être une priorité affichée.",
+            f"Wide area ({zones}): France is included but not a stated priority.",
             params["partial_ratio"],
         )
-    return _Outcome("none", f"Zone d'investissement hors France ({zones}).", 0.0)
+    return _Outcome("none", f"Investment area outside France ({zones}).", 0.0)
 
 
 def _rule_transaction_speciality(
@@ -365,15 +348,15 @@ def _rule_transaction_speciality(
     if expected is None:
         return _Outcome(
             "partial",
-            f"Pas de spécialité définie pour une opération {op.deal_type} : part neutre.",
+            f"No speciality defined for a {op.deal_type} deal: neutral share.",
             params["no_speciality_ratio"],
         )
     if not fund.transaction_modifiers:
         return _missing("transaction_modifiers")
     if expected in fund.transaction_modifiers:
-        return _Outcome("full", f"Le fonds affiche la spécialité {expected}.", 1.0)
+        return _Outcome("full", f"The fund states the {expected} speciality.", 1.0)
     return _Outcome(
-        "none", f"Le fonds n'affiche pas la spécialité {expected} attendue pour l'opération.", 0.0
+        "none", f"The fund does not state the {expected} speciality expected for the deal.", 0.0
     )
 
 
@@ -524,7 +507,7 @@ DEFAULT_CONFIG = load_config()
 
 
 def _share_text(ratio: float) -> str:
-    return "la moitié des points" if ratio == 0.5 else f"{_pct(ratio)} des points"
+    return "half the points" if ratio == 0.5 else f"{_pct(ratio)} of the points"
 
 
 def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
@@ -539,12 +522,12 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
         if outcome.status == "missing":
             missing.append(outcome.missing_field or "")
             explanation = (
-                f"Donnée manquante ({outcome.missing_field}) : critère non vérifiable, "
-                "fonds conservé ; à vérifier avant contact."
+                f"Missing data ({outcome.missing_field}): criterion cannot be checked, "
+                "fund kept; to check before contact."
             )
-            warnings.append(f"{criterion.label} : donnée manquante, à vérifier avant contact.")
+            warnings.append(f"{criterion.label}: missing data, to check before contact.")
         elif outcome.status == "fail":
-            reasons.append(f"{criterion.label} : {explanation}")
+            reasons.append(f"{criterion.label}: {explanation}")
         criteria.append(
             CriterionResult(
                 id=criterion.id,
@@ -572,13 +555,12 @@ def _score_fund(op: Operation, fund: Fund, config: ScoringConfig) -> FundResult:
                 missing.append(outcome.missing_field or "")
                 ratio = config.missing_data_ratio
                 explanation = (
-                    f"Donnée manquante ({outcome.missing_field}) : "
-                    f"{_share_text(ratio)} (règle neutre)."
+                    f"Missing data ({outcome.missing_field}): {_share_text(ratio)} (neutral rule)."
                 )
             if outcome.incomplete_field:
                 missing.append(outcome.incomplete_field)
             if outcome.warning:
-                warnings.append(f"{criterion.label} : {outcome.warning}")
+                warnings.append(f"{criterion.label}: {outcome.warning}")
             # Calcul en décimal (pas en binaire) pour que 33 x 0,25 fasse exactement 8,25.
             exact = Decimal(str(weight)) * Decimal(str(ratio or 0))
             points = _round(exact, "0.01")
@@ -624,11 +606,11 @@ def _confidence(known: int, total: int, missing: list[str], config: ScoringConfi
     """
     missing_count = total - known
     if missing_count <= config.confidence_high_max_missing:
-        level = "élevé"
+        level = "high"
     elif missing_count <= config.confidence_medium_max_missing:
-        level = "moyen"
+        level = "medium"
     else:
-        level = "faible"
+        level = "low"
     return Confidence(
         criteria_known=known, criteria_total=total, level=level, missing_data=list(missing)
     )

@@ -24,7 +24,7 @@ const filled = {
   equityTicket: "15",
 };
 
-function company(rank: number, score: number, name: string, level = "moyen"): RankedCompany {
+function company(rank: number, score: number, name: string, level = "medium"): RankedCompany {
   return {
     rank,
     fund_id: `fund-${rank}`,
@@ -90,11 +90,11 @@ describe("validateForm", () => {
   });
   it("refuses zero, a typo in euros and a ticket above the EV", () => {
     const zero = validateForm({ ...filled, equityTicket: "0" });
-    expect(zero.ok || zero.errors.equityTicket).toBe("Doit être supérieur à 0");
+    expect(zero.ok || zero.errors.equityTicket).toBe("Must be greater than 0");
     const euros = validateForm({ ...filled, enterpriseValue: "40000000" });
-    expect(euros.ok || euros.errors.enterpriseValue).toBe("Montant trop élevé (en M€, pas en €)");
+    expect(euros.ok || euros.errors.enterpriseValue).toBe("Amount too high (in €m, not €)");
     const above = validateForm({ ...filled, equityTicket: "50" });
-    expect(above.ok || above.errors.equityTicket).toBe("Le ticket equity ne peut pas dépasser la VE");
+    expect(above.ok || above.errors.equityTicket).toBe("The equity ticket cannot exceed the EV");
   });
 });
 
@@ -113,24 +113,24 @@ describe("tierOf (proposed thresholds 80 / 60)", () => {
 
 describe("formatRange", () => {
   it("covers both, one or no bound", () => {
-    expect(formatRange(5, 20)).toBe("5–20 M€");
-    expect(formatRange(null, 60)).toBe("jusqu'à 60 M€");
-    expect(formatRange(2.5, null)).toBe("dès 2,5 M€");
-    expect(formatRange(null, null)).toBe("non publié");
+    expect(formatRange(5, 20)).toBe("€5–20m");
+    expect(formatRange(null, 60)).toBe("up to €60m");
+    expect(formatRange(2.5, null)).toBe("from €2.5m");
+    expect(formatRange(null, null)).toBe("not published");
   });
 });
 
 describe("humanize", () => {
-  it("replaces engine codes by French labels, whole words only", () => {
-    expect(humanize("Le fonds accepte les opérations primary_lbo.")).toBe("Le fonds accepte les opérations LBO primaire.");
-    expect(humanize("Donnée manquante (ticket_min_eur_m)")).toBe("Donnée manquante (ticket minimum)");
-    expect(humanize("Secteur industrials ciblé")).toBe("Secteur industrie ciblé");
+  it("replaces engine codes by readable labels, whole words only", () => {
+    expect(humanize("The fund accepts primary_lbo deals.")).toBe("The fund accepts Primary LBO deals.");
+    expect(humanize("Missing data (ticket_min_eur_m)")).toBe("Missing data (minimum ticket)");
+    expect(humanize("Sector food_beverage targeted")).toBe("Sector food & beverage targeted");
     expect(humanize("buyout_industrials_x")).toBe("buyout_industrials_x");
   });
 });
 
 describe("filterCompanies", () => {
-  const list = [company(1, 95, "Alpha"), company(2, 70, "Bêta", "faible"), company(3, 40, "Gamma")];
+  const list = [company(1, 95, "Alpha"), company(2, 70, "Bêta", "low"), company(3, 40, "Gamma")];
   it("keeps the engine order and ranks", () => {
     expect(filterCompanies(list, DEFAULT_VIEW).shown.map((c) => c.rank)).toEqual([1, 2, 3]);
   });
@@ -145,13 +145,13 @@ describe("filterCompanies", () => {
 describe("exclusionSummary", () => {
   it("counts the first reason by criterion, most frequent first", () => {
     const excluded = [
-      { strategy_id: "a", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Position recherchée : x"] },
-      { strategy_id: "b", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Type d'opération : y"] },
-      { strategy_id: "c", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Type d'opération : z"] },
+      { strategy_id: "a", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Stake sought: x"] },
+      { strategy_id: "b", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Deal type: y"] },
+      { strategy_id: "c", fund_id: "f", strategy_name: null, management_company: null, exclusion_reasons: ["Deal type: z"] },
     ];
     expect(exclusionSummary(excluded)).toEqual([
-      { criterion: "Type d'opération", count: 2 },
-      { criterion: "Position recherchée", count: 1 },
+      { criterion: "Deal type", count: 2 },
+      { criterion: "Stake sought", count: 1 },
     ]);
   });
 });

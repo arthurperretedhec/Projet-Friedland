@@ -93,20 +93,20 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
       className="flex flex-col gap-5 border-l border-[var(--accent)] bg-[var(--surface-2)] p-6"
     >
       <h2 id="form-heading" className="label-caps !text-[var(--accent-text)]">
-        1 · La cible
+        1 · The target
       </h2>
 
       <div className="grid gap-4">
         <div>
           <label htmlFor="company-name" className="label-caps mb-1.5 block">
-            Nom de la société
+            Company name
           </label>
           <input
             id="company-name"
             className={input}
             value={values.companyName}
             onChange={(e) => set("companyName", e.target.value)}
-            placeholder="Ex. Groupe Durand Industrie"
+            placeholder="e.g. Durand Industries Group"
             autoComplete="off"
             aria-invalid={!!errors.companyName}
             aria-describedby={errors.companyName ? "company-name-error" : undefined}
@@ -115,7 +115,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
         </div>
         <div>
           <label htmlFor="website" className="label-caps mb-1.5 block">
-            Site internet <span className="font-normal normal-case tracking-normal">(facultatif)</span>
+            Website <span className="font-normal normal-case tracking-normal">(optional)</span>
           </label>
           <input
             id="website"
@@ -123,13 +123,13 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
             className={input}
             value={values.website}
             onChange={(e) => set("website", e.target.value)}
-            placeholder="www.exemple.fr"
+            placeholder="www.example.com"
             autoComplete="off"
           />
         </div>
         <div>
           <label htmlFor="sector" className="label-caps mb-1.5 block">
-            Secteur
+            Sector
           </label>
           <select
             id="sector"
@@ -139,7 +139,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
             aria-invalid={!!errors.sector}
             aria-describedby={errors.sector ? "sector-error" : undefined}
           >
-            <option value="">Choisir un secteur…</option>
+            <option value="">Choose a sector…</option>
             {SECTORS.map((s) => (
               <option key={s.value} value={s.value}>
                 {s.label}
@@ -150,10 +150,10 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
         </div>
       </div>
 
-      <h2 className="label-caps border-t border-[var(--border)] pt-4 !text-[var(--accent-text)]">2 · L&apos;opération</h2>
+      <h2 className="label-caps border-t border-[var(--border)] pt-4 !text-[var(--accent-text)]">2 · The deal</h2>
 
       <Segmented
-        legend="Type d'opération"
+        legend="Deal type"
         name="deal-type"
         options={DEAL_TYPES}
         value={values.dealType}
@@ -161,7 +161,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
         error={errors.dealType}
       />
       <Segmented
-        legend="Position recherchée par l'investisseur"
+        legend="Stake sought by the investor"
         name="stake"
         options={STAKES}
         value={values.stake}
@@ -172,7 +172,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="ev" className="label-caps mb-1.5 block">
-            Valeur d&apos;entreprise (M€)
+            Enterprise value (€m)
           </label>
           <input
             id="ev"
@@ -180,7 +180,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
             className={`${input} tabular-nums`}
             value={values.enterpriseValue}
             onChange={(e) => set("enterpriseValue", e.target.value)}
-            placeholder="Ex. 40"
+            placeholder="e.g. 40"
             aria-invalid={!!errors.enterpriseValue}
             aria-describedby={errors.enterpriseValue ? "ev-error" : undefined}
           />
@@ -188,7 +188,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
         </div>
         <div>
           <label htmlFor="ticket" className="label-caps mb-1.5 block">
-            Ticket equity recherché (M€)
+            Equity ticket sought (€m)
           </label>
           <input
             id="ticket"
@@ -196,14 +196,14 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
             className={`${input} tabular-nums`}
             value={values.equityTicket}
             onChange={(e) => set("equityTicket", e.target.value)}
-            placeholder="Ex. 15"
+            placeholder="e.g. 15"
             aria-invalid={!!errors.equityTicket}
             aria-describedby={errors.equityTicket ? "ticket-error" : "ticket-hint"}
           />
           <FieldError id="ticket-error" message={errors.equityTicket} />
           {!errors.equityTicket && (
             <p id="ticket-hint" className="mt-1 text-xs text-[var(--muted)]">
-              {share === null ? "Fonds propres apportés par l'investisseur" : `Soit ${share} % de la VE`}
+              {share === null ? "Equity brought by the investor" : `i.e. ${share}% of EV`}
             </p>
           )}
         </div>
@@ -214,7 +214,7 @@ export function ScreeningForm({ values, errors, busy, onChange, onSubmit }: Prop
         disabled={busy}
         className="btn-primary bracket w-full"
       >
-        {busy ? "Classement en cours…" : "Trouver les acquéreurs"}
+        {busy ? "Ranking…" : "Find buyers"}
       </button>
     </form>
   );

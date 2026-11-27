@@ -21,15 +21,11 @@ def test_import_is_available_at_app_startup():
         assert strategy["strategy_name"] == "Abenex Industries 9.0"
         assert strategy["equity_ticket_min_eur_m"] == Decimal("5")
         assert strategy["target_ev_min_eur_m"] is None
-        assert [
-            r["membership"] for r in data.strategy_buckets[strategy["strategy_id"]]
-        ] == [
+        assert [r["membership"] for r in data.strategy_buckets[strategy["strategy_id"]]] == [
             "PRIMARY",
             "SECONDARY",
         ]
-        assert any(
-            r["subsector"] for r in data.strategy_sectors[strategy["strategy_id"]]
-        )
+        assert any(r["subsector"] for r in data.strategy_sectors[strategy["strategy_id"]])
         assert any(
             r["polarity"] == "EXCLUDED_EXPLICIT"
             for rows in data.strategy_sectors.values()
@@ -144,7 +140,4 @@ def test_paraphrases_and_deal_specific_provenance():
     assert observation["source_paraphrase"]
     for number in range(1, 5):
         deal_id = f"deal-ext-{number:03}"
-        assert (
-            data.sources[f"src-{deal_id}"]["source_url"]
-            == data.deals[deal_id]["source_url"]
-        )
+        assert data.sources[f"src-{deal_id}"]["source_url"] == data.deals[deal_id]["source_url"]

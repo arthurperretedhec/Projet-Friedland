@@ -124,9 +124,9 @@ def test_only_minimum_published_lists_the_missing_maximum_with_a_warning():
     assert (c.status, c.points) == ("full", 35)
     assert result.score == 100
     assert result.missing_data == ["ev_max_eur_m"]
-    assert any("VE maximum non publiée" in w for w in result.warnings)
-    assert "maximum non publié" in c.explanation
-    assert "à non publié" not in c.explanation
+    assert any("maximum EV not published" in w for w in result.warnings)
+    assert "maximum not published" in c.explanation
+    assert "to not published" not in c.explanation
 
 
 @pytest.mark.parametrize(
@@ -143,7 +143,7 @@ def test_one_published_bound_levels(ev_min, ev_max, status, points, missing):
     c = criterion(result, "G2")
     assert (c.status, c.points) == (status, points)
     assert result.missing_data == [missing]
-    assert "une seule borne publiée" in c.explanation
+    assert "only one bound published" in c.explanation
 
 
 def test_one_missing_bound_counts_in_the_tie_break():
@@ -161,7 +161,7 @@ def test_one_missing_bound_counts_in_the_tie_break():
 def test_near_explanation_says_at_most():
     c = criterion(score_one({"ev_min_eur_m": 80, "ev_max_eur_m": 200}), "G2")
     assert c.status == "partial"
-    assert "à 25 % au plus d'une borne" in c.explanation
+    assert "within 25% of a bound" in c.explanation
 
 
 # --- Revue n° 4 : contrôles de la configuration, chacun avec son message ----------------------
@@ -225,9 +225,9 @@ def test_missing_eliminatory_data_keeps_the_fund_and_warns(criterion_id, field):
     result = score_one({field: None})
     c = criterion(result, criterion_id)
     assert result.excluded is False
-    assert (c.status, c.status_label) == ("missing", "Donnée manquante")
+    assert (c.status, c.status_label) == ("missing", "Missing data")
     assert result.missing_data == [field]
-    assert any("à vérifier avant contact" in w for w in result.warnings)
+    assert any("to check before contact" in w for w in result.warnings)
     assert result.score == 100  # les critères graduels ne changent pas
 
 
@@ -255,7 +255,7 @@ def test_fund_year_after_analysis_date_keeps_points_but_warns():
     assert criterion(result, "G4").points == 10
     assert result.score == 100
     assert any(
-        w.startswith("Période d'investissement :") and "postérieure à la date d'analyse" in w
+        w.startswith("Investment period:") and "after the analysis date" in w
         for w in result.warnings
     )
     assert result.missing_data == []

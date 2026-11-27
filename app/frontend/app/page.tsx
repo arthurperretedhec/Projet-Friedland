@@ -15,22 +15,22 @@ export default function Home() {
           </h1>
           <nav aria-label="Sections" className="hidden gap-6 sm:flex">
             <span aria-current="page" className="label-caps border-b-2 border-[var(--accent)] pb-1 !text-[var(--heading)]">
-              Nouveau screening
+              New screening
             </span>
           </nav>
           <p className="label-caps ml-auto hidden !font-normal normal-case !tracking-normal text-[var(--muted)] md:block">
-            112 sociétés de gestion · 153 stratégies · France
+            112 management companies · 153 strategies · France
           </p>
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-[1440px] flex-1 px-6 py-10 sm:px-10">
         <section className="mb-10 max-w-4xl">
-          <p className="label-caps">Sell-side · acquéreurs financiers</p>
-          <h2 className="display-light rule-blue mt-3 text-[clamp(2.25rem,5vw,4rem)]">Trouver les bons partenaires financiers</h2>
+          <p className="label-caps">Sell-side · financial buyers</p>
+          <h2 className="display-light rule-blue mt-3 text-[clamp(2.25rem,5vw,4rem)]">Find the right financial partners</h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed">
-            Décrivez la cible : les fonds sont filtrés, notés et classés. Choisissez ceux qui iront dans les discussion
-            materials et prévisualisez leur bandeau.
+            Describe the target: funds are filtered, scored and ranked. Pick the ones that go into the discussion
+            materials and preview their banner.
           </p>
         </section>
         <ScreeningApp />
@@ -40,10 +40,10 @@ export default function Home() {
         <div className="mx-auto flex max-w-[1440px] flex-wrap items-start justify-between gap-6 px-6 py-8 text-sm sm:px-10">
           <div>
             <p className="tracking-[0.18em] uppercase">Friedland</p>
-            <p className="mt-1 text-white/70">Projet de cours EDHEC · données publiques, sources sur chaque ligne</p>
+            <p className="mt-1 text-white/70">EDHEC course project · public data, sources on every row</p>
           </div>
           <details className="text-xs text-white/70">
-            <summary className="cursor-pointer">Diagnostic technique</summary>
+            <summary className="cursor-pointer">Technical diagnostics</summary>
             <div className="mt-2 max-w-md bg-white text-[var(--foreground)]">
               <HealthStatus />
             </div>

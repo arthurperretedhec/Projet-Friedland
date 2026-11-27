@@ -199,7 +199,7 @@ def test_real_fund_2_argos_midmarket_for_buildup_mid_is_85(data):
     assert result.score == 85
     statuses = {c.id: c.status for c in result.criteria if c.kind == "eliminatory"}
     assert statuses == {"E1": "pass", "E2": "missing", "E3": "missing", "E4": "pass"}
-    assert sum("à vérifier avant contact" in w for w in result.warnings) == 2
+    assert sum("to check before contact" in w for w in result.warnings) == 2
 
 
 def test_real_fund_3_antin_flagship_is_excluded_from_lbo_small(data):
@@ -210,8 +210,8 @@ def test_real_fund_3_antin_flagship_is_excluded_from_lbo_small(data):
     result = by_id(score_operation_on_base(LBO_SMALL, data), "str-antin-flagship")
     assert result.excluded is True
     assert result.score == 0
-    assert [r.split(" : ")[0] for r in result.exclusion_reasons] == [
-        "Type d'opération",
-        "Ticket minimum",
+    assert [r.split(": ")[0] for r in result.exclusion_reasons] == [
+        "Deal type",
+        "Minimum ticket",
     ]
-    assert "aucun type de private equity" in result.exclusion_reasons[0]
+    assert "no private equity deal type" in result.exclusion_reasons[0]

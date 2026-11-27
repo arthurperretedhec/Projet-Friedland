@@ -147,10 +147,10 @@ def test_excluded_fund_lists_every_reason():
     assert charlie.excluded is True
     assert charlie.score == 0
     assert charlie.rank is None
-    assert [reason.split(" : ")[0] for reason in charlie.exclusion_reasons] == [
-        "Type d'opération",
-        "Ticket minimum",
-        "Position recherchée",
+    assert [reason.split(": ")[0] for reason in charlie.exclusion_reasons] == [
+        "Deal type",
+        "Minimum ticket",
+        "Stake sought",
     ]
     # Les critères graduels ne sont pas calculés pour un fonds exclu.
     assert all(c.kind == "eliminatory" for c in charlie.criteria)

@@ -75,7 +75,7 @@ def test_sc5_v2_abenex_industries_for_lbo_small_is_90(data):
     assert points(result) == {"G1": 40, "G5": 25, "G6": 15, "G7": 10, "G8": 0}, DATA_CHANGED
     assert result.score == 90
     assert result.missing_data == []
-    assert (result.confidence.criteria_known, result.confidence.level) == (9, "élevé")
+    assert (result.confidence.criteria_known, result.confidence.level) == (9, "high")
 
 
 def test_sc6_v2_argos_midmarket_for_buildup_mid_is_100(data):
@@ -90,7 +90,7 @@ def test_sc6_v2_argos_midmarket_for_buildup_mid_is_100(data):
     result = by_id(score_operation_on_base(BUILDUP_MID, data), "str-argos-midmarket")
     assert points(result) == {"G1": 40, "G5": 25, "G6": 15, "G7": 10, "G8": 10}, DATA_CHANGED
     assert result.score == 100
-    assert (result.confidence.criteria_known, result.confidence.level) == (7, "moyen")
+    assert (result.confidence.criteria_known, result.confidence.level) == (7, "medium")
     assert result.confidence.missing_data == ["ticket_min_eur_m", "ticket_max_eur_m"]
 
 
@@ -181,7 +181,7 @@ def test_confidence_level_follows_the_number_of_missing_data(data):
         for r in score_operation_on_base(operation, data).ranked:
             missing = r.confidence.criteria_total - r.confidence.criteria_known
             assert missing == len(r.missing_data)
-            expected = "élevé" if missing <= 1 else "moyen" if missing <= 3 else "faible"
+            expected = "high" if missing <= 1 else "medium" if missing <= 3 else "low"
             assert r.confidence.level == expected, r.strategy_id
 
 
@@ -190,7 +190,7 @@ def test_confidence_spread_snapshot(data):
     # LBO small, 95 stratégies classées : élevé 13, moyen 77, faible 5.
     result = score_operation_on_base(LBO_SMALL, data)
     levels = [r.confidence.level for r in result.ranked]
-    assert (levels.count("élevé"), levels.count("moyen"), levels.count("faible")) == (
+    assert (levels.count("high"), levels.count("medium"), levels.count("low")) == (
         13,
         77,
         5,
@@ -206,6 +206,6 @@ def test_v1_confidence_counts_a_missing_ev_bound(data):
     result = by_id(score_operation_on_base(LBO_SMALL, data, config_v1), "str-abenex-industries-90")
     assert sorted(result.missing_data) == ["ev_min_eur_m", "last_fund_size_eur_m", "last_fund_year"]
     assert (result.confidence.criteria_known, result.confidence.criteria_total) == (5, 8)
-    assert result.confidence.level == "moyen"
+    assert result.confidence.level == "medium"
     for r in score_operation_on_base(LBO_SMALL, data, config_v1).ranked:
         assert r.confidence.criteria_total - r.confidence.criteria_known == len(r.missing_data)

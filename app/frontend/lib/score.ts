@@ -4,26 +4,26 @@
 // --- Vocabulaire (mêmes codes que app/backend/app/logic/reference.py) -------------------------
 
 export const DEAL_TYPES = [
-  { value: "primary_lbo", label: "LBO primaire", hint: "Transmission, MBO / MBI, succession familiale" },
-  { value: "secondary_lbo", label: "LBO secondaire", hint: "Sortie d'un fonds, reprise par un autre fonds" },
-  { value: "build_up", label: "Build-up", hint: "Acquisition par une plateforme déjà détenue" },
-  { value: "growth", label: "Capital développement", hint: "Financer la croissance, souvent minoritaire" },
-  { value: "carve_out", label: "Carve-out", hint: "Cession d'une filiale ou d'une division" },
+  { value: "primary_lbo", label: "Primary LBO", hint: "Transfer, MBO / MBI, family succession" },
+  { value: "secondary_lbo", label: "Secondary LBO", hint: "A fund exits, another fund buys in" },
+  { value: "build_up", label: "Build-up", hint: "Acquisition by a platform already held" },
+  { value: "growth", label: "Growth capital", hint: "Funding growth, often a minority stake" },
+  { value: "carve_out", label: "Carve-out", hint: "Sale of a subsidiary or a division" },
 ] as const;
 
 export const SECTORS = [
-  { value: "software_it", label: "Logiciel & IT" },
-  { value: "healthcare", label: "Santé" },
-  { value: "business_services", label: "Services aux entreprises" },
-  { value: "industrials", label: "Industrie" },
-  { value: "consumer_retail", label: "Consommation & distribution" },
-  { value: "food_beverage", label: "Agroalimentaire & boissons" },
-  { value: "financial_services", label: "Services financiers" },
-  { value: "education", label: "Éducation" },
-  { value: "energy_environment", label: "Énergie & environnement" },
-  { value: "construction_real_estate", label: "Construction & immobilier" },
-  { value: "transport_logistics", label: "Transport & logistique" },
-  { value: "media_telecom", label: "Médias & télécoms" },
+  { value: "software_it", label: "Software & IT" },
+  { value: "healthcare", label: "Healthcare" },
+  { value: "business_services", label: "Business services" },
+  { value: "industrials", label: "Industrials" },
+  { value: "consumer_retail", label: "Consumer & retail" },
+  { value: "food_beverage", label: "Food & beverage" },
+  { value: "financial_services", label: "Financial services" },
+  { value: "education", label: "Education" },
+  { value: "energy_environment", label: "Energy & environment" },
+  { value: "construction_real_estate", label: "Construction & real estate" },
+  { value: "transport_logistics", label: "Transport & logistics" },
+  { value: "media_telecom", label: "Media & telecom" },
   { value: "agriculture", label: "Agriculture" },
 ] as const;
 
@@ -62,20 +62,20 @@ export const SECTOR_SHORT: Record<string, string> = {
 };
 
 export const STAKES = [
-  { value: "majority", label: "Majoritaire", hint: "Le fonds prend le contrôle" },
-  { value: "minority", label: "Minoritaire", hint: "Le dirigeant garde le contrôle" },
+  { value: "majority", label: "Majority", hint: "The fund takes control" },
+  { value: "minority", label: "Minority", hint: "Management keeps control" },
 ] as const;
 
 const DATA_FIELD_LABELS: Record<string, string> = {
-  ticket_min_eur_m: "ticket minimum",
-  ticket_max_eur_m: "ticket maximum",
-  equity_ticket_min_eur_m: "ticket minimum",
-  equity_ticket_max_eur_m: "ticket maximum",
-  ev_min_eur_m: "VE minimum",
-  ev_max_eur_m: "VE maximum",
-  deal_types: "types d'opération",
-  stake: "position",
-  sectors: "secteurs",
+  ticket_min_eur_m: "minimum ticket",
+  ticket_max_eur_m: "maximum ticket",
+  equity_ticket_min_eur_m: "minimum ticket",
+  equity_ticket_max_eur_m: "maximum ticket",
+  ev_min_eur_m: "minimum EV",
+  ev_max_eur_m: "maximum EV",
+  deal_types: "deal types",
+  stake: "stake",
+  sectors: "sectors",
 };
 
 const CODE_LABELS: Record<string, string> = {
@@ -85,7 +85,7 @@ const CODE_LABELS: Record<string, string> = {
 };
 const CODE_PATTERN = new RegExp(`\\b(${Object.keys(CODE_LABELS).join("|")})\\b`, "g");
 
-/** Remplace les codes techniques (« primary_lbo », « ticket_min_eur_m »…) par leur libellé français. */
+/** Remplace les codes techniques (« primary_lbo », « ticket_min_eur_m »…) par leur libellé. */
 export function humanize(text: string): string {
   return text.replace(CODE_PATTERN, (code) => CODE_LABELS[code] ?? code);
 }
@@ -138,11 +138,11 @@ export function parseAmount(text: string): number | null {
 }
 
 function amountError(text: string): string | undefined {
-  if (text.trim() === "") return "Champ obligatoire";
+  if (text.trim() === "") return "Required";
   const value = parseAmount(text);
-  if (value === null) return "Saisir un nombre en M€, par exemple 12,5";
-  if (value <= 0) return "Doit être supérieur à 0";
-  if (value > MAX_AMOUNT_EUR_M) return "Montant trop élevé (en M€, pas en €)";
+  if (value === null) return "Enter an amount in €m, e.g. 12.5";
+  if (value <= 0) return "Must be greater than 0";
+  if (value > MAX_AMOUNT_EUR_M) return "Amount too high (in €m, not €)";
   return undefined;
 }
 
@@ -151,11 +151,11 @@ export function validateForm(
   values: FormValues,
 ): { ok: true; request: ScoreRequest } | { ok: false; errors: FieldErrors } {
   const errors: FieldErrors = {};
-  if (values.companyName.trim() === "") errors.companyName = "Champ obligatoire";
-  if (values.companyName.trim().length > 120) errors.companyName = "120 caractères maximum";
-  if (!SECTORS.some((s) => s.value === values.sector)) errors.sector = "Choisir un secteur";
-  if (!DEAL_TYPES.some((d) => d.value === values.dealType)) errors.dealType = "Choisir un type d'opération";
-  if (!STAKES.some((s) => s.value === values.stake)) errors.stake = "Choisir une position";
+  if (values.companyName.trim() === "") errors.companyName = "Required";
+  if (values.companyName.trim().length > 120) errors.companyName = "120 characters maximum";
+  if (!SECTORS.some((s) => s.value === values.sector)) errors.sector = "Choose a sector";
+  if (!DEAL_TYPES.some((d) => d.value === values.dealType)) errors.dealType = "Choose a deal type";
+  if (!STAKES.some((s) => s.value === values.stake)) errors.stake = "Choose a stake";
   const evError = amountError(values.enterpriseValue);
   const ticketError = amountError(values.equityTicket);
   if (evError) errors.enterpriseValue = evError;
@@ -163,7 +163,7 @@ export function validateForm(
   if (!evError && !ticketError) {
     const ev = parseAmount(values.enterpriseValue)!;
     const ticket = parseAmount(values.equityTicket)!;
-    if (ticket > ev) errors.equityTicket = "Le ticket equity ne peut pas dépasser la VE";
+    if (ticket > ev) errors.equityTicket = "The equity ticket cannot exceed the EV";
   }
   if (Object.keys(errors).length > 0) return { ok: false, errors };
   return {
@@ -281,7 +281,7 @@ export type ExcludedCompany = {
   profile: FundProfile;
 };
 
-export const UNREACHABLE = "Le serveur ne répond pas. Est-il lancé ? Démarrer l'application avec `npm run dev`.";
+export const UNREACHABLE = "The server is not responding. Is it running? Start the app with `npm run dev`.";
 
 /** Transforme la réponse HTTP de POST /api/score en résultat ou en message d'erreur affichable. */
 export function interpretScore(
@@ -294,7 +294,7 @@ export function interpretScore(
   }
   const error = (body as { error?: { message?: unknown; details?: unknown } } | null)?.error;
   const details = Array.isArray(error?.details) ? (error.details as { field: string; message: string }[]) : [];
-  const message = typeof error?.message === "string" ? error.message : `Réponse inattendue du serveur (HTTP ${status}).`;
+  const message = typeof error?.message === "string" ? error.message : `Unexpected server response (HTTP ${status}).`;
   return { kind: "error", message, details };
 }
 
@@ -312,20 +312,20 @@ export function tierOf(score: number): Tier {
 }
 
 export const TIER_LABELS: Record<Tier, string> = {
-  1: "Tier 1 · à contacter en priorité",
-  2: "Tier 2 · à qualifier",
-  3: "Tier 3 · opportuniste",
+  1: "Tier 1 · contact first",
+  2: "Tier 2 · to qualify",
+  3: "Tier 3 · opportunistic",
 };
 
-export const CONFIDENCE_LABELS: Record<string, string> = { élevé: "Élevée", moyen: "Moyenne", faible: "Faible" };
+export const CONFIDENCE_LABELS: Record<string, string> = { high: "High", medium: "Medium", low: "Low" };
 
-/** « 5–20 M€ », « jusqu'à 20 M€ », « dès 5 M€ » ou « non publié ». */
+/** « €5–20m », « up to €20m », « from €5m » ou « not published ». */
 export function formatRange(min: number | null, max: number | null): string {
-  const n = (v: number) => v.toLocaleString("fr-FR", { maximumFractionDigits: 1 });
-  if (min !== null && max !== null) return `${n(min)}–${n(max)} M€`;
-  if (max !== null) return `jusqu'à ${n(max)} M€`;
-  if (min !== null) return `dès ${n(min)} M€`;
-  return "non publié";
+  const n = (v: number) => v.toLocaleString("en-GB", { maximumFractionDigits: 1 });
+  if (min !== null && max !== null) return `€${n(min)}–${n(max)}m`;
+  if (max !== null) return `up to €${n(max)}m`;
+  if (min !== null) return `from €${n(min)}m`;
+  return "not published";
 }
 
 export type ViewOptions = {
@@ -348,7 +348,7 @@ export function filterCompanies(
   const matching = companies.filter(
     (c) =>
       tierOf(c.score) <= view.minTier &&
-      !(view.hideLowConfidence && c.confidence.level === "faible") &&
+      !(view.hideLowConfidence && c.confidence.level === "low") &&
       (query === "" || fold(`${c.management_company ?? ""} ${c.best_strategy_name ?? ""}`).includes(query)),
   );
   return { shown: view.limit === null ? matching : matching.slice(0, view.limit), matching: matching.length };
@@ -358,8 +358,8 @@ export function filterCompanies(
 export function exclusionSummary(excluded: ExcludedStrategy[]): { criterion: string; count: number }[] {
   const counts = new Map<string, number>();
   for (const strategy of excluded) {
-    const first = strategy.exclusion_reasons[0] ?? "Raison non précisée";
-    const criterion = first.split(" :")[0];
+    const first = strategy.exclusion_reasons[0] ?? "Reason not given";
+    const criterion = first.split(":")[0];
     counts.set(criterion, (counts.get(criterion) ?? 0) + 1);
   }
   return [...counts.entries()].map(([criterion, count]) => ({ criterion, count })).sort((a, b) => b.count - a.count);

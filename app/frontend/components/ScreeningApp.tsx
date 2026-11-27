@@ -87,27 +87,26 @@ export function ScreeningApp() {
       <div aria-live="polite">
         {state.kind === "idle" && (
           <div className="border-l border-[var(--accent)] p-6 text-sm text-[var(--foreground)]">
-            <p className="label-caps !text-[var(--accent-text)]">Comment ça marche</p>
+            <p className="label-caps !text-[var(--accent-text)]">How it works</p>
             <ol className="mt-2 list-decimal space-y-1 pl-5">
-              <li>Décrivez la cible et l&apos;opération à gauche.</li>
+              <li>Describe the target and the deal on the left.</li>
               <li>
-                Les fonds qui ne peuvent pas faire le deal (type d&apos;opération, ticket, position) sont écartés, avec la
-                raison.
+                Funds that cannot do the deal (deal type, ticket, stake) are excluded, with the reason.
               </li>
-              <li>Les autres sont notés sur 100, regroupés par société de gestion et classés en tiers.</li>
-              <li>Cochez ou décochez les fonds à mettre dans le PowerPoint ; ajoutez au besoin un fonds écarté, et marquez d&apos;une étoile ceux qui ont exprimé un intérêt.</li>
-              <li>Cliquez sur un fonds pour voir l&apos;aperçu de son bandeau, le détail du score et les sources.</li>
+              <li>The others are scored out of 100, grouped by management company and ranked in tiers.</li>
+              <li>Tick or untick the funds to put in the PowerPoint; add an excluded fund if needed, and star those that have expressed interest.</li>
+              <li>Click a fund to see its banner preview, the score detail and the sources.</li>
             </ol>
           </div>
         )}
         {state.kind === "loading" && (
           <p role="status" className="border border-[var(--border)] p-6 text-sm text-[var(--muted)]">
-            Classement des fonds en cours…
+            Ranking the funds…
           </p>
         )}
         {state.kind === "error" && (
           <p role="alert" data-testid="score-error" className=" border-l-4 border-[var(--error)] bg-[var(--surface)] px-3 py-2 text-sm">
-            <span className="font-semibold text-[var(--error)]">Erreur</span> : {state.message}
+            <span className="font-semibold text-[var(--error)]">Error</span>: {state.message}
           </p>
         )}
         {state.kind === "ok" && <RankingResults data={state.data} website={state.website} sector={state.sector} />}

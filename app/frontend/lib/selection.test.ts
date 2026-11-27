@@ -35,7 +35,7 @@ function ranked(rank: number, score: number, fundId: string): RankedCompany {
     best_strategy_name: `Strategy ${fundId}`,
     score,
     criteria: [],
-    confidence: { criteria_known: 9, criteria_total: 9, level: "élevé", missing_data: [] },
+    confidence: { criteria_known: 9, criteria_total: 9, level: "high", missing_data: [] },
     missing_data: [],
     warnings: [],
     other_strategies: [],
@@ -47,7 +47,7 @@ const excluded: ExcludedCompany = {
   fund_id: "fund-x",
   management_company: "Excluded Partners",
   strategies: [
-    { strategy_id: "str-x", fund_id: "fund-x", strategy_name: "X Fund", management_company: "Excluded Partners", exclusion_reasons: ["Ticket maximum : trop petit"] },
+    { strategy_id: "str-x", fund_id: "fund-x", strategy_name: "X Fund", management_company: "Excluded Partners", exclusion_reasons: ["Maximum ticket: too small"] },
   ],
   profile: profile(),
 };
@@ -127,8 +127,8 @@ describe("selectionCsv", () => {
   it("exports the selected funds with origin, star and investments", () => {
     const s = toggle(initialSelection(data), "fund-x", "starred");
     const lines = selectionCsv(selectedRows(data, s)).split("\r\n");
-    expect(lines[0].startsWith("﻿Fonds;Stratégie;Origine;Intérêt exprimé")).toBe(true);
-    expect(lines[1]).toBe("Fund a;Strategy a;Classement;;1;90;Élevée;;;;;;");
-    expect(lines[2]).toBe("Excluded Partners;X Fund;Ajout manuel;Oui;;;;;;;;;");
+    expect(lines[0].startsWith("﻿Fund;Strategy;Origin;Interest expressed")).toBe(true);
+    expect(lines[1]).toBe("Fund a;Strategy a;Ranking;;1;90;High;;;;;;");
+    expect(lines[2]).toBe("Excluded Partners;X Fund;Added manually;Yes;;;;;;;;;");
   });
 });

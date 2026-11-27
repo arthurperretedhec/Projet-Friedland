@@ -64,7 +64,8 @@ def build_scoring_base(
 
 def load_logos(path: Path | None = None) -> Mapping[str, tuple[str, bool, str]]:
     """Logos collectés le 2026-11-26 (annuaire France Invest, ou site du fonds non vérifié).
-    Fichier absent = pas de logo (le bandeau affiche le nom)."""
+    Fichier absent = pas de logo (le bandeau affiche le nom). Une URL https, ou un fichier local
+    servi par le frontend (`/logos/...`, dossier frontend/public/logos)."""
     path = path or DATA_DIR / "fund_logos.csv"
     if not path.exists():
         return MappingProxyType({})
@@ -73,7 +74,7 @@ def load_logos(path: Path | None = None) -> Mapping[str, tuple[str, bool, str]]:
             {
                 r["fund_id"]: (r["logo_url"], r["white_logo"] == "yes", r["source"])
                 for r in csv.DictReader(f)
-                if r["logo_url"].startswith("https://")
+                if r["logo_url"].startswith(("https://", "/logos/"))
             }
         )
 
@@ -81,7 +82,7 @@ def load_logos(path: Path | None = None) -> Mapping[str, tuple[str, bool, str]]:
 def _allowed(value: str, allowed: tuple[str, ...], what: str) -> str:
     """`what` : début de phrase accordé, par exemple « position inconnue »."""
     if value not in allowed:
-        raise ValueError(f"{what} « {value} » ; valeurs autorisées : {', '.join(allowed)}")
+        raise ValueError(f'{what} "{value}"; allowed values: {", ".join(allowed)}')
     return value
 
 
@@ -104,17 +105,17 @@ class ScoreRequest(BaseModel):
     @field_validator("deal_type")
     @classmethod
     def _deal_type(cls, value: str) -> str:
-        return _allowed(value, DEAL_TYPES, "type d'opération inconnu")
+        return _allowed(value, DEAL_TYPES, "unknown deal type")
 
     @field_validator("sector")
     @classmethod
     def _sector(cls, value: str) -> str:
-        return _allowed(value, OPERATION_SECTORS, "secteur inconnu")
+        return _allowed(value, OPERATION_SECTORS, "unknown sector")
 
     @field_validator("stake_sought")
     @classmethod
     def _stake(cls, value: str) -> str:
-        return _allowed(value, STAKES_SOUGHT, "position inconnue")
+        return _allowed(value, STAKES_SOUGHT, "unknown stake")
 
 
 class ExcludedStrategy(BaseModel):
@@ -266,7 +267,7 @@ def score(payload: ScoreRequest, request: Request) -> ScoreResponse:
     base: ScoringBase = request.app.state.scoring_base
     operation = Operation(
         operation_id=payload.operation_id or "operation",
-        company_name=payload.company_name or "Opération sans nom",
+        company_name=payload.company_name or "Unnamed deal",
         deal_type=payload.deal_type,
         equity_ticket_eur_m=payload.equity_ticket_eur_m,
         enterprise_value_eur_m=payload.enterprise_value_eur_m,
@@ -291,9 +292,7 @@ def score(payload: ScoreRequest, request: Request) -> ScoreResponse:
         company_name=operation.company_name,
         analysis_date=operation.analysis_date,
         config_version=result.config_version,
-        message=None
-        if companies
-        else "Aucun fonds de la base n'est compatible avec cette opération.",
+        message=None if companies else "No fund in the database is compatible with this deal.",
         counts=ScoreCounts(
             strategies_total=len(base.funds),
             strategies_ranked=len(result.ranked),

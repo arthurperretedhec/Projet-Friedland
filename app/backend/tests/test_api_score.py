@@ -57,7 +57,7 @@ def test_lbo_small_returns_the_company_ranking_with_abenex_at_90(client):
     assert abenex["confidence"] == {
         "criteria_known": 9,
         "criteria_total": 9,
-        "level": "élevé",
+        "level": "high",
         "missing_data": [],
     }
     graded = {c["id"]: c["points"] for c in abenex["criteria"] if c["kind"] == "graded"}
@@ -75,13 +75,13 @@ def test_ranking_is_ordered_and_excluded_funds_have_a_reason(client):
     assert len(body["excluded"]) == 58
     assert all(e["exclusion_reasons"] for e in body["excluded"])
     antin = next(e for e in body["excluded"] if e["strategy_id"] == "str-antin-flagship")
-    assert antin["exclusion_reasons"][0].startswith("Type d'opération")
+    assert antin["exclusion_reasons"][0].startswith("Deal type")
 
 
 def test_optional_fields_have_defaults(client):
     payload = {k: v for k, v in LBO_SMALL.items() if k not in ("company_name", "analysis_date")}
     body = client.post("/api/score", json=payload).json()
-    assert body["company_name"] == "Opération sans nom"
+    assert body["company_name"] == "Unnamed deal"
     assert body["analysis_date"] == date.today().isoformat()
     assert body["counts"]["companies_ranked"] == 82  # en v2, la date ne change pas le score
 
@@ -89,7 +89,7 @@ def test_optional_fields_have_defaults(client):
 # --- Entrées invalides ------------------------------------------------------------------------
 
 
-def test_invalid_values_are_refused_with_french_messages(client):
+def test_invalid_values_are_refused_with_field_messages(client):
     payload = {
         **LBO_SMALL,
         "deal_type": "seed",
@@ -103,22 +103,22 @@ def test_invalid_values_are_refused_with_french_messages(client):
     error = response.json()["error"]
     assert error["code"] == "invalid_request"
     details = {d["field"]: d["message"] for d in error["details"]}
-    assert details["deal_type"].startswith("type d'opération inconnu « seed »")
+    assert details["deal_type"].startswith('unknown deal type "seed"')
     assert "primary_lbo" in details["deal_type"]  # les valeurs autorisées sont listées
-    assert details["sector"].startswith("secteur inconnu « aerospace »")
+    assert details["sector"].startswith('unknown sector "aerospace"')
     assert "generalist" not in details["sector"]  # pas un secteur d'opération
-    assert details["equity_ticket_eur_m"] == "doit être strictement supérieur à 0"
-    assert details["stake_sought"].startswith("position inconnue « both »")
-    assert details["unexpected"] == "champ inconnu"
-    assert error["message"].startswith("Requête invalide : ")
+    assert details["equity_ticket_eur_m"] == "must be strictly greater than 0"
+    assert details["stake_sought"].startswith('unknown stake "both"')
+    assert details["unexpected"] == "unknown field"
+    assert error["message"].startswith("Invalid request: ")
 
 
 @pytest.mark.parametrize(
     ("change", "field", "message"),
     [
-        ({"equity_ticket_eur_m": -5}, "equity_ticket_eur_m", "doit être strictement supérieur à 0"),
-        ({"equity_ticket_eur_m": "quinze"}, "equity_ticket_eur_m", "doit être un nombre"),
-        ({"analysis_date": "25/11/2026"}, "analysis_date", "date invalide"),
+        ({"equity_ticket_eur_m": -5}, "equity_ticket_eur_m", "must be strictly greater than 0"),
+        ({"equity_ticket_eur_m": "quinze"}, "equity_ticket_eur_m", "must be a number"),
+        ({"analysis_date": "25/11/2026"}, "analysis_date", "invalid date"),
     ],
 )
 def test_single_invalid_field(client, change, field, message):
@@ -133,7 +133,7 @@ def test_single_invalid_field(client, change, field, message):
 def test_missing_required_field(client):
     payload = {k: v for k, v in LBO_SMALL.items() if k != "sector"}
     details = client.post("/api/score", json=payload).json()["error"]["details"]
-    assert details == [{"field": "sector", "message": "champ obligatoire manquant"}]
+    assert details == [{"field": "sector", "message": "required field missing"}]
 
 
 def test_body_that_is_not_json(client):
@@ -142,8 +142,8 @@ def test_body_that_is_not_json(client):
     )
     assert response.status_code == 422
     assert response.json()["error"]["details"][0] == {
-        "field": "corps de la requête",
-        "message": "JSON invalide",
+        "field": "request body",
+        "message": "invalid JSON",
     }
 
 
@@ -167,14 +167,14 @@ def test_no_compatible_fund_returns_an_empty_ranking_and_a_message(client):
     assert response.status_code == 200
     body = response.json()
     assert body["companies"] == []
-    assert body["message"] == "Aucun fonds de la base n'est compatible avec cette opération."
+    assert body["message"] == "No fund in the database is compatible with this deal."
     assert body["counts"] == {
         "strategies_total": 3,
         "strategies_ranked": 0,
         "strategies_excluded": 3,
         "companies_ranked": 0,
     }
-    assert all("Type d'opération" in e["exclusion_reasons"][0] for e in body["excluded"])
+    assert all("Deal type" in e["exclusion_reasons"][0] for e in body["excluded"])
 
 
 # --- Chargement unique ------------------------------------------------------------------------
@@ -280,3 +280,14 @@ def test_profile_carries_the_logo_when_collected(client):
     # data/fund_logos.csv : Abenex vient de l'annuaire France Invest (vérifié).
     assert abenex["profile"]["logo_url"].startswith("https://france-invest.")
     assert abenex["profile"]["logo_verified"] is True
+
+
+def test_local_logo_file_is_served_as_a_relative_path(client):
+    # data/fund_logos.csv : CAPZA (fund-031) a un logo en fichier local (frontend/public/logos/),
+    # extrait de son site le 2026-11-27 ; un chemin « /logos/... » est accepté comme une URL https.
+    body = client.post("/api/score", json=LBO_SMALL).json()
+    capza = next(
+        c for c in body["companies"] + body["excluded_companies"] if c["fund_id"] == "fund-031"
+    )
+    assert capza["profile"]["logo_url"] == "/logos/fund-031.png"
+    assert capza["profile"]["logo_white"] is True

@@ -53,6 +53,9 @@ for (const size of sizes) {
     await expect(banner).toContainText("Tethys");
     await expect(banner).toContainText("(2026)");
     await expect(drawer.getByText("Why this score")).toBeVisible();
+    // Ticket from the tickets workbook (B2: Abenex Industries 9.0, 5–20, Friedland database).
+    await expect(drawer.getByTestId("drawer-ticket")).toContainText("€[5-20]m");
+    await expect(drawer.getByTestId("drawer-ticket")).toContainText("Friedland database");
     await page.screenshot({ path: `test-results/screening-${size.name}-${size.width}x${size.height}.png` });
     await page.keyboard.press("Escape");
     await expect(drawer).toBeHidden();

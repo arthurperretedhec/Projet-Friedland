@@ -206,6 +206,15 @@ def test_each_company_carries_the_published_profile_of_its_best_strategy(client)
     in_sector = profile.pop("sector_investments")
     for logo_field in ("logo_url", "logo_white", "logo_verified"):  # testés à part
         profile.pop(logo_field)
+    # Classeur des tickets, B2 : « Abenex Industries 9.0 : 5–20 M€ », base Friedland.
+    assert profile.pop("ticket") == {
+        "label": "Abenex Industries 9.0",
+        "min_eur_m": 5,
+        "max_eur_m": 20,
+        "source_type": "base",
+        "source_url": "https://www.abenex.com/en/publications/abenex-industries-9-fund-first-closing",
+        "to_confirm": False,
+    }
     assert profile.pop("holdings_collected") is True
     assert profile == {
         "website": "https://www.abenex.com/en",

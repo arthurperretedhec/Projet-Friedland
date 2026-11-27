@@ -19,6 +19,7 @@ from types import MappingProxyType
 from fastapi import APIRouter, Request
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.data.fund_tickets import FundTicket, choose_ticket, load_fund_tickets
 from app.data.investors import DATA_DIR, InvestorData
 from app.data.portfolio_extended import (
     Holding,
@@ -49,6 +50,10 @@ class ScoringBase:
     )
     # Logos par fund_id (data/fund_logos.csv) : (url, logo blanc ?, source).
     logos: Mapping[str, tuple[str, bool, str]] = field(default_factory=lambda: MappingProxyType({}))
+    # Tickets par fund_id (data/fund_tickets.csv) ; affichage seul, le moteur garde strategies.csv.
+    tickets: Mapping[str, tuple[FundTicket, ...]] = field(
+        default_factory=lambda: MappingProxyType({})
+    )
 
 
 def build_scoring_base(
@@ -59,6 +64,7 @@ def build_scoring_base(
         funds=funds_from_base(data),
         holdings=load_portfolio_extended() if holdings is None else holdings,
         logos=load_logos(),
+        tickets=load_fund_tickets(),
     )
 
 
@@ -140,6 +146,17 @@ class Investment(BaseModel):
     sector_by_ai: bool  # True = secteur classé par l'IA, pas publié
 
 
+class TicketInfo(BaseModel):
+    """Ticket affiché pour la société (fund_tickets.csv) : la stratégie affichée si nommée."""
+
+    label: str | None
+    min_eur_m: float | None
+    max_eur_m: float | None
+    source_type: str  # base | internal | web
+    source_url: str | None
+    to_confirm: bool
+
+
 class FundProfile(BaseModel):
     """Fiche de la meilleure stratégie, telle que publiée dans la base (aucun calcul).
 
@@ -162,6 +179,7 @@ class FundProfile(BaseModel):
     logo_url: str | None = None
     logo_white: bool = False  # logo blanc : à afficher en noir sur fond blanc
     logo_verified: bool = False  # True = annuaire France Invest ; False = site, non vérifié
+    ticket: TicketInfo | None = None  # fund_tickets.csv ; None = ticket inconnu
 
 
 class RankedCompany(CompanyResult):
@@ -208,8 +226,12 @@ def fund_profile(
     holdings: Mapping[str, tuple[Holding, ...]] | None = None,
     operation_sector: str | None = None,
     logos: Mapping[str, tuple[str, bool, str]] | None = None,
+    tickets: Mapping[str, tuple[FundTicket, ...]] | None = None,
 ) -> FundProfile:
     row = data.strategies[strategy_id]
+    ticket = choose_ticket(
+        (tickets or {}).get(str(row["fund_id"]), ()), _text(row.get("strategy_name"))
+    )
     logo = (logos or {}).get(str(row["fund_id"]))
     held = (holdings or {}).get(str(row["fund_id"]), ())
     in_sector = latest_in_sector(held, data_sector_codes(operation_sector))
@@ -222,6 +244,16 @@ def fund_profile(
         logo_url=logo[0] if logo else None,
         logo_white=logo[1] if logo else False,
         logo_verified=bool(logo and logo[2] == "france_invest"),
+        ticket=None
+        if ticket is None
+        else TicketInfo(
+            label=ticket.label or None,
+            min_eur_m=ticket.min_eur_m,
+            max_eur_m=ticket.max_eur_m,
+            source_type=ticket.source_type,
+            source_url=ticket.source_url or None,
+            to_confirm=ticket.to_confirm,
+        ),
         website=_text(row.get("website")),
         source_url=_text(row.get("source_url")),
         last_fund_name=_text(row.get("last_fund_name")),
@@ -303,7 +335,12 @@ def score(payload: ScoreRequest, request: Request) -> ScoreResponse:
             RankedCompany(
                 **company.model_dump(),
                 profile=fund_profile(
-                    base.data, company.best_strategy_id, base.holdings, operation.sector, base.logos
+                    base.data,
+                    company.best_strategy_id,
+                    base.holdings,
+                    operation.sector,
+                    base.logos,
+                    base.tickets,
                 ),
             )
             for company in companies
@@ -332,7 +369,12 @@ def _excluded_companies(
             management_company=strategies[0].management_company,
             strategies=strategies,
             profile=fund_profile(
-                base.data, strategies[0].strategy_id, base.holdings, operation_sector, base.logos
+                base.data,
+                strategies[0].strategy_id,
+                base.holdings,
+                operation_sector,
+                base.logos,
+                base.tickets,
             ),
         )
         for fund_id, strategies in grouped.items()

@@ -212,6 +212,16 @@ export type Investment = {
   sector_by_ai: boolean; // secteur classé par l'IA, pas publié
 };
 
+/** Ticket of the tickets file (fund_tickets.csv), for the fund's displayed strategy. */
+export type TicketInfo = {
+  label: string | null;
+  min_eur_m: number | null;
+  max_eur_m: number | null;
+  source_type: string; // base | internal | web
+  source_url: string | null;
+  to_confirm: boolean;
+};
+
 export type FundProfile = {
   website: string | null;
   source_url: string | null;
@@ -226,6 +236,7 @@ export type FundProfile = {
   logo_url?: string | null;
   logo_white?: boolean; // logo blanc : affiché en noir
   logo_verified?: boolean; // annuaire France Invest (sinon site du fonds, non vérifié)
+  ticket?: TicketInfo | null; // tickets file; null = unknown
 };
 
 export type RankedCompany = {

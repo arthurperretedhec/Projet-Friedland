@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { type Investment, SECTOR_SHORT } from "@/lib/score";
-import { type BannerRow, investmentText, ticketForSlide } from "@/lib/selection";
+import { type BannerRow, fundTicket, investmentText } from "@/lib/selection";
 
 // Layout of the "Financial partners" slides of the discussion materials: rounded light-blue headers of
 // equal height, rounded navy frame for the fund part, light-grey frame for the investments, square bullets.
@@ -81,7 +81,7 @@ const CELL = "min-w-0 px-2 text-center text-[12px]";
 /** One banner row, as it will come out in the PowerPoint. */
 export function BannerPreview({ row, sector }: { row: BannerRow; sector: string }) {
   const p = row.profile;
-  const ticket = ticketForSlide(p.equity_ticket_min_eur_m, p.equity_ticket_max_eur_m);
+  const ticket = fundTicket(p);
   const empty = p.holdings_collected ? "No investment identified" : "Portfolio not yet collected";
   const sectorShort = SECTOR_SHORT[sector] ?? sector;
   return (
@@ -114,7 +114,7 @@ export function BannerPreview({ row, sector }: { row: BannerRow; sector: string 
             {p.last_fund_name && <span className="block break-words">{p.last_fund_name}</span>}
           </div>
           <div className={`${CELL} text-[#222]`}>n.d.</div>
-          <div className={`${CELL} font-bold`} style={{ color: INK }}>
+          <div data-testid="banner-ticket" className="min-w-0 px-1 text-center text-[11.5px] font-bold whitespace-nowrap" style={{ color: INK }}>
             {ticket ?? "n.d."}
           </div>
         </div>

@@ -8,6 +8,8 @@ import {
   selectedRows,
   selectionCsv,
   setIncluded,
+  fundTicket,
+  ticketSourceLabel,
   ticketForSlide,
   toggle,
 } from "./selection";
@@ -128,7 +130,31 @@ describe("selectionCsv", () => {
     const s = toggle(initialSelection(data), "fund-x", "starred");
     const lines = selectionCsv(selectedRows(data, s)).split("\r\n");
     expect(lines[0].startsWith("﻿Fund;Strategy;Origin;Interest expressed")).toBe(true);
-    expect(lines[1]).toBe("Fund a;Strategy a;Ranking;;1;90;High;;;;;;");
-    expect(lines[2]).toBe("Excluded Partners;X Fund;Added manually;Yes;;;;;;;;;");
+    expect(lines[1]).toBe("Fund a;Strategy a;Ranking;;1;90;High;;;;;;;");
+    expect(lines[2]).toBe("Excluded Partners;X Fund;Added manually;Yes;;;;;;;;;;");
+  });
+
+  it("exports the ticket of the tickets file with its source", () => {
+    const ticket = { label: null, min_eur_m: 10, max_eur_m: 50, source_type: "web", source_url: "https://x", to_confirm: true };
+    const row = { ...selectedRows(data, initialSelection(data))[0] };
+    row.profile = profile({ ticket });
+    const line = selectionCsv([row]).split("\r\n")[1];
+    expect(line).toContain(";€[10-50]m;Web research (third-party source, to confirm);");
+  });
+});
+
+describe("fundTicket", () => {
+  it("uses the tickets file, never the strategy's own bounds", () => {
+    const ticket = { label: "X", min_eur_m: 5, max_eur_m: 20, source_type: "base", source_url: null, to_confirm: false };
+    expect(fundTicket(profile({ ticket, equity_ticket_min_eur_m: 1, equity_ticket_max_eur_m: 2 }))).toBe("€[5-20]m");
+    expect(fundTicket(profile({ equity_ticket_min_eur_m: 1, equity_ticket_max_eur_m: 2 }))).toBeNull();
+  });
+
+  it("labels each source", () => {
+    const base = { label: null, min_eur_m: 1, max_eur_m: 2, source_url: null, to_confirm: false };
+    expect(ticketSourceLabel({ ...base, source_type: "base" })).toBe("Friedland database");
+    expect(ticketSourceLabel({ ...base, source_type: "internal" })).toBe("Internal intelligence");
+    expect(ticketSourceLabel({ ...base, source_type: "web" })).toBe("Web research");
+    expect(ticketSourceLabel(null)).toBe("");
   });
 });

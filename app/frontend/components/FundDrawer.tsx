@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { BannerPreview } from "@/components/BannerPreview";
 import { type ExcludedCompany, formatRange, humanize, type RankedCompany } from "@/lib/score";
-import type { BannerRow, FundChoice } from "@/lib/selection";
+import { type BannerRow, type FundChoice, fundTicket, ticketSourceLabel } from "@/lib/selection";
 
 type Props = {
   row: BannerRow;
@@ -72,7 +72,7 @@ export function FundDrawer({ row, sector, company, excluded, choice, onToggle, o
             </h3>
             <BannerPreview row={{ ...row, starred: choice.starred }} sector={sector} />
             {p.logo_url && !p.logo_verified && (
-              <p className="mt-2 text-xs text-[var(--muted)]">Logo taken from the fund&apos;s website, to check.</p>
+              <p className="mt-2 text-xs text-[var(--muted)]">Logo from a public source (fund website or directory), to check.</p>
             )}
             {[...p.sector_investments, ...p.latest_investments_france].some((i) => i.description_short_by_ai || i.sector_by_ai) && (
               <p className="mt-2 text-xs text-[var(--muted)]">Holding descriptions and sectors summarised or classified by AI, to review before sending.</p>
@@ -134,7 +134,24 @@ export function FundDrawer({ row, sector, company, excluded, choice, onToggle, o
                 Published criteria
               </h3>
               <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
-                <dt className="text-[var(--muted)]">Equity ticket</dt>
+                <dt className="text-[var(--muted)]">Ticket</dt>
+                <dd data-testid="drawer-ticket">
+                  <span className="tabular-nums">{fundTicket(p) ?? "unknown"}</span>
+                  {p.ticket && (
+                    <span className="block text-xs text-[var(--muted)]">
+                      {p.ticket.label && `${p.ticket.label} · `}
+                      {p.ticket.source_url ? (
+                        <a href={p.ticket.source_url} target="_blank" rel="noreferrer noopener" className="link-cta normal-case">
+                          {ticketSourceLabel(p.ticket)}
+                        </a>
+                      ) : (
+                        ticketSourceLabel(p.ticket)
+                      )}
+                      {p.ticket.to_confirm && <span className="text-[var(--warn)]"> · third-party source, to confirm</span>}
+                    </span>
+                  )}
+                </dd>
+                <dt className="text-[var(--muted)]">Strategy ticket</dt>
                 <dd className="tabular-nums">{formatRange(p.equity_ticket_min_eur_m, p.equity_ticket_max_eur_m)}</dd>
                 <dt className="text-[var(--muted)]">Target EV</dt>
                 <dd className="tabular-nums">{formatRange(p.target_ev_min_eur_m, p.target_ev_max_eur_m)}</dd>

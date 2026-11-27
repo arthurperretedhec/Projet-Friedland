@@ -6,6 +6,7 @@ import {
   CONFIDENCE_LABELS,
   type ExcludedCompany,
   type FundProfile,
+  type TicketInfo,
   type Investment,
   type RankedCompany,
   type ScoreResponse,
@@ -101,6 +102,22 @@ export function ticketForSlide(min: number | null, max: number | null): string |
   return null;
 }
 
+const SOURCE_LABELS: Record<string, string> = {
+  base: "Friedland database",
+  internal: "Internal intelligence",
+  web: "Web research",
+};
+
+/** Ticket shown for a fund: the tickets file only (Alexandre's workbook, 2026-11-27). */
+export function fundTicket(profile: FundProfile): string | null {
+  const t = profile.ticket;
+  return t ? ticketForSlide(t.min_eur_m, t.max_eur_m) : null;
+}
+
+export function ticketSourceLabel(ticket: TicketInfo | null | undefined): string {
+  return ticket ? (SOURCE_LABELS[ticket.source_type] ?? ticket.source_type) : "";
+}
+
 /** Texte d'une participation : le résumé IA s'il existe, sinon le début du texte publié. */
 export function investmentText(inv: Investment, max = 110): { text: string | null; byAi: boolean } {
   if (inv.description_short) return { text: inv.description_short, byAi: inv.description_short_by_ai };
@@ -134,6 +151,7 @@ export function selectionCsv(rows: BannerRow[]): string {
     "Confidence",
     "Last fund",
     "Ticket",
+    "Ticket source",
     "Investments in the target's sector",
     "Latest investments in France (descriptions summarised by AI where flagged)",
     "Website",
@@ -148,7 +166,10 @@ export function selectionCsv(rows: BannerRow[]): string {
     r.score,
     r.confidence,
     r.profile.last_fund_name,
-    ticketForSlide(r.profile.equity_ticket_min_eur_m, r.profile.equity_ticket_max_eur_m),
+    fundTicket(r.profile),
+    r.profile.ticket
+      ? ticketSourceLabel(r.profile.ticket) + (r.profile.ticket.to_confirm ? " (third-party source, to confirm)" : "")
+      : null,
     r.profile.sector_investments.map(investmentLine).join(" | "),
     r.profile.latest_investments_france.map(investmentLine).join(" | "),
     r.profile.website,

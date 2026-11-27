@@ -24,7 +24,7 @@ import {
   selectedRows,
   selectionCsv,
   setIncluded,
-  ticketForSlide,
+  fundTicket,
   toggle,
 } from "@/lib/selection";
 
@@ -297,7 +297,8 @@ export function RankingResults({ data, website = "", sector }: { data: ScoreResp
                         <ScoreBar score={c.score} />
                       </td>
                       <td className="hidden px-2 py-2 text-xs tabular-nums md:table-cell">
-                        {ticketForSlide(c.profile.equity_ticket_min_eur_m, c.profile.equity_ticket_max_eur_m) ?? <span className="text-[var(--muted)]">n.d.</span>}
+                        {fundTicket(c.profile) ?? <span className="text-[var(--muted)]">n.d.</span>}
+                        {c.profile.ticket?.to_confirm && <span title="Third-party source, to confirm" className="ml-1 text-[var(--warn)]">*</span>}
                       </td>
                       <td className="hidden px-2 py-2 text-xs lg:table-cell">
                         {CONFIDENCE_LABELS[c.confidence.level] ?? c.confidence.level}

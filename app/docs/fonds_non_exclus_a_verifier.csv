@@ -1,0 +1,9 @@
+fund_id,management_company,strategy_id,decision,reason,source_url
+fund-070,M Capital Partners,str-m-capital-tourism,review,Source officielle de Capital Développement : CA 5–50 M€ incluant tourisme; périmètre plus large que stratégie spécifique,https://www.mcapital.fr/capital-developpement/
+fund-104,TRAIL Capital,str-ext-trail-slam,review,Montants d’investissement génériques rapportés pour TRAIL; non confirmés pour SLAM,https://www.trailcapital.eu/fr/funds/fonds-dinvestisseurs-prives-slam
+fund-049,Extendam,str-extendam-hotels,keep_indicative,EV 5–50 M€ d’annuaire : actif hôtelier ≠ EV corporate garantie,https://www.infocession.fr/investisseurs/extendam
+fund-050,Finadvance,,keep_historical,"EV historique 3–25 M€ documentée, mais société liquidée : revoir l’éligibilité indépendamment des montants",https://www.pappers.fr/entreprise/finadvance-345156814
+fund-078,Moringa Partnership,str-ext-moringa-impact,keep_confirmed,"Equity 4–10 M€ par projet (historique, périmètre Afrique / Amérique latine)",https://initiative20x20.org/partners/moringa
+fund-089,Perceva Capital,str-perceva-special,keep_indicative,EV ≥ 30 M€ annuaire ; CA de sources anciennes contradictoires,https://www.infocession.fr/investisseurs/perceva
+fund-090,Phillimore Investissement,str-ext-phillimore-niche,keep_indicative,EV 5–50 M€ et CA 5–50 M€ selon annuaire historique ; mandat à revalider,https://www.infocession.fr/investisseurs/phillimore
+fund-109,Vivalto Partners,str-ext-vivalto-health,keep_confirmed,Equity 15–50 M€ et EV 50–500 M€ officiels,https://www.vivaltopartners.com/en/home-page/

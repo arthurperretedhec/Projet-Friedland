@@ -27,6 +27,7 @@ from app.data.portfolio_extended import (
     latest_in_sector,
     load_portfolio_extended,
 )
+from app.data.screening_exclusions import load_screening_exclusions
 from app.logic.reference import DATA_SECTORS, DEAL_TYPES, GENERALIST_SECTOR, SECTORS
 from app.logic.scoring import Fund, Operation, score_operation
 from app.logic.scoring.real_data import CompanyResult, funds_from_base, rank_management_companies
@@ -59,9 +60,15 @@ class ScoringBase:
 def build_scoring_base(
     data: InvestorData, holdings: Mapping[str, tuple[Holding, ...]] | None = None
 ) -> ScoringBase:
+    excluded_fund_ids = load_screening_exclusions()
+    active_funds = [
+        fund
+        for fund in funds_from_base(data)
+        if data.strategies[fund.strategy_id]["fund_id"] not in excluded_fund_ids
+    ]
     return ScoringBase(
         data=data,
-        funds=funds_from_base(data),
+        funds=active_funds,
         holdings=load_portfolio_extended() if holdings is None else holdings,
         logos=load_logos(),
         tickets=load_fund_tickets(),

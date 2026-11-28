@@ -1,0 +1,10 @@
+fund_id,management_company,strategy_id,decision,checked_on,reason,source_url
+fund-002,Access Capital Partners Group,str-access-smallcap-coinvest,exclude,2026-11-28,Pas de borne publiée propre au co-investissement small-cap,https://www.access-capital-partners.com/en/expertise/small-cap
+fund-019,Artémis,str-ext-artemis-holding,exclude,2026-11-28,Holding familial sans seuil cible financier publié,https://www.groupeartemis.com/en/presentation/vision/
+fund-039,Demea Sustainable Investment,str-demea-sage,exclude,2026-11-28,"SAGE : taille cible du fonds documentée, pas de ticket/EV/EBITDA/CA de cible",https://demeter.agencek2.com/wp-content/uploads/LEC29_2024.pdf
+fund-069,LMBO,str-ext-lmbo-quasi,exclude,2026-11-28,"Quasi-capital historique, absence de bornes documentées et activité à revalider",https://www.lmbo.com/
+fund-075,MFGI,str-ext-mfgi-holding,exclude,2026-11-28,Holding industrielle sans seuil financier de cible publié,https://www.mfgi.fr/
+fund-079,Natixis,,exclude,2026-11-28,Aucune stratégie d’investissement direct assignable au groupe,https://www.im.natixis.com/fr-fr/about/investment-managers-and-capabilities/naxicap-partners
+fund-084,Ocean Peak Capital,str-ext-ocean-industry,exclude,2026-11-28,"Transactions historiques trouvées, aucun critère financier de mandat publié",https://www.opeo.consulting/page-actualit%C3%A9s-publications/ocean-peak-capital-entre-au-capital-dopeo-pour-accompagner-une-nouvelle-phase-de-d%C3%A9veloppement
+fund-085,Omnes Capital,str-omnes-coinvest,exclude,2026-11-28,Capital levé par fonds de co-investissement ≠ ticket par opération,https://www.omnescapital.com/expertise/co-investment
+fund-096,SAMFI Invest,str-ext-samfi-holding,exclude,2026-11-28,"Holding familiale, pas de seuil financier cible publié",https://www.samfi-invest.fr/presentation/

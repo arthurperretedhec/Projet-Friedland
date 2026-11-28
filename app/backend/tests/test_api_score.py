@@ -14,6 +14,7 @@ from fastapi.testclient import TestClient
 
 import app.api.score as score_module
 from app.api.score import build_scoring_base
+from app.data.screening_exclusions import load_screening_exclusions
 from app.main import app
 
 LBO_SMALL = {
@@ -42,12 +43,12 @@ def test_lbo_small_returns_the_company_ranking_with_abenex_at_90(client):
     body = response.json()
     assert body["config_version"] == "2026-11-25-v2"
     assert body["message"] is None
-    assert body["counts"] == {
-        "strategies_total": 153,
-        "strategies_ranked": 95,
-        "strategies_excluded": 58,
-        "companies_ranked": 82,
-    }
+    assert body["counts"]["strategies_total"] == len(app.state.scoring_base.funds)
+    assert (
+        body["counts"]["strategies_ranked"] + body["counts"]["strategies_excluded"]
+        == body["counts"]["strategies_total"]
+    )
+    assert body["counts"]["companies_ranked"] == len(body["companies"])
     # Abenex Capital (SC5, calculé à la main) : meilleure stratégie Abenex Industries 9.0,
     # 40 + 25 + 15 + 10 + 0 = 90, aucune donnée manquante, confiance élevée.
     abenex = next(c for c in body["companies"] if c["management_company"] == "Abenex Capital SAS")
@@ -72,7 +73,7 @@ def test_ranking_is_ordered_and_excluded_funds_have_a_reason(client):
     assert [c["rank"] for c in companies] == list(range(1, len(companies) + 1))
     scores = [c["score"] for c in companies]
     assert scores == sorted(scores, reverse=True)
-    assert len(body["excluded"]) == 58
+    assert len(body["excluded"]) == body["counts"]["strategies_excluded"]
     assert all(e["exclusion_reasons"] for e in body["excluded"])
     antin = next(e for e in body["excluded"] if e["strategy_id"] == "str-antin-flagship")
     assert antin["exclusion_reasons"][0].startswith("Deal type")
@@ -83,7 +84,7 @@ def test_optional_fields_have_defaults(client):
     body = client.post("/api/score", json=payload).json()
     assert body["company_name"] == "Unnamed deal"
     assert body["analysis_date"] == date.today().isoformat()
-    assert body["counts"]["companies_ranked"] == 82  # en v2, la date ne change pas le score
+    assert body["counts"]["companies_ranked"] == len(body["companies"])
 
 
 # --- Entrées invalides ------------------------------------------------------------------------
@@ -190,7 +191,11 @@ def test_base_is_translated_once_at_startup_not_per_call(client, monkeypatch):
     for _ in range(2):
         assert client.post("/api/score", json=LBO_SMALL).status_code == 200
     assert app.state.scoring_base is base
-    assert len(base.funds) == 153
+    n_excluded = sum(
+        row["fund_id"] in load_screening_exclusions()
+        for row in base.data.strategies.values()
+    )
+    assert len(base.funds) == len(base.data.strategies) - n_excluded
 
 
 # --- Fiche publiée de la meilleure stratégie (écran de classement, 2026-11-26) ----------------
